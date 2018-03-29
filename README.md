@@ -5,7 +5,6 @@
 
 ### Getting Started
 - [Overview](docs/index.md)
-- [Install](docs/install.md)
 - [Usage](docs/usage.md)
 - [Examples](docs/examples.md)
 
