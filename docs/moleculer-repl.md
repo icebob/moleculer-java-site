@@ -1,6 +1,7 @@
 title: REPL console
 ---
-The [moleculer-repl](https://github.com/moleculer-java/moleculer-java-repl) is an interactive developer console for Moleculer.
+## moleculer repl [![npm](https://img.shields.io/npm/v/moleculer-repl.svg?maxAge=3600)](https://www.npmjs.com/package/moleculer-repl)
+The [moleculer-repl](https://github.com/moleculerjs/moleculer-repl) is an interactive developer console for Moleculer.
 
 ## Install
 ```bash
@@ -10,8 +11,8 @@ npm i moleculer-repl
 ## Usage
 
 **Switch broker to REPL mode**
-```js
-let broker = new ServiceBroker({ logger: console });
+```java
+const broker = new ServiceBroker();
 
 // Switch to REPL mode
 broker.repl();
@@ -29,7 +30,9 @@ broker.repl();
     broadcastLocal <eventName>                          Broadcast an event locally
     call [options] <actionName> [jsonParams]            Call an action
     dcall [options] <nodeID> <actionName> [jsonParams]  Direct call an action
+    destroy <serviceName> [version]                     Destroy a locally running service
     clear [pattern]                                     Clear cache entries
+    cls                                                 Clear console    
     emit <eventName>                                    Emit an event
     env                                                 List of environment variables
     events [options]                                    List of event listeners
@@ -38,7 +41,6 @@ broker.repl();
     loadFolder <serviceFolder> [fileMask]               Load all services from folder
     nodes [options]                                     List of nodes
     services [options]                                  List of services
-    hello [options] <name>                              Call the greeter.hello service with name
 ```
 
 ### List nodes
@@ -48,10 +50,11 @@ mol $ nodes
 
 **Options**
 ```
-    -d, --details      detailed list
-    -a, --all          list all (offline) nodes
-    --raw              print service registry to JSON
-    --save [filename]  save service registry to a JSON file
+    -a, --all             list all (offline) nodes
+    -d, --details         detailed list
+    -f, --filter <match>  filter nodes (e.g.: 'node-*')
+    --raw                 print service registry to JSON
+    --save [filename]     save service registry to a JSON file
 ```
 
 **Output**
@@ -67,10 +70,11 @@ mol $ services
 
 **Options**
 ```
-    -l, --local         only local services
-    -i, --skipinternal  skip internal services
-    -d, --details       print endpoints
-    -a, --all           list all (offline) services
+    -a, --all             list all (offline) services
+    -d, --details         print endpoints
+    -f, --filter <match>  filter services (e.g.: 'user*')
+    -i, --skipinternal    skip internal services
+    -l, --local           only local services
 ```
 
 **Output**
@@ -86,10 +90,11 @@ mol $ actions
 
 **Options**
 ```
-    -l, --local         only local actions
-    -i, --skipinternal  skip internal actions
-    -d, --details       print endpoints
-    -a, --all           list all (offline) actions
+    -a, --all             list all (offline) actions
+    -d, --details         print endpoints
+    -f, --filter <match>  filter actions (e.g.: 'users.*')
+    -i, --skipinternal    skip internal actions
+    -l, --local           only local actions
 ```
 
 **Output**
@@ -105,10 +110,11 @@ mol $ events
 
 **Options**
 ```
-    -l, --local         only local actions
-    -i, --skipinternal  skip internal actions
-    -d, --details       print endpoints
-    -a, --all           list all (offline) actions
+    -a, --all             list all (offline) event listeners
+    -d, --details         print endpoints
+    -f, --filter <match>  filter event listeners (e.g.: 'user.*')
+    -i, --skipinternal    skip internal event listeners
+    -l, --local           only local event listeners
 ```
 
 **Output**
@@ -126,7 +132,6 @@ mol $ info
 **Output**
 ![image](https://cloud.githubusercontent.com/assets/306521/26260974/aaea9b02-3ccf-11e7-9e1c-ec9150518791.png)
 
-
 ### List environment variables
 ```bash
 mol $ env
@@ -139,6 +144,14 @@ mol $ call "test.hello"
 
 **Output**
 ![image](assets/repl/call1.png)
+
+**Options**
+```
+    --help               output usage information
+    --load [filename]    Load params from file
+    --stream [filename]  Send a file as stream
+    --save [filename]    Save response to file
+```
 
 #### Call an action with parameters
 ```bash
@@ -162,6 +175,12 @@ It tries to load the `<current_dir>/math.add.params.json` file to params.
 mol $ call "math.add" --load my-params.json
 ```
 It tries to load the `my-params.jon` file to params.
+
+#### Call with file stream
+```bash
+mol $ call "math.add" --stream my-picture.jpg
+```
+It loads the `my-picture.png` file and send to the `math.add` action as a `Stream`.
 
 #### Call and save response to file
 ```bash
@@ -219,7 +238,7 @@ mol $ bench --time 30 math.add
 
 
 #### Parameters
-Please note, you can pass parameters only with JSON string.
+Please note, parameters can be passed only as JSON string.
 ```bash
 mol $ bench math.add '{ "a": 50, "b": 32 }'
 ```
@@ -235,10 +254,10 @@ mol $ load "./services"
 ```
 
 ### Custom commands
-You can define your custom REPL commands in broker options to extend Moleculer REPL commands.
+Custom REPL commands can be defined in broker options to extend Moleculer REPL commands.
 
-```js
-let broker = new ServiceBroker({
+```java
+const broker = new ServiceBroker({
     logger: true,
     replCommands: [
         {

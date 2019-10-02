@@ -1,35 +1,69 @@
 title: Documentation
 ---
-Welcome to the Moleculer Java documentation. Navigate through the documentation to learn more. If you encounter any problems when using Moleculer, open an issue on [GitHub](https://github.com/moleculer-java/moleculer-java/issues) or write to us on [Gitter](https://gitter.im/moleculer-java/moleculer-java).
-
 ## What is Moleculer Java?
 
-Moleculer is a fast, modern and powerful microservices framework for [Node.js](https://nodejs.org/en/). It helps you to build efficient, reliable & scalable services. Moleculer provides many features for building and managing your microservices.
+Java implementation of the [Moleculer microservices framework](http://moleculer.services/).
+Moleculer Ecosystem is designed to facilitate the development of multilingual distributed applications.
+The Java-based Moleculer is completely compatible with the Node.js-based Moleculer.
 
 ## Features
 
-- request-reply concept
+- polyglot (implemented under Node.js, Java and [other](https://github.com/moleculerjs/awesome-moleculer#polyglot-implementations) languages)
+- request-reply concept (uses high-performance, non-blocking API)
+- support streams (for transferring large files, media content)
+- [Promise](https://berkesa.github.io/datatree-promise/)-based solution
 - support event-driven architecture with balancing
-- built-in service registry
-- dynamic service discovery
-- load balanced requests & events (round-robin, random, custom)
-- supports middlewares
-- service mixins
+- built-in service registry & dynamic service discovery
+- load balanced requests & events (round-robin, random, cpu-usage, network latency)
+- many fault tolerance features (circuit breaker, retry, timeout)
+- supports middlewares (for using arbitrary cache, encryption or logging modules)
+- supports services with version identifiers
+- built-in caching solution (memory cache, Redis cache, off-heap cache, JCache)
+- pluggable transporters (TCP, NATS, MQTT, Redis, AMQP, Kafka, JMS, Google Cloud Pub/Sub)
+- pluggable serializers (JSON, MsgPack, BSON, CBOR, Ion, Smile)
 - multiple services on a node/server
-- built-in caching solution (memory, Redis)
-- pluggable transporters (TCP, NATS, MQTT, Redis, NATS Streaming, Kafka)
-- pluggable serializers (JSON, Avro, MsgPack, Protocol Buffer)
-- every node is equal, no master/leader node
-- supports versioned services
-- official [API gateway module](https://github.com/moleculer-java/moleculer-java-web) and many other modules...
-- ...
+- all nodes are equal, no master/leader node
+- official [API gateway module](https://moleculer-java.github.io/moleculer-java-web/) and many other modules
+- open source - Moleculer is 100% open source and free of charge
 
-{% note info Requirements %}
-Java **v1.8** is required.
-{% endnote %}
+## Requirements
 
-## How fast?
+Moleculer Java requires Java 8.
 
-We spent a lot of hours to improve the performance of Moleculer Java and create the fastest microservices framework for Java.
+## Download
 
-[Check out our benchmark results.](benchmark.html)
+**Maven**
+
+```xml
+<dependencies>
+	<dependency>
+		<groupId>com.github.berkesa</groupId>
+		<artifactId>moleculer-java</artifactId>
+		<version>1.1.3</version>
+		<scope>runtime</scope>
+	</dependency>
+</dependencies>
+```
+
+**Gradle**
+
+```gradle
+dependencies {
+	compile group: 'com.github.berkesa', name: 'moleculer-java', version: '1.1.3' 
+}
+```
+
+## Sample project
+
+* [Moleculer Java demo project with Gradle](https://moleculer-java.github.io/moleculer-spring-boot-demo/)
+
+## Subprojects
+
+* [High-performance Web API for Moleculer Apps](https://moleculer-java.github.io/moleculer-java-web/)
+* [Interactive Developer Console](https://moleculer-java.github.io/moleculer-java-repl/)
+* [JMX Service for Moleculer](https://moleculer-java.github.io/moleculer-java-jmx/)
+* [MongoDB API for Moleculer](https://moleculer-java.github.io/moleculer-java-mongo/)
+
+## License
+
+This project is available under the [MIT license](https://tldrlegal.com/license/mit-license).

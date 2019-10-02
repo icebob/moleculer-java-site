@@ -1,6 +1,7 @@
 title: API Gateway
 ---
-The [moleculer-java-web](https://github.com/moleculer-java/moleculer-java-web) is the official API gateway service for Moleculer framework. Use it to publish your services.
+## moleculer-web [![npm](https://img.shields.io/npm/v/moleculer-web.svg?maxAge=3600)](https://www.npmjs.com/package/moleculer-web)
+The [moleculer-web](https://github.com/moleculerjs/moleculer-web) is the official API gateway service for Moleculer framework. Use it to publish your services as RESTful APIs.
 
 ## Features
 * support HTTP & HTTPS
@@ -15,7 +16,10 @@ The [moleculer-java-web](https://github.com/moleculer-java/moleculer-java-web) i
 * before & after call hooks
 * Buffer & Stream handling
 * middleware mode (use as a middleware with Express)
-* support authorization
+
+{% note info Try it in your browser! %}
+[![Edit moleculer-web](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/github/moleculerjs/sandbox-moleculer-api-routing/tree/master/?fontsize=14)
+{% endnote %}
 
 ## Install
 ```bash
@@ -28,11 +32,11 @@ npm i moleculer-web
 This example uses API Gateway service with default settings.
 You can access all services (including internal `$node.`) via `http://localhost:3000/`
 
-```js
-let { ServiceBroker } = require("moleculer");
-let ApiService = require("moleculer-web");
+```java
+const { ServiceBroker } = require("moleculer");
+const ApiService = require("moleculer-web");
 
-let broker = new ServiceBroker({ logger: console });
+const broker = new ServiceBroker();
 
 // Load API Gateway
 broker.createService(ApiService);
@@ -50,9 +54,9 @@ broker.start();
 
 ## Whitelist
 If you don't want to publish all actions, you can filter them with whitelist option.
-You can use [match strings](https://github.com/micromatch/nanomatch) or regexp in list.
+Use match strings or regexp in list. _To enable all actions, use `"**"` item._
 
-```js
+```java
 broker.createService({
     mixins: [ApiService],
 
@@ -78,7 +82,7 @@ You can use alias names instead of action names. You can also specify the method
 
 Using named parameters in aliases is possible. Named parameters are defined by prefixing a colon to the parameter name (`:name`).
 
-```js
+```java
 broker.createService({
     mixins: [ApiService],
 
@@ -86,7 +90,7 @@ broker.createService({
         routes: [{
             aliases: {
                 // Call `auth.login` action with `GET /login` or `POST /login`
-                "login": "auth.login"
+                "login": "auth.login",
 
                 // Restrict the request method
                 "POST users": "users.create",
@@ -101,12 +105,12 @@ broker.createService({
 ```
 
 {% note info %}
-The named parameter is handled with [path-to-regexp](https://github.com/pillarjs/path-to-regexp) module. Therefore you can use [optional](https://github.com/pillarjs/path-to-regexp#optional) and [repeated](https://github.com/pillarjs/path-to-regexp#zero-or-more) parameters as well.
+The named parameter is handled with [path-to-regexp](https://github.com/pillarjs/path-to-regexp) module. Therefore you can use [optional](https://github.com/pillarjs/path-to-regexp#optional) and [repeated](https://github.com/pillarjs/path-to-regexp#zero-or-more) parameters, as well.
 {% endnote %}
 
 
 You can also create RESTful APIs.
-```js
+```java
 broker.createService({
     mixins: [ApiService],
 
@@ -125,7 +129,7 @@ broker.createService({
 ```
 
 For REST routes you can also use this simple shorthand alias:
-```js
+```java
 broker.createService({
     mixins: [ApiService],
 
@@ -139,11 +143,16 @@ broker.createService({
 });
 ```
 {% note warn %}
-To use this shorthand alias you need to create a service which has `list`, `get`, `create`, `update` and `remove` actions.
+To use this shorthand alias, create a service which has `list`, `get`, `create`, `update` and `remove` actions.
 {% endnote %}
 
-You can make use of custom functions within the declaration of aliases.
-```js
+You can make use of custom functions within the declaration of aliases. In this case, the handler's signature is `function (req, res) {...}`.
+
+{% note info %}
+Please note that Moleculer uses native Node.js [HTTP server](https://nodejs.org/api/http.html)
+{% endnote %}
+
+```java
 broker.createService({
     mixins: [ApiService],
 
@@ -152,6 +161,9 @@ broker.createService({
             aliases: {
                 "POST upload"(req, res) {
                     this.parseUploadedFile(req, res);
+                },
+                "GET custom"(req, res) {
+                    res.end('hello from custom handler')
                 }
             }
         }]
@@ -160,14 +172,17 @@ broker.createService({
 ```
 
 {% note info %}
-You have some internal pointer in `req` & `res` to some important instances:
-* `req.$service` & `res.$service` is pointed to the service instance.
-* `req.$route` & `res.$route` is pointed to the route definition.
+There are some internal pointer in `req` & `res` objects:
+* `req.$ctx` are pointed to request context.
+* `req.$service` & `res.$service` are pointed to this service instance.
+* `req.$route` & `res.$route` are pointed to the resolved route definition.
 * `req.$params` is pointed to the resolved parameters (from query string & post body)
-* `req.$alias` is pointed to the alias definition.
-* `req.$endpoint` is pointed to the resolved action endpoint. It contains action and nodeID.
+* `req.$alias` is pointed to the resolved alias definition.
+* `req.$action` is pointed to the resolved action.
+* `req.$endpoint` is pointed to the resolved action endpoint.
+* `req.$next` is pointed to the `next()` handler if the request comes from ExpressJS.
 
-E.g., if you would like to access the broker, use `req.$service.broker` path.
+E.g.: To access the broker, use `req.$service.broker`.
 {% endnote %}
 
 ### Mapping policy
@@ -177,7 +192,7 @@ The `route` has a `mappingPolicy` property to handle routes without aliases.
 - `all` - enable to request all routes with or without aliases (default)
 - `restrict` - enable to request only the routes with aliases.
 
-```js
+```java
 broker.createService({
     mixins: [ApiService],
 
@@ -193,11 +208,243 @@ broker.createService({
 ```
 You can't request the `/math.add` or `/math/add` URLs, only `POST /add`.
 
-## Middlewares
-It supports Connect-like middlewares in global-level, route-level & alias-level. Signature: `function(req, res, next) {...}`.
+### File upload aliases
+API Gateway has implemented file uploads. You can upload files as a multipart form data (thanks to [busboy](https://github.com/mscdex/busboy) library) or as a raw request body. In both cases, the file is transferred to an action as a `Stream`. In multipart form data mode you can upload multiple files, as well.
+
+{% note warn %}
+Please note, you have to disable other body parsers in order to accept files.
+{% endnote %}
 
 **Example**
-```js
+```java
+const ApiGateway = require("moleculer-web");
+
+module.exports = {
+    mixins: [ApiGateway],
+    settings: {
+        path: "/upload",
+
+        routes: [
+            {
+                path: "",
+
+                // You should disable body parsers
+                bodyParsers: {
+                    json: false,
+                    urlencoded: false
+                },
+
+                aliases: {
+                    // File upload from HTML multipart form
+                    "POST /": "multipart:file.save",
+                    
+                    // File upload from AJAX or cURL
+                    "PUT /": "stream:file.save",
+
+                    // File upload from HTML form and overwrite busboy config
+                    "POST /multi": {
+                        type: "multipart",
+                        // Action level busboy config
+                        busboyConfig: {
+                            limits: { files: 3 }
+                        },
+                        action: "file.save"
+                    }
+                },
+
+                // Route level busboy config.
+                // More info: https://github.com/mscdex/busboy#busboy-methods
+                busboyConfig: {
+                    limits: { files: 1 }
+                    // Can be defined limit event handlers
+                    // `onPartsLimit`, `onFilesLimit` or `onFieldsLimit`
+                },
+
+                mappingPolicy: "restrict"
+            }
+        ]
+    }
+});
+```
+### Auto-alias
+The auto-alias feature allows you to declare your route alias directly in your services. The gateway will dynamically build the full routes from service schema.
+
+{% note info %}
+Gateway will regenerate the routes every time a service joins or leaves the network.
+{% endnote %}
+
+Use `whitelist` parameter to specify services that the Gateway should track and build the routes.
+
+**Example**
+```java
+// api.service.js
+module.exports = {
+    mixins: [ApiGateway],
+
+    settings: {
+        routes: [
+            {
+                path: "/api",
+
+                whitelist: [
+                    "posts.*",
+                    "test.*"
+                ],
+
+                aliases: {
+                    "GET /hi": "test.hello"
+                },
+
+                autoAliases: true
+            }
+        ]
+    }
+};
+```
+
+```java
+// posts.service.js
+module.exports = {
+    name: "posts",
+    version: 2,
+
+    settings: {
+        // Base path
+        rest: "posts/"
+    },
+
+    actions: {
+        list: {
+            // Expose as "/api/v2/posts/"
+            rest: "GET /",
+            handler(ctx) {}
+        },
+
+        get: {
+            // Expose as "/api/v2/posts/:id"
+            rest: "GET /:id",
+            handler(ctx) {}
+        },
+
+        create: {
+            rest: "POST /",
+            handler(ctx) {}
+        },
+
+        update: {
+            rest: "PUT /:id",
+            handler(ctx) {}
+        },
+
+        remove: {
+            rest: "DELETE /:id",
+            handler(ctx) {}
+        }
+    }
+};
+```
+
+**The generated aliases**
+
+```bash
+    GET     /api/hi             => test.hello
+    GET     /api/v2/posts       => v2.posts.list
+    GET     /api/v2/posts/:id   => v2.posts.get
+    POST    /api/v2/posts       => v2.posts.create
+    PUT     /api/v2/posts/:id   => v2.posts.update
+    DELETE  /api/v2/posts/:id   => v2.posts.remove
+```
+
+**Example to define full path alias**
+```java
+// posts.service.js
+module.exports = {
+    name: "posts",
+    version: 2,
+
+    settings: {
+        // Base path
+        rest: "posts/"
+    },
+
+    actions: {
+        tags: {
+            // Expose as "/tags" instead of "/api/v2/posts/tags"
+            rest: {
+                method: "GET",
+                fullPath: "/tags"
+            },
+            handler(ctx) {}
+        }
+    }
+};
+```
+
+
+## Parameters
+API gateway collects parameters from URL querystring, request params & request body and merges them. The results is placed to the `req.$params`.
+
+### Disable merging
+To disable parameter merging set `mergeParams: false` in route settings. In this case the parameters is separated.
+
+**Example**
+```java
+broker.createService({
+    mixins: [ApiService],
+    settings: {
+        routes: [{
+            path: "/",
+            mergeParams: false
+        }]
+    }
+});
+```
+
+**Un-merged `req.$params`:**
+```java
+{
+    // Querystring params
+    query: {
+        category: "general",
+    }
+
+    // Request body content
+    body: {
+        title: "Hello",
+        content: "...",
+        createdAt: 1530796920203
+    },
+
+    // Request params
+    params: {
+        id: 5
+    }
+}
+```
+
+### Query string parameters
+More information: https://github.com/ljharb/qs
+
+**Array parameters**
+URL: `GET /api/opt-test?a=1&a=2`
+```java
+a: ["1", "2"]
+```
+
+**Nested objects & arrays**
+URL: `GET /api/opt-test?foo[bar]=a&foo[bar]=b&foo[baz]=c`
+```java
+foo: { 
+    bar: ["a", "b"], 
+    baz: "c" 
+}
+```
+
+## Middlewares
+It supports Connect-like middlewares in global-level, route-level & alias-level. Signature: `function(req, res, next) {...}`. For more info check [express middleware](https://expressjs.com/en/guide/using-middleware.html)
+
+**Example**
+```java
 broker.createService({
     mixins: [ApiService],
     settings: {
@@ -235,10 +482,41 @@ broker.createService({
 });
 ```
 
+### Error-handler middleware
+There is support to use error-handler middlewares in the API Gateway. So if you pass an `Error` to the `next(err)` function, it will call error handler middlewares which have signature as `(err, req, res, next)`.
+
+```java
+broker.createService({
+    mixins: [ApiService],
+    settings: {
+        // Global middlewares. Applied to all routes.
+        use: [
+            cookieParser(),
+            helmet()
+        ],
+
+        routes: [
+            {
+                path: "/",
+
+                // Route-level middlewares.
+                use: [
+                    compression(),
+                    
+                    passport.initialize(),
+                    passport.session(),
+
+                    function(err, req, res, next) {
+                        this.logger.error("Error is occured in middlewares!");
+                        this.sendError(req, res, err);
+                    }
+                ],
+```
+
 ## Serve static files
 It serves assets with the [serve-static](https://github.com/expressjs/serve-static) module like ExpressJS.
 
-```js
+```java
 broker.createService({
     mixins: [ApiService],
 
@@ -255,9 +533,9 @@ broker.createService({
 ```
 
 ## Calling options
-The `route` has a `callOptions` property which is passed to `broker.call`. So you can set `timeout`, `retryCount` or `fallbackResponse` options for routes. [Read more about calling options](broker.html#Call-services)
+The `route` has a `callOptions` property which is passed to `broker.call`. So you can set `timeout`, `retries` or `fallbackResponse` options for routes. [Read more about calling options](actions.html#Call-services)
 
-```js
+```java
 broker.createService({
     mixins: [ApiService],
 
@@ -266,7 +544,7 @@ broker.createService({
 
             callOptions: {
                 timeout: 500,
-                retryCount: 0,
+                retries: 3,
                 fallbackResponse(ctx, err) { ... }
             }
 
@@ -278,7 +556,11 @@ broker.createService({
 ## Multiple routes 
 You can create multiple routes with different prefix, whitelist, alias, calling options & authorization.
 
-```js
+{% note info %}
+When using multiple routes you should explicitly set the body parser(s) for each route.
+{% endnote %}
+
+```java
 broker.createService({
     mixins: [ApiService],
 
@@ -293,6 +575,10 @@ broker.createService({
                     "$node.*",
                     "users.*",
                 ]
+
+                bodyParsers: {
+                    json: true
+                }
             },
             {
                 path: "/",
@@ -301,19 +587,61 @@ broker.createService({
                     "posts.*",
                     "math.*",
                 ]
+
+                bodyParsers: {
+                    json: true
+                }
             }
         ]
     }
 });
 ```
 
+## Response type & status code
+When the response is received from an action handler, the API gateway detects the type of response and set the `Content-Type` in the `res` headers. The status code is `200` by default. Of course you can overwrite these values, moreover, you can define custom response headers, too.
+
+To define response headers & status code use `ctx.meta` fields:
+
+**Available meta fields:**
+* `ctx.meta.$statusCode` - set `res.statusCode`.
+* `ctx.meta.$statusMessage` - set `res.statusMessage`.
+* `ctx.meta.$responseType` - set `Content-Type` in header.
+* `ctx.meta.$responseHeaders` - set all keys in header.
+* `ctx.meta.$location` - set `Location` key in header for redirects.
+
+**Example**
+```java
+module.exports = {
+    name: "export",
+    actions: {
+        // Download response as a file in the browser
+        downloadCSV(ctx) {
+            ctx.meta.$responseType = "text/csv";
+            ctx.meta.$responseHeaders = {
+                "Content-Disposition": `attachment; filename="data-${ctx.params.id}.csv"`
+            };
+            
+            return csvFileStream;
+        }
+
+        // Redirect the request
+        redirectSample(ctx) {
+            ctx.meta.$statusCode = 302;
+            ctx.meta.$location = "/login";
+
+            return;
+        }
+    }
+}
+```
+
 ## Authorization
-You can implement authorization. For this you have to do 2 things.
+You can implement authorization. Do 2 things to enable it.
 1. Set `authorization: true` in your routes
-2. Define the `authorize` method of service.
+2. Define the `authorize` method in service.
 
 **Example authorization**
-```js
+```java
 const E = require("moleculer-web").Errors;
 
 broker.createService({
@@ -356,13 +684,50 @@ broker.createService({
 ```
 
 {% note info %}
-You can find a more detailed role-based JWT authorization example in [full example](https://github.com/moleculer-java/moleculer-java-web/blob/master/examples/full/index.js#L239).
+You can find a more detailed role-based JWT authorization example in [full example](https://github.com/moleculerjs/moleculer-web/blob/master/examples/full/index.js#L239).
 {% endnote %}
+
+## Authentication
+To enable the support for authentication, you need to do something similar to what is describe in the Authorization paragraph. Also in this case you have to:
+1. Set `authentication: true` in your routes
+2. Define your custom `authenticate` method in your service
+
+**Example authentication**
+```java
+broker.createService({
+    mixins: ApiGatewayService,
+
+    settings: {
+        routes: [{
+            // Enable authentication
+            authentication: true
+        }]
+    },
+
+    methods: {
+        authenticate(ctx, route, req, res) {
+            let accessToken = req.query["access_token"];
+            if (accessToken) {
+                if (accessToken === "12345") {
+                    // valid credentials
+                    return Promise.resolve({ id: 1, username: "john.doe", name: "John Doe" });
+                } else {
+                    // invalid credentials
+                    return Promise.reject();
+                }
+            } else {
+                // anonymous user
+                return Promise.resolve(null);
+            }
+        }
+    }
+});
+```
 
 ## Route hooks
 The `route` has before & after call hooks. You can use it to set `ctx.meta`, access `req.headers` or modify the response `data`.
 
-```js
+```java
 broker.createService({
     mixins: [ApiService],
 
@@ -386,11 +751,14 @@ broker.createService({
 });
 ```
 
+> In previous versions of Moleculer Web, you couldn't manipulate the `data` in `onAfterCall`. Now you can, but you must always return the new or original `data`.
+
+
 ## Error handlers
 You can add route-level & global-level custom error handlers. 
 > In handlers, you must call the `res.end`. Otherwise, the request is unhandled.
 
-```js
+```java
 broker.createService({
     mixins: [ApiService],
     settings: {
@@ -420,7 +788,7 @@ broker.createService({
 You can use [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) headers in Moleculer-Web service.
 
 **Usage**
-```js
+```java
 const svc = broker.createService({
     mixins: [ApiService],
 
@@ -460,7 +828,7 @@ const svc = broker.createService({
 The Moleculer-Web has a built-in rate limiter with a memory store.
 
 **Usage**
-```js
+```java
 const svc = broker.createService({
     mixins: [ApiService],
 
@@ -490,7 +858,7 @@ const svc = broker.createService({
 ```
 
 ### Custom Store example
-```js
+```java
 class CustomStore {
     constructor(window, opts) {
         this.hits = new Map();
@@ -524,16 +892,93 @@ class CustomStore {
 }
 ```
 
+## ETag
+
+The `etag` option value can be `false`, `true`, `weak`, `strong`, or a custom `Function`. For full details check the [code](https://github.com/moleculerjs/moleculer-web/pull/92).
+
+```java
+const ApiGateway = require("moleculer-web");
+
+module.exports = {
+    mixins: [ApiGateway],
+    settings: {
+        // Service-level option
+        etag: false,
+        routes: [
+            {
+                path: "/",
+                // Route-level option.
+                etag: true
+            }
+        ]
+    }
+}
+```
+
+**Custom `etag` Function**
+```java
+module.exports = {
+    mixins: [ApiGateway],
+    settings: {
+        // Service-level option
+        etag: (body) => generateHash(body)
+    }
+}
+```
+
+Please note, it doesn't work with stream responses. In this case, you should generate the `etag` by yourself.
+
+**Custom `etag` for streaming**
+```java
+module.exports = {
+    name: "export",
+    actions: {
+        // Download response as a file in the browser
+        downloadCSV(ctx) {
+            ctx.meta.$responseType = "text/csv";
+            ctx.meta.$responseHeaders = {
+                "Content-Disposition": `attachment; filename="data-${ctx.params.id}.csv"`,
+                "ETag": '<your etag here>'
+            };
+            return csvFileStream;
+        }
+    }
+}
+```
+
+## HTTP2 Server
+API Gateway provides an experimental support for HTTP2. You can turn it on with `http2: true` in service settings.
+**Example**
+```java
+const ApiGateway = require("moleculer-web");
+
+module.exports = {
+    mixins: [ApiGateway],
+    settings: {
+        port: 8443,
+
+        // HTTPS server with certificate
+        https: {
+            key: fs.readFileSync("key.pem"),
+            cert: fs.readFileSync("cert.pem")
+        },
+
+        // Use HTTP2 server
+        http2: true
+    }
+});
+```
+
 ## ExpressJS middleware usage
 You can use Moleculer-Web as a middleware in an [ExpressJS](http://expressjs.com/) application.
 
 **Usage**
-```js
+```java
 const svc = broker.createService({
     mixins: [ApiService],
 
     settings: {
-        middleware: true
+        server: false // Default is "true"
     }
 });
 
@@ -554,7 +999,7 @@ broker.start();
 ## Full service settings
 List of all settings of Moleculer Web service:
 
-```js
+```java
 settings: {
 
     // Exposed port
@@ -569,9 +1014,10 @@ settings: {
         cert: fs.readFileSync("ssl/cert.pem")
     },
 
-    // Middleware mode (for ExpressJS)
-    middleware: false,
-
+    // Used server instance. If null, it will create a new HTTP(s)(2) server
+	// If false, it will start without server in middleware mode
+	server: true,
+    		
     // Exposed global path prefix
     path: "/api",
     
@@ -585,7 +1031,16 @@ settings: {
     logRequestParams: "info",
     
     // Logging response data with 'debug' level
-    logResponseData: "debug"
+    logResponseData: "debug",
+
+    // Use HTTP2 server (experimental)
+    http2: false,
+
+    // Override HTTP server default timeout
+	httpServerTimeout: null,
+
+    // Optimize route & alias paths (deeper first).
+    optimizeOrder: true,
 
     // Routes
     routes: [
@@ -601,6 +1056,9 @@ settings: {
 
             // Call the `this.authorize` method before call the action
             authorization: true,
+
+            // Merge parameters from querystring, request params & body 
+            mergeParams: true,
             
             // Route-level middlewares
             uses: [
@@ -659,6 +1117,7 @@ settings: {
             // Calling options
             callOptions: {
                 timeout: 3000,
+                retries: 3,
                 fallbackResponse: "Static fallback response"
             },
 
@@ -689,6 +1148,7 @@ settings: {
         // Options to `server-static` module
         options: {}
     },
+
     // Global error handler
     onError(req, res, err) {
         res.setHeader("Content-Type", "text/plain");
@@ -697,39 +1157,47 @@ settings: {
     }    
 }
 ```
+## Service Methods
+### `addRoute`
+This service [method](services.html#Methods) (`this.addRoute(opts, toBottom = true)`) add/replace a route. For example, you can call it from your mixins to define new routes (e.g. swagger route, graphql route, etc.). 
+
+> Please note that if a route already exists this method will replace previous route configuration with a new one.
+
+### `removeRoute`
+Service method removes the route by path (`this.removeRoute("/admin")`).
 
 ## Examples
-- [Simple](https://github.com/moleculer-java/moleculer-java-web/blob/master/examples/simple/index.js)
+- [Simple](https://github.com/moleculerjs/moleculer-web/blob/master/examples/simple/index.js)
     - simple gateway with default settings.
 
-- [SSL server](https://github.com/moleculer-java/moleculer-java-web/blob/master/examples/ssl/index.js)
+- [SSL server](https://github.com/moleculerjs/moleculer-web/blob/master/examples/ssl/index.js)
     - open HTTPS server
     - whitelist handling
 
-- [WWW with assets](https://github.com/moleculer-java/moleculer-java-web/blob/master/examples/www/index.js)
+- [WWW with assets](https://github.com/moleculerjs/moleculer-web/blob/master/examples/www/index.js)
     - serve static files from the `assets` folder
     - whitelist
     - aliases
     - multiple body-parsers
 
-- [Authorization](https://github.com/moleculer-java/moleculer-java-web/blob/master/examples/authorization/index.js)
+- [Authorization](https://github.com/moleculerjs/moleculer-web/blob/master/examples/authorization/index.js)
     - simple authorization demo
     - set the authorized user to `Context.meta`
 
-- [REST](https://github.com/moleculer-java/moleculer-java-web/blob/master/examples/rest/index.js)
+- [REST](https://github.com/moleculerjs/moleculer-web/blob/master/examples/rest/index.js)
     - simple server with RESTful aliases
     - example `posts` service with CRUD actions
 
-- [Express](https://github.com/moleculer-java/moleculer-java-web/blob/master/examples/express/index.js)
+- [Express](https://github.com/moleculerjs/moleculer-web/blob/master/examples/express/index.js)
     - webserver with Express
     - use moleculer-web as a middleware
     
-- [Socket.io](https://github.com/moleculer-java/moleculer-java-web/blob/master/examples/socket.io/index.js)
+- [Socket.io](https://github.com/moleculerjs/moleculer-web/blob/master/examples/socket.io/index.js)
     - start socket.io websocket server
     - call action and send back the response via websocket
     - send Moleculer events to the browser via websocket
     
-- [Full](https://github.com/moleculer-java/moleculer-java-web/blob/master/examples/full/index.js)
+- [Full](https://github.com/moleculerjs/moleculer-web/blob/master/examples/full/index.js)
     - SSL
     - static files
     - middlewares
@@ -742,13 +1210,13 @@ settings: {
     - metrics, statistics & validation from Moleculer
     - custom error handlers
 
-- [Webpack](https://github.com/moleculer-java/moleculer-java-web/blob/master/examples/webpack)
+- [Webpack](https://github.com/moleculerjs/moleculer-web/blob/master/examples/webpack)
     - Webpack development environment for client-side developing
     - webpack config file
     - compression
     - static file serving
 
-- [Webpack-Vue](https://github.com/moleculer-java/moleculer-java-web/blob/master/examples/webpack-vue)
+- [Webpack-Vue](https://github.com/moleculerjs/moleculer-web/blob/master/examples/webpack-vue)
     - Webpack+Vue development environment for VueJS client developing
     - webpack config file
     - Hot-replacement
