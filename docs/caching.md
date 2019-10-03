@@ -7,26 +7,28 @@ By default, ServiceBroker uses MemoryCacher.
 **Cached action example**
 
 ```java
-ServiceBroker broker = new ServiceBroker();
+@Name("users")
+public class UserService extends Service {
 
-// Create a service
-broker.createService({
-    name: "users",
-    actions: {
-        list: {
-            // Enable caching to this action
-            cache: true, 
-            handler(ctx) {
-                this.logger.info("Handler called!");
-                return [
-                    { id: 1, name: "John" },
-                    { id: 2, name: "Jane" }
-                ]
-            }
-        }
-    }
-});
+    // Enable caching to this action
+    @Cache()
+    public Action list = ctx -> {
+        logger.info("Handler called!");
+            
+        // Response structure:
+        // [
+        //   { id: 1, name: "John" },
+        //   { id: 2, name: "Jane" }
+        // ]
+        Tree root = new Tree();
+        Tree list = root.putList("list");
+        list.addMap().put("id", 1).put("name", "John");
+        list.addMap().put("id", 2).put("name", "Jane");
+        return list;
+    };
+}
 
+// Invoke "users.list" action twice:
 Promise.resolve()
     .then(rsp -> {
         
@@ -59,44 +61,50 @@ Promise.resolve()
 [2017-08-18T13:04:33.849Z] INFO  Users count: 2
 [2017-08-18T13:04:33.849Z] INFO  Users count from cache: 2
 ```
-As you can see, the `Handler called` message appears only once because the response of second request is returned from the cache.
 
-> [Try it on Runkit](https://runkit.com/icebob/moleculer-cacher-example2)
+The `Handler called` message appears only once because the response of the second call came from the cache.
 
 ## Cache keys
+
 The cacher generates key from service name, action name and the params of context.
 The syntax of key is:
 ```
 <serviceName>.<actionName>:<parameters or hash of parameters>
 ```
-So if you call the `posts.list` action with params `{ limit: 5, offset: 20 }`, the cacher calculates a hash from the params. So the next time, when you call this action with the same params, it will find the entry in the cache by key.
+So if you call the `posts.list` action with params `{ limit: 5, offset: 20 }`,
+cacher generates cache key from `params` based on JSON serialization and/or hash algorithm.
+So the next time, when you call this action with the same params,
+it will find the entry in the cache by key.
 
 **Example hashed cache key for "posts.find" action**
+
 ```
 posts.find:limit|5|offset|20
 ```
 
-However, the params can contain properties which is not relevant for the cache key. On the other hand, it can cause performance issues if the key is too long. Therefore it is recommended to set an object for `cache` property which contains a list of essential parameter names under the `keys` property.
+The `params` structure may contain properties that are not relevant to the cache key.
+In addition, it can cause performance problems if the key is too long.
+Therefore, we recommend that you set the key properties of the "cache" note, which contains a list of basic parameter names under the "keys" property.
+
+Therefore it is recommended to set the key properties of the `cache` annotation which
+contains a list of essential parameter names:
 
 **Strict the list of `params` & `meta` properties for key generation**
+
 ```java
-{
-    name: "posts",
-    actions: {
-        list: {
-            cache: {
-                //  generate cache key from "limit", "offset" params and "user.id" meta
-                keys: ["limit", "offset","#user.id"]
-            },
-            handler(ctx) {
-                return this.getList(ctx.params.limit, ctx.params.offset);
-            }
-        }
-    }
+@Name("posts")
+public class PostService extends Service {
+
+    // Generate cache key from "limit", "offset" params and "user.id" meta
+    @Cache(keys = { "limit", "offset", "#user.id" })
+    public Action list = ctx -> {
+        logger.info("Handler called!");
+		// ...
+    };
 }
 
 // If params is { limit: 10, offset: 30 } and meta is { user: { id: 123 } }, the cache key will be:
-//   posts.list:10|30|123
+// posts.list:10|30|123
 ```
 
 {% note info Performance %}
@@ -104,203 +112,131 @@ This solution is pretty fast, so we recommend to use it in production. ![](https
 {% endnote %}
 
 ### Cache meta keys
+
 To use meta keys in cache `keys` use the `#` prefix.
 
 ```java
-broker.createService({
-    name: "posts",
-    actions: {
-        list: {
-            cache: {
-                // Cache key:  "limit" & "offset" from ctx.params, "user.id" from ctx.meta
-                keys: ["limit", "offset", "#user.id"],
-                ttl: 5
-            },
-            handler(ctx) {
+@Name("posts")
+public class PostService extends Service {
 
-            }
-        }
-    }
-});
+    // Generate cache key from "limit", "offset" params and "user.id" meta,
+	// cached responses are stored in the cacher for only 5 seconds (ttl = 5).
+    @Cache(keys = { "limit", "offset", "#user.id" }, ttl = 5)
+    public Action list = ctx -> {
+        logger.info("Handler called!");
+		// ...
+    };
+}
 ```
 
 ### Limiting cache key length
-Occasionally, the key can be very long, which can cause performance issues. To avoid it, maximize the length of concatenated params in the key with `maxParamsLength` cacher option. When the key is longer than this configured limitvalue, the cacher calculates a hash (SHA256) from the full key and adds it to the end of the key.
+
+Occasionally, the key can be very long, which can cause performance issues.
+To avoid it, maximize the length of concatenated params in the key with `maxParamsLength` cacher option.
+When the key is longer than this configured limitvalue,
+the cacher calculates a hash (SHA256) from the full key and adds it to the end of the key.
 
 > The minimum of `maxParamsLength` is `44` (SHA 256 hash length in Base64).
 > 
-> To disable this feature, set it to `0` or `null`.
+> To disable this feature, set it to `0`.
 
 **Generate a full key from the whole params without limit**
+
 ```java
-cacher.getCacheKey("posts.find", { id: 2, title: "New post", content: "It can be very very looooooooooooooooooong content. So this key will also be too long" });
+// The params is { id: 2, title: "New post", content: "It can be very very looooooooooooooooooong content. So this key will also be too long" }
+cacher.getCacheKey("posts.find", params);
 // Key: 'posts.find:id|2|title|New post|content|It can be very very looooooooooooooooooong content. So this key will also be too long'
 ```
 
 **Generate a limited-length key**
-```java
-const broker = new ServiceBroker({
-    cacher: {
-        type: "Memory",
-        options: {
-            maxParamsLength: 60
-        }
-    }
-});
 
-cacher.getCacheKey("posts.find", { id: 2, title: "New post", content: "It can be very very looooooooooooooooooong content. So this key will also be too long" });
+```java
+RedisCacher cacher = new RedisCacher("redis://localhost/");
+cacher.setMaxParamsLength(60);
+ServiceBroker broker = ServiceBroker.builder().cacher(cacher).build();
+
+// The params is { id: 2, title: "New post", content: "It can be very very looooooooooooooooooong content. So this key will also be too long" }
+cacher.getCacheKey("posts.find", params);
 // Key: 'posts.find:id|2|title|New pL4ozUU24FATnNpDt1B0t1T5KP/T5/Y+JTIznKDspjT0='
 ```
 
-## Conditional caching
-
-Conditional caching allows to bypass the cached response and execute an action in order to obtain "fresh" data.
-To bypass the cache set `ctx.meta.$cache` to `false` before calling an action.
-
-**Example of turning off the caching for the `greeter.hello` action**
-```java
-broker.call("greeter.hello", { name: "Moleculer" }, { meta: { $cache: false }}))
-```
-
-As an alternative, a custom function can be implemented to enable bypassing the cache. The custom function accepts as an argument the context (`ctx`) instance therefore it has access any params or meta data. This allows to pass the bypass flag within the request.
-
-**Example of a custom conditional caching function**
-```java
-// greeter.service.js
-module.exports = {
-    name: "greeter",
-    actions: {
-        hello: {
-            cache: {
-                enabled: ctx => ctx.params.noCache !== true, //`noCache` passed as a parameter
-                keys: ["name"]
-            },
-            handler(ctx) {
-                this.logger.debug(chalk.yellow("Execute handler"));
-                return `Hello ${ctx.params.name}`;
-            }
-        }
-    }
-};
-
-// Use custom `enabled` function to turn off caching for this request
-broker.call("greeter.hello", { name: "Moleculer", noCache: true }))
-```
-
 ## TTL
+
 Default TTL setting can be overriden in action definition.
 
 ```java
-const broker = new ServiceBroker({
-    cacher: {
-        type: "memory",
-        options: {
-            ttl: 30 // 30 seconds
-        }
-    }
-});
+MemoryCacher cacher = new MemoryCacher();
+cacher.setTtl(10);
+ServiceBroker broker = ServiceBroker.builder().cacher(cacher).build();
 
-broker.createService({
-    name: "posts",
-    actions: {
-        list: {
-            cache: {
-                // These cache entries will be expired after 5 seconds instead of 30.
-                ttl: 5
-            },
-            handler(ctx) {
-                // ...
-            }
-        }
-    }
+broker.createService(new Service("posts") {
+
+    @Cache(keys = { "limit", "offset", "#user.id" }, ttl = 5)
+    public Action list = ctx -> {
+        logger.info("Handler called!");
+		// ...
+    };
+
 });
 ```
 
-## Custom key-generator
-To overwrite the built-in cacher key generator, set your own function as `keygen` in cacher options.
+## Custom key-generator and Cacher
 
-```java
-const broker = new ServiceBroker({
-    cacher: {
-        type: "memory",
-        options: {
-            keygen(name, params, meta, keys) {
-                // Generate a cache key
-                // name - action name
-                // params - ctx.params
-                // meta - ctx.meta
-                // keys - cache keys defined in action
-                return "";
-            }
-        }
-    }
-});
-```
+The easiest way to build your own Cacher implementation is to inherit your own from an existing cacher class.
+To overwrite the built-in cache key generator,
+override the `getCacheKey` function with your implementation.
+The implementations of the cachers can be found in the `services.moleculer.cacher` package.
 
 ## Manual caching
-The cacher module can be used manually. Just call the `get`, `set`, `del` methods of `broker.cacher`.
+
+The cacher module can be used manually. Just call the `get`, `set`, `del` methods of the ServiceBroker's `Cacher`.
 
 ```java
-// Save to cache
-broker.cacher.set("mykey.a", { a: 5 });
+Cacher cacher = broker.getConfig().getCacher();
 
-// Get from cache (async)
-const obj = await broker.cacher.get("mykey.a")
+// Save to cache
+Tree data = new Tree();
+data.putList("array").add(1).add(2).add(3);
+
+cacher.set("mykey.a", data, 60);
+
+// Get from cache
+cacher.get("mykey.a").then(rsp -> {
+    logger.info("Data: " + rsp);
+});
 
 // Remove entry from cache
-broker.cacher.del("mykey.a");
+cacher.del("mykey.a");
 
 // Clean all 'mykey' entries
-broker.cacher.clean("mykey.**");
+cacher.clean("mykey.**");
 
 // Clean all entries
-broker.cacher.clean();
-```
-
-Additionally, the complete [ioredis](https://github.com/luin/ioredis) client API is available at `broker.cacher.client` when using the built-in Redis cacher:
-
-```java
-// create an ioredis pipeline
-const pipeline = broker.cacher.client.pipeline();
-// set values in cache
-pipeline.set('mykey.a', 'myvalue.a');
-pipeline.set('mykey.b', 'myvalue.b');
-// execute pipeline
-pipeline.exec();
+cacher.clean();
 ```
 
 ## Clear cache
-When you create a new model in your service, sometimes you have to clear the old cached model entries.
+
+Sometimes you have to clear the old cached entries
+(for example, when you change the records in a database).
 
 **Example to clean the cache inside actions**
+
 ```java
-{
-    name: "users",
-    actions: {
-        create(ctx) {
-            // Create new user entity
-            const user = new User(ctx.params);
+// Clear all entries
+cacher.clean();
 
-            // Clear all cache entries
-            this.broker.cacher.clean();
+// Clear all entries from the `users` cache region
+this.broker.cacher.clean("users.**");
 
-            // Clear all cache entries which keys start with `users.`
-            this.broker.cacher.clean("users.**");
-
-            // Clear multiple cache entries
-            this.broker.cacher.clean([ "users.**", "posts.**" ]);
-
-            // Delete an entry
-            this.broker.cacher.del("users.list");
-
-            // Delete multiple entries
-            this.broker.cacher.del([ "users.model:5", "users.model:8" ]);
-        }
-    }
-}
+// Delete the specified entries
+cacher.del("users.list");
+cacher.del("users.model:5");
+cacher.del("users.model:8|true|2");
 ```
 
 ### Clear cache among multiple service instances
+
 The best practice to clear cache entries among multiple service instances is that use broadcast events.
 
 **Example**
@@ -337,9 +273,12 @@ module.exports = {
 ```
 
 ### Clear cache among different services
-Common way is that your service depends on other ones. E.g. `posts` service stores information from `users` service in cached entries (in case of populating).
+
+Common way is that your service depends on other ones.
+E.g. `posts` service stores information from `users` service in cached entries (in case of populating).
 
 **Example cache entry in `posts` service**
+
 ```java
 {
     _id: 1,
@@ -353,11 +292,16 @@ Common way is that your service depends on other ones. E.g. `posts` service stor
     createdAt: 1519729167666
 }
 ```
-The `author` field is received from `users` service. So if the `users` service clears cache entries, the `posts` service has to clear own cache entries, as well. Therefore you should also subscribe to the `cache.clear.users` event in `posts` service.
+
+The `author` field is received from `users` service.
+So if the `users` service clears cache entries,
+the `posts` service has to clear own cache entries, as well.
+Therefore you should also subscribe to the `cache.clear.users` event in `posts` service.
 
 To make it easier, create a `CacheCleaner` mixin and define in constructor the dependent services.
 
 **cache.cleaner.mixin.js**
+
 ```java
 module.exports = function(serviceNames) {
     const events = {};
@@ -378,6 +322,7 @@ module.exports = function(serviceNames) {
 ```
 
 **posts.service.js**
+
 ```java
 const CacheCleaner = require("./cache.cleaner.mixin");
 
@@ -396,46 +341,8 @@ module.exports = {
 
 With this solution if the `users` service emits a `cache.clean.users` event, the `posts` service will also clear the own cache entries.
 
-## Cache locking
-Moleculer also supports cache locking feature. For detailed info [check the PR](https://github.com/moleculerjs/moleculer/pull/490)
-
-**Enable Lock**
-```java
-const broker = new ServiceBroker({
-    cacher: {
-        ttl: 60,
-        lock: true, // Set to true to enable cache locks. Default is disabled.
-    }
-});
-```
-
-**Enable with TTL**
-```java
-const broker = new ServiceBroker({
-    cacher: {
-        ttl: 60,
-        lock: {
-            ttl: 15, // The maximum amount of time you want the resource locked in seconds
-            staleTime: 10, // If the TTL is less than this number, means that the resources are staled
-        }
-    }
-});
-```
-
-**Disable Lock**
-```java
-const broker = new ServiceBroker({
-    cacher: {
-        ttl: 60,
-        lock: {
-            enable: false, // Set to false to disable.
-            ttl: 15, // The maximum amount of time you want the resource locked in seconds
-            staleTime: 10, // If the TTL is less than this number, means that the resources are staled
-        }
-    }
-});
-```
 **Example for Redis cacher with `redlock` library**
+
 ```java
 const broker = new ServiceBroker({
   cacher: {
@@ -488,9 +395,11 @@ With this solution if the `users` service emits a `cache.clean.users` event, the
 ## Built-in cachers
 
 ### Memory cacher
+
 `MemoryCacher` is a built-in memory cache module. It stores entries in the heap memory.
 
 **Enable memory cacher**
+
 ```java
 const broker = new ServiceBroker({
     cacher: "Memory"
@@ -504,6 +413,7 @@ const broker = new ServiceBroker({
 ```
 
 **Enable with options**
+
 ```java
 const broker = new ServiceBroker({
     cacher: {
@@ -526,6 +436,7 @@ const broker = new ServiceBroker({
 | `maxParamsLength` | `Number` | `null` | Maximum length of params in generated keys. |
 
 #### Cloning
+
 The cacher uses the lodash `_.cloneDeep` method for cloning. To change it, set a `Function` to the `clone` option instead of a `Boolean`.
 
 **Custom clone function with JSON parse & stringify**
@@ -541,6 +452,7 @@ const broker = new ServiceBroker({
 ```
 
 ### Redis cacher
+
 `RedisCacher` is a built-in [Redis](https://redis.io/) based distributed cache module. It uses [`ioredis`](https://github.com/luin/ioredis) library.
 Use it, if you have multiple instances of services because if one instance stores some data in the cache, other instances will find it.
 
@@ -552,6 +464,7 @@ const broker = new ServiceBroker({
 ```
 
 **With connection string**
+
 ```java
 const broker = new ServiceBroker({
     cacher: "redis://redis-server:6379"
@@ -559,6 +472,7 @@ const broker = new ServiceBroker({
 ```
 
 **With options**
+
 ```java
 const broker = new ServiceBroker({
     cacher: {
@@ -583,6 +497,7 @@ const broker = new ServiceBroker({
 ```
 
 **With MessagePack serializer**
+
 ```java
 const broker = new ServiceBroker({
     nodeID: "node-123",
@@ -603,6 +518,7 @@ const broker = new ServiceBroker({
 ```
 
 **With Redis Cluster Client**
+
 ```java
 const broker = new ServiceBroker({
     cacher: {
@@ -642,9 +558,11 @@ To be able to use this cacher, install the `ioredis` module with the `npm instal
 {% endnote %}
 
 ### LRU memory cacher
+
 `LRU memory cacher` is a built-in [LRU cache](https://github.com/isaacs/node-lru-cache) module. It deletes the least-recently-used items.
 
 **Enable LRU cacher**
+
 ```java
 const broker = new ServiceBroker({
     cacher: "MemoryLRU"
@@ -652,6 +570,7 @@ const broker = new ServiceBroker({
 ```
 
 **With options**
+
 ```java
 let broker = new ServiceBroker({
     logLevel: "debug",
@@ -673,9 +592,11 @@ To be able to use this cacher, install the `lru-cache` module with the `npm inst
 {% endnote %}
 
 ## Custom cacher
+
 Custom cache module can be created. We recommend to copy the source of [MemoryCacher](https://github.com/moleculerjs/moleculer/blob/master/src/cachers/memory.js) or [RedisCacher](https://github.com/moleculerjs/moleculer/blob/master/src/cachers/redis.js) and implement the `get`, `set`, `del` and `clean` methods.
 
 ### Create custom cacher
+
 ```java
 const BaseCacher = require("moleculer").Cachers.Base;
 
