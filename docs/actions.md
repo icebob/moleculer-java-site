@@ -28,19 +28,57 @@ So if you have a `posts` service with a `create` action, you can call it as `pos
 
 The `params` is an object which is passed to the action as a part of the [Context](#Context).
 The service can access it via `ctx.params`.
-This parameter is optional.
+In the Node.js-based Moleculer implementation, the 'params' is a JavaScript Object.
+A JavaScript Object is a collection of named values:
 
-The `opts` is an CallOptions to set/override some request parameters, for example `timeout`, `retryCount` or `nodeID`.
-This parameter is optional. CallOptions can be produced using method chainig:
+Sample JavaScript Object:
+
+```js
+var params = {param1: "value1",
+              param2: "value2",
+              param3: 12345678,
+              param3: true};
+```
+
+There is no similar native support for dynamic creation of JSON objects in Java language.
+Because of this, the Java-based Moleculer implementation uses [Tree](https://berkesa.github.io/datatree/)
+Objects to create hierarchical data structures.
+The following Java code snippet builds similar JSON structure like the previous JavaScript code:
 
 ```java
-CallOptions opts = CallOptions.nodeID("node-2").timeout(1500).retryCount(3);
-
 Tree params = new Tree();
 params.put("param1", "value1");
 params.put("param2", "value2");
 params.put("param3", 12345678);
 params.put("param4", true);
+```
+
+The following Java statement...
+```java
+System.out.println(params);
+```
+... will print this:
+```json
+{
+  "param1" : "value1",
+  "param2" : "value2",
+  "param3" : 12345678,
+  "param4" : true
+}
+```
+
+The `opts` is an CallOptions to set/override some request parameters,
+for example `timeout`, `retryCount` or `nodeID`.
+CallOptions can be produced using method chainig:
+
+```java
+CallOptions opts = CallOptions.nodeID("node-2").timeout(1500).retryCount(3);
+
+Tree params = new Tree()
+    .put("param1", "value1")
+    .put("param2", "value2")
+    .put("param3", 12345678)
+    .put("param4", true);
 
 Promise promise = broker.call("service.action", params, opts);
 
