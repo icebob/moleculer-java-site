@@ -185,7 +185,6 @@ List of all available broker options:
 | `transporter` | `Transporter` | `null` | Transporter settings. [Read more](networking.html). |
 | `monitor` | `Monitor` | `SigarMonitor` | CPU monitor. [Read more](balancing.html). |
 | `shutDownThreadPools` | `boolean` | `true` | Shut down thread pools during the shutdown stage |
-```
 
 This
 [demo project](https://github.com/moleculer-java/moleculer-spring-boot-demo)
