@@ -42,8 +42,8 @@ const MyCustomMiddleware = {
     // Wrap local event handlers
     localEvent(next, event) {
         return (ctx) => {
-			return next(ctx);
-		};
+            return next(ctx);
+        };
     },
 
     // Wrap broker.createService method

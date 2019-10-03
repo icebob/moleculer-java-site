@@ -36,12 +36,12 @@ Moleculer Java requires Java 8.
 
 ```xml
 <dependencies>
-	<dependency>
-		<groupId>com.github.berkesa</groupId>
-		<artifactId>moleculer-java</artifactId>
-		<version>1.1.3</version>
-		<scope>runtime</scope>
-	</dependency>
+    <dependency>
+        <groupId>com.github.berkesa</groupId>
+        <artifactId>moleculer-java</artifactId>
+        <version>1.1.3</version>
+        <scope>runtime</scope>
+    </dependency>
 </dependencies>
 ```
 
@@ -49,7 +49,7 @@ Moleculer Java requires Java 8.
 
 ```gradle
 dependencies {
-	compile group: 'com.github.berkesa', name: 'moleculer-java', version: '1.1.3' 
+    compile group: 'com.github.berkesa', name: 'moleculer-java', version: '1.1.3' 
 }
 ```
 

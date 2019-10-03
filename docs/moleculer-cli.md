@@ -23,27 +23,27 @@ The above command downloads the template from [moleculerjs/moleculer-template-pr
 #### [Official templates](https://github.com/topics/moleculer-template)
 
 * [**project**](https://github.com/moleculerjs/moleculer-template-project) - Generate a common Moleculer-based project. *Use it if you want to start a new project which is based on Moleculer framework*
-	* sample service (`greeter`)
-	* official [API Gateway](https://github.com/moleculerjs/moleculer-web) (optional)
-	* Docker & Docker Compose files
-	* tests & coverage with [Jest](http://facebook.github.io/jest/)
-	* lint with [ESLint](http://eslint.org/)
+    * sample service (`greeter`)
+    * official [API Gateway](https://github.com/moleculerjs/moleculer-web) (optional)
+    * Docker & Docker Compose files
+    * tests & coverage with [Jest](http://facebook.github.io/jest/)
+    * lint with [ESLint](http://eslint.org/)
 
 
 * [**nano**](https://github.com/moleculerjs/moleculer-template-nano) - Minimal project template for one microservice. *Use it if you want to create a microservice which connect to others via transporter*
-	* sample service (`greeter`)
-	* Docker & Docker Compose files
-	* tests & coverage with [Jest](http://facebook.github.io/jest/)
-	* lint with [ESLint](http://eslint.org/)
-	* Minimal Docker file
+    * sample service (`greeter`)
+    * Docker & Docker Compose files
+    * tests & coverage with [Jest](http://facebook.github.io/jest/)
+    * lint with [ESLint](http://eslint.org/)
+    * Minimal Docker file
 
 
 * [**module**](https://github.com/moleculerjs/moleculer-template-module) - Generate a new Moleculer module project (e.g.: `moleculer-xyz`). *Use it if you want to create a module for Moleculer framework*
-	* empty service skeleton
-	* examples skeleton
-	* readme skeleton
-	* tests & coverage with [Jest](http://facebook.github.io/jest/)
-	* lint with [ESLint](http://eslint.org/)
+    * empty service skeleton
+    * examples skeleton
+    * readme skeleton
+    * tests & coverage with [Jest](http://facebook.github.io/jest/)
+    * lint with [ESLint](http://eslint.org/)
 
 #### Custom templates
 

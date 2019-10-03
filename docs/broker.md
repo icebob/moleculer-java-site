@@ -55,42 +55,42 @@ ServiceBroker broker = ServiceBroker.builder()
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
-	   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-	   http://www.springframework.org/schema/context
-	   http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<!-- ENABLE ANNOTATION PROCESSING -->
+    <!-- ENABLE ANNOTATION PROCESSING -->
 
-	<context:annotation-config />
+    <context:annotation-config />
 
-	<!-- PACKAGE OF THE MOLECULER SERVICES -->
-	
-	<context:component-scan base-package="my.services" />
+    <!-- PACKAGE OF THE MOLECULER SERVICES -->
+    
+    <context:component-scan base-package="my.services" />
 
-	<!-- SPRING REGISTRATOR FOR MOLECULER SERVICES -->
+    <!-- SPRING REGISTRATOR FOR MOLECULER SERVICES -->
 
-	<bean id="registrator" class="services.moleculer.config.SpringRegistrator" depends-on="broker" />
+    <bean id="registrator" class="services.moleculer.config.SpringRegistrator" depends-on="broker" />
 
-	<!-- SERVICE BROKER INSTANCE -->
+    <!-- SERVICE BROKER INSTANCE -->
 
-	<bean id="broker" class="services.moleculer.ServiceBroker"
-		init-method="start" destroy-method="stop">
-		<constructor-arg ref="brokerConfig" />
-	</bean>
+    <bean id="broker" class="services.moleculer.ServiceBroker"
+        init-method="start" destroy-method="stop">
+        <constructor-arg ref="brokerConfig" />
+    </bean>
 
-	<!-- SERVICE BROKER SETTINGS -->
+    <!-- SERVICE BROKER SETTINGS -->
 
-	<bean id="brokerConfig" class="services.moleculer.config.ServiceBrokerConfig">
-		<property name="nodeID" value="node-1" />
-		<property name="transporter" ref="transporter" />
-	</bean>
+    <bean id="brokerConfig" class="services.moleculer.config.ServiceBrokerConfig">
+        <property name="nodeID" value="node-1" />
+        <property name="transporter" ref="transporter" />
+    </bean>
 
-	<!-- CONFIGURE TRANSPORTER -->
+    <!-- CONFIGURE TRANSPORTER -->
 
-	<bean id="transporter" class="services.moleculer.transporter.TcpTransporter" />
+    <bean id="transporter" class="services.moleculer.transporter.TcpTransporter" />
 
 </beans>
 ```
@@ -108,12 +108,12 @@ import services.moleculer.service.*;
 @Controller
 public class TestService extends Service {
 
-	@Name("action1")
-	public Action testAction = ctx -> {
-		return ctx.params.get("a").asInteger()
-			 + ctx.params.get("b").asInteger();
-	};
-	
+    @Name("action1")
+    public Action testAction = ctx -> {
+        return ctx.params.get("a").asInteger()
+             + ctx.params.get("b").asInteger();
+    };
+    
 }
 ```
 
@@ -131,25 +131,25 @@ import services.moleculer.*;
 @ComponentScan("my.services")
 public class MoleculerApplication {
 
-	// --- CREATE AND CONFIGURE SERVICE BROKER ---
+    // --- CREATE AND CONFIGURE SERVICE BROKER ---
 
-	@Bean(initMethod = "start", destroyMethod = "stop")
-	public ServiceBroker getServiceBroker() {
-		ServiceBrokerConfig config = new ServiceBrokerConfig();
-		config.setNodeID("node1");
-		config.setTransporter(...);
-		config.setStrategyFactory(...);
-		config.setCacher(...);
+    @Bean(initMethod = "start", destroyMethod = "stop")
+    public ServiceBroker getServiceBroker() {
+        ServiceBrokerConfig config = new ServiceBrokerConfig();
+        config.setNodeID("node1");
+        config.setTransporter(...);
+        config.setStrategyFactory(...);
+        config.setCacher(...);
 
-		return new ServiceBroker(config);
-	}
+        return new ServiceBroker(config);
+    }
 
-	// --- SPRING REGISTRATOR (REQUIRED) ---
+    // --- SPRING REGISTRATOR (REQUIRED) ---
 
-	@Bean
-	public SpringRegistrator getSpringRegistrator() {
-		return new SpringRegistrator();
-	}
+    @Bean
+    public SpringRegistrator getSpringRegistrator() {
+        return new SpringRegistrator();
+    }
 
 }
 ```

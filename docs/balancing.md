@@ -67,17 +67,17 @@ it gets samples and selects the node with the lowest CPU usage from only samples
 ```java
 // Create CPU monitor
 SigarMonitor cpuMonitor = new SigarMonitor();
-		
+        
 // Create CPU-based strategy
 CpuUsageStrategyFactory invocationStrategy = new CpuUsageStrategyFactory();
 invocationStrategy.setLowCpuUsage(5);
 invocationStrategy.setMaxTries(3);
-		
+        
 // Create service broker
 ServiceBroker broker = ServiceBroker.builder()
                                     .strategy(invocationStrategy)
-									.monitor(cpuMonitor)
-									.build();		
+                                    .monitor(cpuMonitor)
+                                    .build();        
 ```
 
 To determine CPU usage, ServiceBroker needs a Monitor instance that can query the current CPU usage.
@@ -107,7 +107,7 @@ strategy.setSampleCount(5);
 strategy.setCollectCount(10);
 strategy.setPingInterval(10);
 strategy.setPingTimeout(5000);
-		
+        
 // Create service broker
 ServiceBroker broker = ServiceBroker.builder().strategy(strategy).build();
 ```

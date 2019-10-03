@@ -117,9 +117,9 @@ const broker = new ServiceBroker({
 ```java
 // nodes.json
 [
-	"127.0.0.1:6001/client-1",
-	"127.0.0.1:7001/server-1",
-	"127.0.0.1:7002/server-2"
+    "127.0.0.1:6001/client-1",
+    "127.0.0.1:7001/server-1",
+    "127.0.0.1:7002/server-2"
 ]
 ```
 

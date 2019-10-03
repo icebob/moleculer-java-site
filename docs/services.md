@@ -303,20 +303,20 @@ ServiceBroker has a continuous local storage that stores the current context. It
 ```java
 // greeter.service.js
 module.exports = {
-	name: "greeter",
-	actions: {
-		hello(ctx) {
-			return this.Promise.resolve()
-				.then(() => this.doSomething());
+    name: "greeter",
+    actions: {
+        hello(ctx) {
+            return this.Promise.resolve()
+                .then(() => this.doSomething());
 
-		}
-	},
-	methods: {
-		doSomething() {
+        }
+    },
+    methods: {
+        doSomething() {
             const ctx = this.currentContext;
             return ctx.call("other.service");
-		}
-	}
+        }
+    }
 });
 ```
 

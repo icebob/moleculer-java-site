@@ -43,10 +43,11 @@ params.put("param3", 12345678);
 params.put("param4", true);
 
 Promise promise = broker.call("service.action", params, opts);
+
 promise.then(rsp -> {
     logger.info("Response: " + rsp);
 }).catchError(err -> {
-    logger.error("Error!", err);			
+    logger.error("Error!", err);            
 });
 ```
 
@@ -59,20 +60,20 @@ broker.call("service.action",
             "param2", "value2",
             "param3", 12345678,
             "param4", true,
-			CallOptions.nodeID("node-2").timeout(1500).retryCount(3)
-			).then(rsp -> {
-			    logger.info("Response: " + rsp);
-			}).catchError(err -> {
-			    logger.error("Error!", err);			
-			});
+            CallOptions.nodeID("node-2").timeout(1500).retryCount(3)
+            ).then(rsp -> {
+                logger.info("Response: " + rsp);
+            }).catchError(err -> {
+                logger.error("Error!", err);            
+            });
 ```
 
 **Available calling options:**
 
 | Name | Type | Default | Description |
 | ------- | ----- | ------- | ------- |
-| `timeout` | `Number` | `null` | Timeout of request in milliseconds. If the request is timed out and you don't define `fallbackResponse`, broker will throw a `RequestTimeout` error. To disable set `0`. If it's not defined, broker uses the `requestTimeout` value of broker options. [Read more](fault-tolerance.html#Timeout) |
-| `retries` | `Number` | `null` | Count of retry of request. If the request is timed out, broker will try to call again. To disable set `0`. If it's not defined, broker uses the `retryPolicy.retries` value of broker options. [Read more](fault-tolerance.html#Retry) |
+| `timeout` | `Number` | `null` | Timeout of request in milliseconds. [Read more](fault-tolerance.html#Timeout) |
+| `retries` | `Number` | `null` | Count of retry of request. If the request is timed out, broker will try to call again. [Read more](fault-tolerance.html#Retry) |
 | `nodeID` | `String` | `null` | Target nodeID. If set, it will make a direct call to the given node. |
 
 ### Usages
@@ -80,24 +81,24 @@ broker.call("service.action",
 **Call without params**
 
 ```java
-broker.call("user.list").then(res -> {
-    logger.info("User list: ", res));
+broker.call("user.list").then(rsp -> {
+    logger.info("User list: ", rsp));
 });
 ```
 
 **Call with params**
 
 ```java
-broker.call("user.get", "id", 3).then(res -> {
-    logger.info("User: ", res));
+broker.call("user.get", "id", 3).then(rsp -> {
+    logger.info("User: ", rsp));
 });
 ```
 
 **Blocking style calling**
 
 ```java
-Tree res = broker.call("user.get", "id", 3).waitFor();
-logger.info("User: ", res);
+Tree rsp = broker.call("user.get", "id", 3).waitFor();
+logger.info("User: ", rsp);
 ```
 
 **Call with options**
@@ -105,11 +106,9 @@ logger.info("User: ", res);
 ```java
 broker.call("user.recommendation",
             "limit", 5,
-			CallOptions.timeout(500)
-			           .retryCount(3)
-           ).then(res -> {
-               logger.info("User: ", res));
-           });
+            CallOptions.retryCount(3)).then(rsp -> {
+               logger.info("User: ", rsp));
+            });
 ```
 
 ### Metadata
@@ -133,31 +132,6 @@ broker.call("service.action", params).then(rsp -> {
 
 The remote service can access the metadata block with the `ctx.params.getMeta()` function.
 
-```java
-broker.createService({
-    name: "test",
-    actions: {
-        first(ctx) {
-            return ctx.call("test.second", null, { meta: {
-                b: 5
-            }});
-        },
-        second(ctx) {
-            console.log(ctx.meta);
-            // Prints: { a: "John", b: 5 }
-        }
-    }
-});
-
-broker.call("test.first",
-            new Tree().getMeta()
-                      .put("a", "John"));
-```
-
-The current Java implementation does not pass the received metadata to the following services.
-This is currently a difference between Node.js and Java implementations.
-In the next Moleculer-Java versions, the operation will be the same as the Node.js implementation.
-
 ## Streaming
 
 Moleculer-Java supports streams as request `params` and as response.
@@ -179,7 +153,7 @@ try {
 }
 ```
 
-Please note, the `params` should be a stream, you cannot add any more variables to the `params`.
+Please note, the `params` should be a stream, you cannot add other variables to the `params`.
 Use the `meta` property to transfer additional data.
 
 **Sending a file to a service**
@@ -220,9 +194,9 @@ public class StorageService extends Service {
 public class StorageService extends Service {
     public Action get = ctx -> {
         String filename = ctx.params.getMeta().get("filename", "");
-		PacketStream stream = broker.createStream();
+        PacketStream stream = broker.createStream();
         stream.transferFrom(new File(filename));
-		return stream;
+        return stream;
     };
 }
 ```
@@ -235,19 +209,20 @@ broker.call("storage.get", "filename", filename).then(rsp -> {
 
     // Response received
     PacketStream stream = (PacketStream) rsp.asObject();
-	logger.info("Receiving file...");
-	return stream.transferTo(new File(filename));
-	
+    logger.info("Receiving file...");
+    return stream.transferTo(new File(filename));
+
 }).then(end -> {
 
-    // Downloading finished
-	logger.info("Ok!");
-	
+    // Saving finished, `transferTo` completed
+    // the previously returned Promise
+    logger.info("Ok!");
+
 }).catchError(err -> {
 
     // Downloading failed
-	logger.error("Failed!", err);
-	
+    logger.error("Failed!", err);
+
 });
 ```
 

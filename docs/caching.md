@@ -30,24 +30,24 @@ broker.createService({
 Promise.resolve()
     .then(rsp -> {
         
-		// The first time the cache is empty, the Service will be invoked.
+        // The first time the cache is empty, the Service will be invoked.
         return broker.call("users.list");
-		
+        
     }).then(rsp -> {
-	
-		// First result
-		logger.info("Users count:" + rsp.size());
-	
+    
+        // First result
+        logger.info("Users count:" + rsp.size());
+    
     }).then(rsp -> {
         
-		// Returns from cache, handler won't be invoked.
+        // Returns from cache, handler won't be invoked.
         return broker.call("users.list");
-		
+        
     }).then(rsp -> {
 
-		// Second result
-		logger.info("Users count from cache:" + rsp.size());
-		
+        // Second result
+        logger.info("Users count from cache:" + rsp.size());
+        
     });
 ```
 

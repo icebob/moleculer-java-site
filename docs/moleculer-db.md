@@ -55,8 +55,8 @@ broker.createService({
     settings: {
         fields: ["_id", "username", "name"],
         entityValidator: {
-			username: "string"
-		}
+            username: "string"
+        }
     },
 
     afterConnected() {

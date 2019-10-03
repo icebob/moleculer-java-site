@@ -45,7 +45,7 @@ broker.createService(ApiService);
 broker.start();
 ```
 
-**Example URLs:**	
+**Example URLs:**    
 - Call `test.hello` action: `http://localhost:3000/test/hello`
 - Call `math.add` action with params: `http://localhost:3000/math/add?a=25&b=13`
 
@@ -527,7 +527,7 @@ broker.createService({
 
             // Further options to `server-static` module
             options: {}
-        }		
+        }        
     }
 });
 ```
@@ -548,7 +548,7 @@ broker.createService({
                 fallbackResponse(ctx, err) { ... }
             }
 
-        }]		
+        }]        
     }
 });
 ```
@@ -779,7 +779,7 @@ broker.createService({
             res.setHeader("Content-Type", "text/plain");
             res.writeHead(501);
             res.end("Global error: " + err.message);
-        }		
+        }        
     }
 }
 ```
@@ -1015,9 +1015,9 @@ settings: {
     },
 
     // Used server instance. If null, it will create a new HTTP(s)(2) server
-	// If false, it will start without server in middleware mode
-	server: true,
-    		
+    // If false, it will start without server in middleware mode
+    server: true,
+            
     // Exposed global path prefix
     path: "/api",
     
@@ -1037,7 +1037,7 @@ settings: {
     http2: false,
 
     // Override HTTP server default timeout
-	httpServerTimeout: null,
+    httpServerTimeout: null,
 
     // Optimize route & alias paths (deeper first).
     optimizeOrder: true,
