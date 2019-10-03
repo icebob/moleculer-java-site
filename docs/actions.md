@@ -67,6 +67,11 @@ System.out.println(params);
 }
 ```
 
+[Tree](https://berkesa.github.io/datatree/) isn't a JSON parser/generator.
+It’s a top-level API layer that uses existing JSON implementations,
+like Jackson, Gson or Fastjson.
+
+The last parameter is `opts`.
 The `opts` is an CallOptions to set/override some request parameters,
 for example `timeout`, `retryCount` or `nodeID`.
 CallOptions can be produced using method chainig:
@@ -111,7 +116,7 @@ broker.call("service.action",
 | Name | Type | Default | Description |
 | ------- | ----- | ------- | ------- |
 | `timeout` | `Number` | `null` | Timeout of request in milliseconds. [Read more](fault-tolerance.html#Timeout) |
-| `retries` | `Number` | `null` | Count of retry of request. If the request is timed out, broker will try to call again. [Read more](fault-tolerance.html#Retry) |
+| `retries` | `Number` | `null` | Count of retry of request. If the request is timed out or any I/O error occurs, broker will try to call again. [Read more](fault-tolerance.html#Retry) |
 | `nodeID` | `String` | `null` | Target nodeID. If set, it will make a direct call to the given node. |
 
 ### Usages
@@ -138,6 +143,13 @@ broker.call("user.get", "id", 3).then(rsp -> {
 Tree rsp = broker.call("user.get", "id", 3).waitFor();
 logger.info("User: ", rsp);
 ```
+
+{% note info Do not block %} 
+The `waitFor` a blocking operation,
+do not use this method unless it is absolutely necessary for something
+(eg. for testing).
+Preferably `then` and `catchError` non-blocking methods should be used.
+{% endnote %}
 
 **Call with options**
 
