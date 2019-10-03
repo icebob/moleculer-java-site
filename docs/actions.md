@@ -156,7 +156,7 @@ logger.info("User: ", rsp);
 The `waitFor` is a blocking operation (temporarily pauses the running Thread),
 do not use this method unless it is absolutely necessary for something
 (eg. for testing).
-Preferably `then` and `catchError` non-blocking methods should be used.
+Preferably `then()` and `catchError()` non-blocking methods should be used.
 Asynchronous operations can be organized into a Waterfall Sequence using these methods.
 {% endnote %}
 
@@ -173,7 +173,7 @@ broker.call("user.recommendation",
 ### Metadata
 
 The request structure may contain metadata. It can be name-value pairs or any structure.
-Unlike the Node.js version, the Java version stores the metadata in params:
+Unlike the Node.js version, the Java version stores the metadata in `params`:
 
 ```java
 Tree params = new Tree();
@@ -314,7 +314,7 @@ broker.call("storage.get", "filename", filename).then(rsp -> {
 When you call an action, the broker creates a `Context` instance which contains all request information
 and passes it to the action handler as a single argument.
 
-**Available properties & methods of `Context`:**
+**Available properties & methods of the `Context`:**
 
 | Name | Type |  Description |
 | ------- | ----- | ------- |
@@ -323,6 +323,7 @@ and passes it to the action handler as a single argument.
 | `ctx.requestID` | `String` | Request ID. If you make nested-calls, it will be the same ID |
 | `ctx.parentID` | `String` | Parent context ID (in nested-calls) |
 | `ctx.params` | `Tree` | Request params including metadata (second argument from `broker.call`) |
+| `ctx.stream` | `PacketStream` | Request stream or `null` |
 | `ctx.level` | `int` | Request level (in nested-calls, the first level is `1`) |
 | `ctx.startTime` | `long` | Timestamp of the context creation |
 | `ctx.call()` | `Method` | Make nested-calls (same arguments like in `broker.call`) |

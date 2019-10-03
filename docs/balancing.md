@@ -8,8 +8,8 @@ The default (pre-set) invocation mode is the round-robin strategy.
 
 ## Built-in strategies
 
-To configure strategy, set `strategy` Builder option when creating the ServiceBroker.
-Alternatively, set up the strategy of the ServiceBrokerConfig using the `setStrategyFactory` method.
+To configure strategy, set `strategy()` builder option when creating the ServiceBroker.
+Alternatively, set up the strategy of the ServiceBrokerConfig using the `setStrategyFactory()` method.
 
 **Configure balancing strategy**
 
@@ -21,7 +21,7 @@ ServiceBrokerConfig config = new ServiceBrokerConfig();
 config.setStrategyFactory(strategy);
 ServiceBroker broker = new ServiceBroker(config);
 
-// Setup using ServiceBroker.Builder
+// Setup using ServiceBroker.builder()
 ServiceBroker broker = ServiceBroker.builder()
                                     .strategy(strategy)
                                     .build();
@@ -30,9 +30,10 @@ ServiceBroker broker = ServiceBroker.builder()
 ### RoundRobin strategy
 
 This strategy selects a node based on [round-robin](https://en.wikipedia.org/wiki/Round-robin_DNS) algorithm.
+This is the default invocation strategy.
 You can use the `setPreferLocal` function to configure ServiceRegistry
 to invoke locally available services whenever they are available in the JVM.
-If set to "false", there will be no difference between local or remote service calls.
+If set to "true", ServiceBroker will always use internal action calls, if possible.
 Such a function exists for each StrategyFactory.
 
 **Usage**
@@ -45,7 +46,8 @@ ServiceBroker broker = ServiceBroker.builder().strategy(strategy).build();
 
 ### Random strategies
 
-This strategy selects a node randomly.
+These strategies randomly select the node.
+The load on each node (as in round-robin) will be roughly the same.
 
 **Usage**
 
@@ -61,6 +63,7 @@ SecureRandomStrategyFactory strategy = new SecureRandomStrategyFactory();
 This strategy selects a node which has the lowest CPU usage.
 Due to the node list can be very long,
 it gets samples and selects the node with the lowest CPU usage from only samples instead of the whole node list.
+CPU-based load balancing works even when the application is heterogeneous (consisting of Java and Node.js modules).
 
 **Usage**
 
@@ -126,7 +129,7 @@ ServiceBroker broker = ServiceBroker.builder().strategy(strategy).build();
 Custom Strategy can be created by implementing StrategyFactory and Strategy interfaces.
 We recommend to copy the source of [SecureRandomStrategyFactory](https://github.com/moleculer-java/moleculer-java/blob/master/src/main/java/services/moleculer/strategy/SecureRandomStrategyFactory.java)
 and [SecureRandomStrategy](https://github.com/moleculer-java/moleculer-java/blob/master/src/main/java/services/moleculer/strategy/SecureRandomStrategy.java)
-classes, and modify the `next` method in the SecureRandomStrategy.java.
+classes, and modify the `next()` method in the SecureRandomStrategy.java.
 
 **Usage**
 
