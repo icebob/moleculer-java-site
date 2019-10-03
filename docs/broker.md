@@ -2,7 +2,7 @@ title: Broker
 ---
 The `ServiceBroker` is the main component of Moleculer.
 It handles services, calls actions, emits events and communicates with remote nodes. 
-You must create a `ServiceBroker` instance for every node.
+You must create a `ServiceBroker` instance for each node.
 
 ## Create Service Broker
 
@@ -20,12 +20,9 @@ broker.createService(new Service("test") {
 });
 
 // Call the service
-broker.call("test.action",
-            "a", 3,
-            "b", 4)
-        .then(rsp -> {
-            System.out.println(rsp);
-        });
+broker.call("test.action", "a", 3, "b", 4).then(rsp -> {
+    System.out.println(rsp);
+});
 ```
 
 **Create Broker with custom settings:**
@@ -39,6 +36,7 @@ config.setNodeID("node1");
 config.setTransporter(new RedisTransporter("redis://host"));
 config.setStrategyFactory(new CpuUsageStrategyFactory());
 config.setCacher(new MemoryCacher());
+
 ServiceBroker broker = new ServiceBroker(config);
 
 // Using ServiceBroker.builder
