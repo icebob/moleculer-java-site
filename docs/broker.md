@@ -214,7 +214,7 @@ The demo also shows you how to set the above parameters.
 | `broker.ping(nodeID)` | `Promise` | Sends a PING message to the specified node. The ping timeout is 3 seconds. |
 | `broker.ping(timeout, nodeID)` | `Promise` | Sends a PING message to the specified node with the specified timeout. |
 | `createStream()` | `PacketStream` | Creates a stream what is suitable for transferring large files between the nodes |
-| `broker.repl()` | - | Start Interactive Developer Console. |
+| `broker.repl()` | boolean | Start Interactive Developer Console. |
 | `broker.emit(name, params)` | - | Emit a balanced event. |
 | `broker.broadcast(name, params)` | - | Broadcast an event. |
 | `broker.broadcastLocal(name, params)` | - | Broadcast an event to local services. |
