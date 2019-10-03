@@ -27,7 +27,8 @@ broker.call("test.action", "a", 3, "b", 4).then(rsp -> {
 
 **Create Broker with custom settings:**
 
-There are two ways to create a `ServiceBroker`; using either `ServiceBrokerConfig` or `ServiceBroker.builder`.
+There are two ways to create a `ServiceBroker`;
+using either `ServiceBrokerConfig` or `ServiceBroker.builder()`.
 
 ```java
 // Using ServiceBrokerConfig
@@ -39,7 +40,7 @@ config.setCacher(new MemoryCacher());
 
 ServiceBroker broker = new ServiceBroker(config);
 
-// Using ServiceBroker.builder
+// Using ServiceBroker.builder()
 ServiceBroker broker = ServiceBroker.builder()
                                     .nodeID("node1")
                                     .transporter(...)
@@ -115,6 +116,11 @@ public class TestService extends Service {
 }
 ```
 
+There is a extended
+[xml configuration sample](https://github.com/moleculer-java/moleculer-java/tree/master/cfg)
+on the project's GitHub page.
+The example shows how to create internal Moleculer Modules using the XML configuration.
+
 **Create broker with Spring Boot:**
 
 The following example code shows Spring Boot-based initialization without XML configuration:
@@ -181,6 +187,11 @@ List of all available broker options:
 | `shutDownThreadPools` | `boolean` | `true` | Shut down thread pools during the shutdown stage |
 ```
 
+This
+[demo project](https://github.com/moleculer-java/moleculer-spring-boot-demo)
+shows you how to build a Spring Boot based web application.
+The demo also shows you how to set the above parameters.
+
 ## Service Broker methods
 
 | Name | Response |  Description |
@@ -189,7 +200,7 @@ List of all available broker options:
 | `broker.getNodeID()` | `String` | Returns the Broker's unique identifier. |
 | `broker.start()` | `ServiceBroker` | Starts broker. Blocks until the end of the boot. |
 | `broker.stop()` | `ServiceBroker` | Stops broker. Blocks until the end of the shutdown process. |
-| `broker.getLogger()` | `Logger` | Return's the Broker's logger. |
+| `broker.getLogger()` | `Logger` | Return's the ServiceBroker's logger (this project uses SLF4J API). |
 | `broker.getLogger(class)` | `Logger` | Returns a logger named corresponding to the class passed as parameter. |
 | `broker.getLogger(name)` | `Logger` | Return a logger named according to the name parameter. |
 | `broker.createService(service)` | `ServiceBroker` | Installs a new service instance and notifies other nodes about the service. |
