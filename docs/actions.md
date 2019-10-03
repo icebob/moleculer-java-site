@@ -71,9 +71,9 @@ System.out.println(params);
 It’s a top-level API layer that uses existing JSON implementations,
 like Jackson, Gson or Fastjson.
 Tree adds manipulation capabilities to the underlaying JSON API,
-such as sorting, filtering, merging, cloning, changing data types.
+such as sorting, filtering, merging, cloning, or changing data types.
 
-The last parameter is `opts`.
+The last parameter is the `opts`.
 The `opts` is an CallOptions to set/override some request parameters,
 for example `timeout`, `retryCount` or `nodeID`.
 CallOptions can be produced using method chainig:
@@ -90,11 +90,15 @@ Tree params = new Tree()
 Promise promise = broker.call("service.action", params, opts);
 
 promise.then(rsp -> {
+
     // The response is also a Tree Object
     logger.info("Response: " + rsp);
+	
 }).catchError(err -> {
+
     // The 'err' is a 'Throwable'
     logger.error("Error!", err);
+	
 });
 ```
 
@@ -153,6 +157,7 @@ The `waitFor` is a blocking operation (temporarily pauses the running Thread),
 do not use this method unless it is absolutely necessary for something
 (eg. for testing).
 Preferably `then` and `catchError` non-blocking methods should be used.
+Asynchronous operations can be organized into a Waterfall Sequence using these methods.
 {% endnote %}
 
 **Call with options**
