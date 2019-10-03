@@ -70,6 +70,8 @@ System.out.println(params);
 [Tree](https://berkesa.github.io/datatree/) isn't a JSON parser/generator.
 It’s a top-level API layer that uses existing JSON implementations,
 like Jackson, Gson or Fastjson.
+Tree adds manipulation capabilities to the underlaying JSON API,
+such as sorting, filtering, merging, cloning, changing data types.
 
 The last parameter is `opts`.
 The `opts` is an CallOptions to set/override some request parameters,
@@ -88,9 +90,11 @@ Tree params = new Tree()
 Promise promise = broker.call("service.action", params, opts);
 
 promise.then(rsp -> {
+    // The response is also a Tree Object
     logger.info("Response: " + rsp);
 }).catchError(err -> {
-    logger.error("Error!", err);            
+    // The 'err' is a 'Throwable'
+    logger.error("Error!", err);
 });
 ```
 
@@ -145,7 +149,7 @@ logger.info("User: ", rsp);
 ```
 
 {% note info Do not block %} 
-The `waitFor` a blocking operation,
+The `waitFor` is a blocking operation (temporarily pauses the running Thread),
 do not use this method unless it is absolutely necessary for something
 (eg. for testing).
 Preferably `then` and `catchError` non-blocking methods should be used.
@@ -199,14 +203,38 @@ try {
     stream.sendData("some bytes".getBytes());
     stream.sendData("more bytes".getBytes());
 } finally {
+    // Streams must be closed in any case
     stream.sendClose();
 }
 ```
 
-Please note, the `params` should be a stream, you cannot add other variables to the `params`.
-Use the `meta` property to transfer additional data.
+The receiving Service can handle incoming data in an event-driven manner:
+
+```java
+@Name("service")
+public class ReceiverService extends Service {
+
+    public Action action = ctx -> {
+        ctx.stream.onPacket((bytes, err, close) -> {
+            if (bytes != null) {
+                // Byte-array received 
+            }
+            if (err != null) {
+                // An error occurred
+            }
+            if (close) {
+                // Stream closed
+            }
+        });
+		// ...
+    };
+}
+```
 
 **Sending a file to a service**
+
+Please note, the `params` should be a stream, you cannot add other variables to the `params`.
+Use the `meta` property to transfer additional data.
 
 ```java
 // Create stream
