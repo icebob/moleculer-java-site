@@ -411,7 +411,7 @@ ServiceBroker broker = ServiceBroker.builder()
 
 Redis-based distributed cache.
 Supports SSL, clustering and password authentication.
-It's the one of the fastest distributed cache - although a local memory cache is always faster.
+It's the one of the fastest distributed cache for Moleculer.
 `RedisCacher` is implemented for both Java and Node.js based Moleculer frameworks.
 Supports global and entry-level TTL configuration.
 
