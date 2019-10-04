@@ -1,7 +1,16 @@
 title: Caching
 ---
 
-Moleculer has a built-in caching solution to cache responses of service actions.
+Moleculer has a built-in caching solution to accelerate responses of service actions.
+There are two types of cache service:
+
+- Local cache (eg. MemoryCacher, Off-Heap Cacher, some JCache implementations)
+- Distributed cache (eg. Redis Cacher, some implementations of JCache are distributed)
+
+Local caches store data per node locally.
+These are the fastest caches, but the programmer must implement the delete operations on multiple nodes.
+Distributed caches store data on one (or more) central cache server(s).
+Distributed caches are easier to use, but they are a bit slower due to network traffic.
 
 **Cached action example**
 
@@ -10,7 +19,7 @@ Moleculer has a built-in caching solution to cache responses of service actions.
 public class UserService extends Service {
 
     // Enable caching to this action
-    @Cache()
+    @Cache() // <<<======HERE=======
     public Action list = ctx -> {
         logger.info("Handler called!");
             
@@ -357,6 +366,7 @@ JSR-107 JCache is a standardized caching API.
 Core JCache API does NOT support entry-level TTL parameter.
 If you need this feature use RedisCacher, MemoryCacher, or Off-heap Cacher.
 JCache is implemented by various caching solutions:
+
 - Apache Ignite
 - Hazelcast
 - Oracle Coherence
