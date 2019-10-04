@@ -104,7 +104,7 @@ contains a list of essential parameter names:
 public class PostService extends Service {
 
     // Generate cache key from "limit", "offset" params and "user.id" meta
-	// To use meta keys in cache "keys"" use the "#" prefix.	
+    // To use meta keys in cache "keys"" use the "#" prefix.	
     @Cache(keys = { "limit", "offset", "#user.id" })
     public Action list = ctx -> {
         logger.info("Handler called!");
@@ -113,8 +113,10 @@ public class PostService extends Service {
 }
 ```
 
-If params is { limit: 10, offset: 30 } and meta is { user: { id: 123 } }, the cache key will be:  
+If params is { limit: 10, offset: 30 } and meta is { user: { id: 123 } }, the cache key will be:
+```
 posts.list:10|30|123
+```
 
 {% note info Performance %}
 This solution is pretty fast, so we recommend to use it in production. ![](https://img.shields.io/badge/performance-%2B20%25-brightgreen.svg)
@@ -128,6 +130,7 @@ When the key is longer than this configured limitvalue,
 the cacher calculates a hash (SHA256) from the full key and adds it to the end of the key.
 
 > The minimum of `maxParamsLength` is `44` (SHA 256 hash length in Base64).
+> 
 > To disable this feature, set it to `0`.
 
 **Generate a full key from the whole params without limit**
@@ -161,7 +164,7 @@ cacher.getCacheKey("posts.find", params);
 
 ## TTL
 
-De TTL is tje default time-to-live of cached entries in seconds.
+The TTL is the default time-to-live of cached entries in seconds.
 TTL setting can be overriden in action definition.
 
 ```java
@@ -411,6 +414,10 @@ Supports SSL, clustering and password authentication.
 It's the one of the fastest distributed cache - although a local memory cache is always faster.
 `RedisCacher` is implemented for both Java and Node.js based Moleculer frameworks.
 Supports global and entry-level TTL configuration.
+
+**Required dependency**
+
+Redis cacher requires [Letuce API](https://mvnrepository.com/artifact/biz.paluch.redis/lettuce).
 
 **Configure Redis cacher**
 
