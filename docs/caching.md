@@ -2,7 +2,7 @@ title: Caching
 ---
 
 Moleculer has a built-in caching solution to accelerate responses of service actions.
-There are two types of cache service:
+There are two types of caches:
 
 - Local cache (eg. MemoryCacher, Off-Heap Cacher, some JCache implementations)
 - Distributed cache (eg. Redis Cacher, some implementations of JCache are distributed)
@@ -104,38 +104,21 @@ contains a list of essential parameter names:
 public class PostService extends Service {
 
     // Generate cache key from "limit", "offset" params and "user.id" meta
+	// To use meta keys in cache "keys"" use the "#" prefix.	
     @Cache(keys = { "limit", "offset", "#user.id" })
     public Action list = ctx -> {
         logger.info("Handler called!");
         // ...
     };
 }
-
-// If params is { limit: 10, offset: 30 } and meta is { user: { id: 123 } }, the cache key will be:
-// posts.list:10|30|123
 ```
+
+If params is { limit: 10, offset: 30 } and meta is { user: { id: 123 } }, the cache key will be:  
+posts.list:10|30|123
 
 {% note info Performance %}
 This solution is pretty fast, so we recommend to use it in production. ![](https://img.shields.io/badge/performance-%2B20%25-brightgreen.svg)
 {% endnote %}
-
-### Cache meta keys
-
-To use meta keys in cache `keys` use the `#` prefix.
-
-```java
-@Name("posts")
-public class PostService extends Service {
-
-    // Generate cache key from "limit", "offset" params and "user.id" meta,
-    // cached responses are stored in the cacher for only 5 seconds (ttl = 5).
-    @Cache(keys = { "limit", "offset", "#user.id" }, ttl = 5)
-    public Action list = ctx -> {
-        logger.info("Handler called!");
-        // ...
-    };
-}
-```
 
 ### Limiting cache key length
 
@@ -145,20 +128,19 @@ When the key is longer than this configured limitvalue,
 the cacher calculates a hash (SHA256) from the full key and adds it to the end of the key.
 
 > The minimum of `maxParamsLength` is `44` (SHA 256 hash length in Base64).
-> 
 > To disable this feature, set it to `0`.
 
 **Generate a full key from the whole params without limit**
 
 ```java
 // The params is { id: 2,
-                   title: "New post",
-                   content: "It can be very very looooooooooooooooooong content.
-                             So this key will also be too long"
-                 }
+//                 title: "New post",
+//                 content: "It can be very very looooooooooooooooooong content.
+//                           So this key will also be too long"
+//               }
 cacher.getCacheKey("posts.find", params);
 // Key: 'posts.find:id|2|title|New post|content|It can be very very looooooooooooooooooong content.
-         So this key will also be too long'
+//       So this key will also be too long'
 ```
 
 **Generate a limited-length key**
@@ -169,17 +151,18 @@ cacher.setMaxParamsLength(60);
 ServiceBroker broker = ServiceBroker.builder().cacher(cacher).build();
 
 // The params is { id: 2,
-                   title: "New post",
-                   content: "It can be very very looooooooooooooooooong content.
-                             So this key will also be too long"
-                 }
+//                 title: "New post",
+//                 content: "It can be very very looooooooooooooooooong content.
+//                           So this key will also be too long"
+//               }
 cacher.getCacheKey("posts.find", params);
 // Key: 'posts.find:id|2|title|New pL4ozUU24FATnNpDt1B0t1T5KP/T5/Y+JTIznKDspjT0='
 ```
 
 ## TTL
 
-Default TTL setting can be overriden in action definition.
+De TTL is tje default time-to-live of cached entries in seconds.
+TTL setting can be overriden in action definition.
 
 ```java
 MemoryCacher cacher = new MemoryCacher();
@@ -209,12 +192,14 @@ The implementations of the cachers can be found in the `services.moleculer.cache
 The cacher module can be used manually. Just call the `get`, `set`, `del` methods of the ServiceBroker's `Cacher`.
 
 ```java
+// The Cacher is in the ServiceBroker's config object
 Cacher cacher = broker.getConfig().getCacher();
 
-// Save to cache
+// Create data
 Tree data = new Tree();
 data.putList("array").add(1).add(2).add(3);
 
+// Save to cache
 cacher.set("mykey.a", data, 60);
 
 // Get from cache
@@ -255,6 +240,10 @@ cacher.del("users.model:8|true|2");
 ### Clear cache among multiple service instances
 
 The best practice to clear cache entries among multiple service instances is that use broadcast events.
+This solution is only required when using local caches.
+It is enough to delete shared (eg. Redis) caches with one `clean` command,
+because the data is stored on a central server.
+When using local caches, each node can store a separate copy of the data.
 
 **Example**
 
@@ -299,13 +288,13 @@ public class UserService extends Service {
 
 ### Memory cacher
 
-The "Memory Cacher" works with each node having its own local heap-based cache.
+The `MemoryCacher` works with each node having its own local heap-based cache.
 This is the fastest cache, but the programmer has to take care of emptying the cache with event broadcasting.
 Memory cache is not a distributed cache, it works like a local Map in the VM's memory.
 But the number of queries can be millions per second,
 because repetitive queries do not generate network traffic.
 Supports global and entry-level TTL.
-ServiceBroker uses MemoryCacher by default.
+ServiceBroker uses `MemoryCacher` by default.
 
 **Configure memory cacher**
 
@@ -328,11 +317,11 @@ ServiceBroker broker = ServiceBroker.builder().cacher(cacher).build();
 
 ### Off-heap memory cacher
 
-Off-heap cache is similar to MemoryCacher, but stores entries in the off-heap RAM.
-This cache is slower than MemoryCacher, but it stores entries in compressed form.
-OHCacher is the solution to store huge amount of data in memory;
+The `OHCacher` is similar to `MemoryCacher`, but stores entries in the off-heap RAM.
+This cache is a bit slower than `MemoryCacher` because it stores entries in a serialized and compressed form.
+`OHCacher` is the solution to store huge amount of data in memory;
 if you plan to store few thousands (or less) entries in the cache,
-use the faster MemoryCacher, otherwise use OHCacher.
+use the faster `MemoryCacher`, otherwise use `OHCacher`.
 Supports global and entry-level TTL.
 
 **Required dependency**
@@ -375,7 +364,9 @@ JCache is implemented by various caching solutions:
 - Blazing Cache
 - Cache2k
 - Caffeine
-- Etc.
+- etc.
+
+The performance and operation of JCacher implementations can be very different.
 
 **Required dependency**
 
@@ -395,6 +386,8 @@ ServiceBroker broker = ServiceBroker.builder()
 Create Cacher using the specified CacheProvider implementation:
 
 ```java
+// "RICachingProvider" is part of a JCache implementation,
+// it could be Ignite, Hazelcast or EHcache based.
 CachingProvider provider = new RICachingProvider();
 CacheManager manager = provider.getCacheManager();
 JCacheCacher cacher = new JCacheCacher(manager);
@@ -415,7 +408,8 @@ ServiceBroker broker = ServiceBroker.builder()
 
 Redis-based distributed cache.
 Supports SSL, clustering and password authentication.
-It's the one of the fastest distributed cache.
+It's the one of the fastest distributed cache - although a local memory cache is always faster.
+`RedisCacher` is implemented for both Java and Node.js based Moleculer frameworks.
 Supports global and entry-level TTL configuration.
 
 **Configure Redis cacher**
@@ -441,7 +435,7 @@ ServiceBroker broker = ServiceBroker.builder().cacher(cacher).build();
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
 | `urls` | `String[]` | `localhost` | Array of URLs of the Redis servers |
-| `ttl` | `int` | `0` | Time-to-live in seconds (0 = disabled) |
+| `ttl` | `int` | `0` | Time-to-live in SECONDS (0 = disabled) |
 | `maxParamsLength` | `int` | `0` | Maximum length of params in generated keys |
 | `serializer` | `Serializer` | `JsonSerializer` | Implementation of the serializer/deserializer |
 | `password` | `String` | `null` | Configures authentication (URI may contain the password) |
