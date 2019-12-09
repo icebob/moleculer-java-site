@@ -298,7 +298,7 @@ module.exports = {
 ## Current Context Storage
 ServiceBroker has a continuous local storage that stores the current context. It means you don't need pass the `ctx` from actions to service [methods](#Methods). You can get it with `this.currentContext`. 
 
-> Context storage is built with Node's [`async_hooks`](https://nodejs.org/api/async_hooks.html) lib.
+> Context storage is built with Node's `async_hooks` lib.
 
 ```java
 // greeter.service.js

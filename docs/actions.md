@@ -190,6 +190,62 @@ broker.call("service.action", params).then(rsp -> {
 ```
 
 The remote service can access the metadata block with the `ctx.params.getMeta()` function.
+Meta is merged at nested calls:
+
+```java
+broker.createService(new Service("test") {
+    Action first = ctx -> {
+	
+		// The "_meta" prefix is a shorthand to access meta:
+        return ctx.call("test.second", "_meta.b", 5);
+    };
+    Action second = ctx -> {
+
+        // Prints: { a: "John", b: 5 }
+        System.out.println(ctx.params.getMeta());
+        return null;
+    };
+});
+
+// Invoke actions:
+Tree params = new Tree();
+Tree meta = params.getMeta();
+meta.put("a", "John");
+broker.call("test.first", params);
+
+// Or shorter:
+broker.call("test.first", "_meta.a", "John");
+```
+
+The `meta` is sent back to the caller service.
+Use it to send extra meta information back to the caller
+(eg. send response headers back to API gateway or set resolved logged in user to metadata).
+
+```java
+broker.createService(new Service("test") {
+    Action first = ctx -> {
+
+        // Modify meta (first time)
+        Tree params = new Tree();
+        ctx.params.getMeta().put("a", "John");
+
+        return ctx.call("test.second").then(rsp -> {
+
+            // Prints: { a: "John", b: 5 }
+            System.out.println(rsp.getMeta());
+        });
+    };
+    Action second = ctx -> {
+
+        // Modify meta (second time)
+        ctx.params.getMeta().put("b", 5);
+        return null;
+    };
+});
+
+// Invoke actions:
+broker.call("test.first");
+```
 
 ## Streaming
 

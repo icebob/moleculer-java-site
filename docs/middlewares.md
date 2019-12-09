@@ -323,8 +323,6 @@ Many integrated features have been exposed as internal middlewares. These middle
 | Class name | Type | Description |
 | ---------- | ---- | ----------- |
 | `ActionHook` | Optional | Action hooks handler. [Read more](actions.html#Action-hooks) |
-| `Validator` | Optional | Parameter validation. [Read more](validating.html) |
-| `Bulkhead` | Optional | Bulkhead feature. [Read more](fault-tolerance.html#Bulkhead) |
 | `Cacher` | Optional | Cacher middleware. [Read more](caching.html) |
 | `ContextTracker` | Optional | Context tracker feature. [Read more](actions.html#Context-tracking) |
 | `CircuitBreaker` | Optional | Circuit Breaker feature. [Read more](fault-tolerance.html#Circuit-Breaker) |

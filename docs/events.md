@@ -1,11 +1,25 @@
 title: Events
 ---
-Broker has a built-in event bus to support [Event-driven architecture](http://microservices.io/patterns/data/event-driven-architecture.html) and to send events to local and remote services. 
+Molculer Service Broker has a built-in event bus for sending events to local and remote services.
+Events can be used to create event-driven,
+runtime scalable applications from services
+deployed on different operating systems and implemented in different languages.
+
+Events can be grouped; events can be sent to
+- a specific node
+- to all listeners
+- to a group of listeners
+- or to one member from all groups
 
 # Balanced events
-The event listeners are arranged to logical groups. It means that only one listener is triggered in every group.
 
-> **Example:** you have 2 main services: `users` & `payments`. Both subscribe to the `user.created` event. You start 3 instances of `users` service and 2 instances of `payments` service. When you emit the `user.created` event, only one `users` and one `payments` service instance will receive the event.
+The event listeners are arranged to logical groups.
+It means that only one listener is triggered in every group.
+
+> **Example:** An application contains 2 main services: `users` & `payments`.
+> Both subscribe to the `user.created` event.
+> 3 instances of `users` service and 2 instances of `payments` service run.
+> If the `user.created` event is emitted, only one `users` and one `payments` service will receive this event.
 
 <div align="center">
     <img src="assets/balanced-events.gif" alt="Balanced events diagram" />
