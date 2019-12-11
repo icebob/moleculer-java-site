@@ -1,215 +1,283 @@
 title: REPL console
 ---
-## moleculer repl [![npm](https://img.shields.io/npm/v/moleculer-repl.svg?maxAge=3600)](https://www.npmjs.com/package/moleculer-repl)
-The [moleculer-repl](https://github.com/moleculerjs/moleculer-repl) is an interactive developer console for Moleculer.
+Java REPL (Interactive Developer Console) for [Moleculer microservices framework](https://moleculer-java.github.io/moleculer-java/).
+The REPL console is a special Moleculer service that executes console commands.
+Console commands can be used to **test** Moleculer actions and event listeners or measure the **response time** of a service.
+It is also possible to create **custom commands**. The console can be used via standard input / output and telnet.
 
-## Install
-```bash
-npm i moleculer-repl
+## Download
+
+**Maven**
+
+```xml
+<dependencies>
+	<dependency>
+		<groupId>com.github.berkesa</groupId>
+		<artifactId>moleculer-java-repl</artifactId>
+		<version>1.2.1</version>
+		<scope>runtime</scope>
+	</dependency>
+</dependencies>
 ```
 
-## Usage
+**Gradle**
 
-**Switch broker to REPL mode**
+```gradle
+dependencies {
+	compile group: 'com.github.berkesa', name: 'moleculer-java-repl', version: '1.2.1' 
+}
+```
+
+## Usage from code
+
 ```java
-const broker = new ServiceBroker();
+// Create Service Broker
+ServiceBroker broker = new ServiceBroker();
+broker.start();
 
 // Switch to REPL mode
 broker.repl();
 ```
 
+## Usage with Spring Framework
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	   http://www.springframework.org/schema/context
+	   http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<!-- ENABLE ANNOTATION PROCESSING -->
+
+	<context:annotation-config />
+
+	<!-- PACKAGE OF THE MOLECULER SERVICES -->
+	
+	<context:component-scan base-package="my.services" />
+
+	<!-- SPRING REGISTRATOR FOR MOLECULER SERVICES -->
+
+	<bean id="registrator" class="services.moleculer.config.SpringRegistrator" depends-on="broker" />
+
+	<!-- SERVICE BROKER INSTANCE -->
+
+	<bean id="broker" class="services.moleculer.ServiceBroker" init-method="start" destroy-method="stop">
+		<constructor-arg ref="brokerConfig" />
+	</bean>
+
+	<!-- SERVICE BROKER SETTINGS -->
+
+	<bean id="brokerConfig" class="services.moleculer.config.ServiceBrokerConfig">
+		<property name="nodeID" value="node-1" />
+	</bean>
+
+	<!-- LOCAL DEVELOPER CONSOLE -->
+
+	<bean id="$repl" class="services.moleculer.repl.LocalRepl" />
+
+</beans>
+```
+
+## Screenshot
+
+![image](assets/repl/console-java.png)
+
+
 ## REPL Commands
 
 ```
-  Commands:
-    help [command...]                                   Provides help for a given command.
-    q                                                   Exit application
-    actions [options]                                   List of actions
-    bench [options] <action> [jsonParams]               Benchmark a service
-    broadcast <eventName>                               Broadcast an event
-    broadcastLocal <eventName>                          Broadcast an event locally
-    call [options] <actionName> [jsonParams]            Call an action
-    dcall [options] <nodeID> <actionName> [jsonParams]  Direct call an action
-    destroy <serviceName> [version]                     Destroy a locally running service
-    clear [pattern]                                     Clear cache entries
-    cls                                                 Clear console    
-    emit <eventName>                                    Emit an event
-    env                                                 List of environment variables
-    events [options]                                    List of event listeners
-    info                                                Information about broker
-    load <servicePath>                                  Load a service from file
-    loadFolder <serviceFolder> [fileMask]               Load all services from folder
-    nodes [options]                                     List of nodes
-    services [options]                                  List of services
+Commands:
+
+  actions [options]                           List of actions
+  bench <action> [jsonParams]                 Benchmark a service
+  broadcast <eventName>                       Broadcast an event
+  broadcastLocal <eventName>                  Broadcast an event locally
+  call <actionName> [jsonParams]              Call an action
+  clear <pattern>                             Delete cached entries by pattern
+  dcall <nodeID> <actionName> [jsonParams]    Direct call an action
+  emit <eventName>                            Emit an event
+  env                                         Lists of environment properties
+  events [options]                            List of event listeners
+  exit, q                                     Exit application
+  find <fullClassName>                        Find a class or resource
+  gc                                          Invoke garbage collector
+  info                                        Information about the broker
+  memory                                      Show memory usage
+  nodes [options]                             List of nodes
+  props                                       List of Java properties
+  services [options]                          List of services
+  threads                                     List of threads
 ```
 
 ### List nodes
+
 ```bash
 mol $ nodes
 ```
 
 **Options**
+
 ```
-    -a, --all             list all (offline) nodes
-    -d, --details         detailed list
-    -f, --filter <match>  filter nodes (e.g.: 'node-*')
-    --raw                 print service registry to JSON
-    --save [filename]     save service registry to a JSON file
+    --help                    output usage information
+    --details, -d             detailed list
+    --all, -a                 list all (offline) nodes
+    --raw                     print service registry as JSON
+    --save [filename], -a     save service registry to JSON file
 ```
 
 **Output**
+
 ![image](assets/repl/nodes.png)
 
 **Detailed output**
+
 ![image](assets/repl/nodes-detailed.png)
 
 ### List services
+
 ```bash
 mol $ services
 ```
 
 **Options**
+
 ```
-    -a, --all             list all (offline) services
-    -d, --details         print endpoints
-    -f, --filter <match>  filter services (e.g.: 'user*')
-    -i, --skipinternal    skip internal services
-    -l, --local           only local services
+    --local, -l           only local services
+    --skipinternal, -i    skip internal services
+    --details, -d         print endpoints
+    --all, -a             list all (offline) services
 ```
 
 **Output**
+
 ![image](assets/repl/services.png)
 
 **Detailed output**
+
 ![image](assets/repl/services-detailed.png)
 
+
 ### List actions
+
 ```bash
 mol $ actions
 ```
 
 **Options**
 ```
-    -a, --all             list all (offline) actions
-    -d, --details         print endpoints
-    -f, --filter <match>  filter actions (e.g.: 'users.*')
-    -i, --skipinternal    skip internal actions
-    -l, --local           only local actions
+    --local, -l           only local actions
+    --skipinternal, -i    skip internal actions
+    --details, -d         print endpoints
+    --all, -a             list all (offline) actions
 ```
 
 **Output**
+
 ![image](assets/repl/actions.png)
 
 **Detailed output**
+
 ![image](assets/repl/actions-detailed.png)
 
 ### List events
+
 ```bash
 mol $ events
 ```
 
 **Options**
+
 ```
-    -a, --all             list all (offline) event listeners
-    -d, --details         print endpoints
-    -f, --filter <match>  filter event listeners (e.g.: 'user.*')
-    -i, --skipinternal    skip internal event listeners
-    -l, --local           only local event listeners
+    --local, -l           only local event listeners
+    --skipinternal, -i    skip internal event listeners
+    --details, -d         print endpoints
+    --all, -a             list all (offline) event listeners
 ```
 
 **Output**
+
 ![image](assets/repl/events.png)
 
 **Detailed output**
+
 ![image](assets/repl/events-detailed.png)
 
-
 ### Show common information
+
 ```bash
 mol $ info
 ```
 
 **Output**
-![image](https://cloud.githubusercontent.com/assets/306521/26260974/aaea9b02-3ccf-11e7-9e1c-ec9150518791.png)
+
+![image](assets/repl/info.png)
 
 ### List environment variables
+
 ```bash
 mol $ env
 ```
 
-### Call an action
+### List system properties of JavaVM
+
 ```bash
-mol $ call "test.hello"
+mol $ props
+```
+
+### Call an action
+
+```bash
+mol $ call math.add {"a":3,"b":4}
 ```
 
 **Output**
-![image](assets/repl/call1.png)
 
-**Options**
-```
-    --help               output usage information
-    --load [filename]    Load params from file
-    --stream [filename]  Send a file as stream
-    --save [filename]    Save response to file
-```
+![image](assets/repl/call.png)
 
 #### Call an action with parameters
+
 ```bash
-mol $ call "math.add" --a 5 --b Bob --c --no-d --e.f "hello"
+mol $ call math.add --a 5 --b Bob --c --no-d --e.f "hello"
 ```
-Params will be `{ a: 5, b: 'Bob', c: true, d: false, e: { f: 'hello' } }`
 
 #### Call with JSON string parameter
-```bash
-mol $ call "math.add" '{"a": 5, "b": "Bob", "c": true, "d": false, "e": { "f": "hello" } }'
-```
-Params will be `{ a: 5, b: 'Bob', c: true, d: false, e: { f: 'hello' } }`
-
-#### Call with parameters from file
-```bash
-mol $ call "math.add" --load
-```
-It tries to load the `<current_dir>/math.add.params.json` file to params.
 
 ```bash
-mol $ call "math.add" --load my-params.json
+mol $ call math.add {"a": 5, "b": "Bob", "c": true, "d": false, "e": { "f": "hello" } }
 ```
-It tries to load the `my-params.jon` file to params.
 
-#### Call with file stream
-```bash
-mol $ call "math.add" --stream my-picture.jpg
-```
-It loads the `my-picture.png` file and send to the `math.add` action as a `Stream`.
+Params will be `{"a":5, "b":"Bob", "c":"--no-d", "e":{ "f":"hello" }}`
 
-#### Call and save response to file
-```bash
-mol $ call "math.add" --save
-```
-It saved the response to the `<current_dir>/posts.find.response.json` file. The extension is `.json` when the response is `object`. Otherwise it is `.txt`.
+**Output**
 
-```bash
-mol $ call "math.add" --save my-response.json
-```
-It saved the response to the `my-response.json` file.
+![image](assets/repl/call2.png)
 
 ### Direct call
+
 Get health info from `node-12` node
+
 ```bash
-mol $ dcall "node-12" "$node.health"
+mol $ dcall node-12 $node.health
 ```
+
 >Parameter passing is similar to `call` command.
 
 ### Emit an event
+
 ```bash
-mol $ emit "user.created"
+mol $ emit user.created
 ```
 
 #### Emit an event with parameters
+
 ```bash
-mol $ emit "user.created" --a 5 --b Bob --c --no-d --e.f "hello"
+mol $ emit user.created --a 5 --b Bob --c --no-d --e.f "hello"
 ```
-Params will be `{ a: 5, b: 'Bob', c: true, d: false, e: { f: 'hello' } }`
+
+Params will be `{"a":5, "b":"Bob", "c":"--no-d", "e":{ "f":"hello" }}`
 
 ### Benchmark services
 
@@ -217,76 +285,197 @@ Moleculer REPL module has a new bench command to measure your services.
 
 ```bash
 # Call service until 5 seconds (default)
-mol $ bench math.add
-
-# Call service 5000 times
-mol $ bench --num 5000 math.add
-
-# Call service until 30 seconds
-mol $ bench --time 30 math.add
-```
-
-**Options**
-```
-    --num <number>     Number of iterates
-    --time <seconds>   Time of bench
-    --nodeID <nodeID>  NodeID (direct call)
+mol $ bench $node.list
 ```
 
 **Output**
-![image](assets/repl/bench.gif)
 
+![image](assets/repl/bench.png)
+
+```bash
+# Call service until 30 seconds
+mol $ bench $node.list --time 30
+```
+
+**Output**
+
+![image](assets/repl/bench2.png)
+
+```bash
+# Call service 5000 times
+mol $ bench $node.list --num 5000
+```
+
+**Output**
+
+![image](assets/repl/bench3.png)
 
 #### Parameters
-Please note, parameters can be passed only as JSON string.
+
 ```bash
-mol $ bench math.add '{ "a": 50, "b": 32 }'
+mol $ bench math.add --time 10 --a 3 --b 6
+# or
+mol $ bench math.add --time 10 {"a":3,"b":6}
 ```
 
-### Load a service from file
+**Output**
+
+![image](assets/repl/bench4.png)
+
+### Dump hierarchy of threads
+
 ```bash
-mol $ load "./math.service.js"
+mol $ threads
 ```
 
-### Load all services from a folder
+**Output**
+
+![image](assets/repl/threads.png)
+
+### Show JVM's heap usage
+
 ```bash
-mol $ load "./services"
+mol $ memory
 ```
 
-### Custom commands
-Custom REPL commands can be defined in broker options to extend Moleculer REPL commands.
+**Output**
+
+![image](assets/repl/memory.png)
+
+### Invoke Garbage Collector
+
+```bash
+mol $ gc
+```
+
+**Output**
+
+![image](assets/repl/gc.png)
+
+### Runs a script file
+
+```bash
+mol $ run /temp/commands.txt
+```
+
+Loads a "script" file and executes all non-empty lines as command. Skips rows
+that begin with a "comment marker" characters (hashmark, double slash or star).
+The script file must be in UTF-8.
+
+## User-defined commands
+
+You can define your custom REPL commands in broker options to extend Moleculer REPL commands.
+
+**Source of the "hello" console command**
 
 ```java
-const broker = new ServiceBroker({
-    logger: true,
-    replCommands: [
-        {
-            command: "hello <name>",
-            description: "Call the greeter.hello service with name",
-            alias: "hi",
-            options: [
-                { option: "-u, --uppercase", description: "Uppercase the name" }
-            ],
-            types: {
-                string: ["name"],
-                boolean: ["u", "uppercase"]
-            },
-            //parse(command, args) {},
-            //validate(args) {},
-            //help(args) {},
-            allowUnknownOptions: true,
-            action(broker, args/*, helpers*/) {
-                const name = args.options.uppercase ? args.name.toUpperCase() : args.name;
-                return broker.call("greeter.hello", { name }).then(console.log);
-            }
-        }
-    ]
-});
+package my.commands;
 
-broker.repl();
+import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.List;
+
+import services.moleculer.ServiceBroker;
+import services.moleculer.repl.Command;
+import services.moleculer.service.Name;
+
+@Name("hello")
+public class HelloCommand extends Command {
+
+	public HelloCommand() {
+		option("uppercase, -u", "uppercase the name");
+	}
+	
+	@Override
+	public String getDescription() {
+		return "Call the greeter.hello service with name";
+	}
+
+	@Override
+	public String getUsage() {
+		return "hello [options] <name>";
+	}
+
+	@Override
+	public int getNumberOfRequiredParameters() {
+		
+		// One parameter (the "name") is required
+		return 1;
+	}
+
+	@Override
+	public void onCommand(ServiceBroker broker, PrintWriter out, String[] parameters) throws Exception {
+		
+		// Parse parameters
+		List<String> params = Arrays.asList(parameters);
+		boolean uppercase = params.contains("--uppercase") || params.contains("-u");
+		
+		// Last parameter is the name
+		String name = parameters[parameters.length - 1];
+		if (uppercase) {
+			name = name.toUpperCase();
+		}
+		
+		// Call the "greeter.hello" service
+		broker.call("greeter.hello", name).then(rsp -> {
+			
+			// Print response
+			out.println(rsp.asString());
+			
+		}).catchError(err -> {
+			
+			// Print error
+			err.printStackTrace(out);
+			
+		});
+	}
+}
 ```
+
+**Source of the "greeter.hello" action**
+
+```java
+package my.services;
+
+import services.moleculer.service.*;
+
+@Name("greeter")
+public class GreeterService extends Service {
+
+	@Name("hello")
+	public Action helloAction = ctx -> {
+		return "Hello " + ctx.params.asString();
+	};
+	
+}
+```
+
+**Installation of the "hello" command from code**
+
+```java
+ServiceBroker broker = new ServiceBroker();
+
+// Start local REPL console
+LocalRepl repl = new LocalRepl();
+repl.setPackagesToScan("my.commands");
+broker.createService("$repl", repl);
+```
+
+**Installation of the "hello" command with Spring**
+
+```xml
+<bean id="$repl" class="services.moleculer.repl.LocalRepl">
+	<property name="packagesToScan" value="my.commands" />		
+</bean>
+```
+
+**Output of "help" command**
+
+![image](assets/repl/custom.png)
+
+**Invoke the "hello" command**
 
 ```bash
 mol $ hello -u John
 Hello JOHN
-```
+``` 

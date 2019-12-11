@@ -27,7 +27,7 @@ ServiceBroker broker = ServiceBroker.builder()
                                     .build();
 ```
 
-### RoundRobin strategy
+### Round-Robin strategy
 
 This strategy selects a node based on [round-robin](https://en.wikipedia.org/wiki/Round-robin_DNS) algorithm.
 This is the default invocation strategy.
@@ -123,6 +123,47 @@ ServiceBroker broker = ServiceBroker.builder().strategy(strategy).build();
 | `collectCount` | `int` | `5` | The number of measured latency per host to keep in order to calculate the average latency. |
 | `pingInterval` | `int` | `10` | Ping interval in SECONDS. If you have a lot of host/nodes, it's recommended to *increase* the value. |
 | `pingTimeout` | `long` | `5000` | Ping timeout time, in MILLISECONDS. |
+
+### Sharding strategy
+
+Shard invocation strategy is based on [consistent-hashing](https://www.toptal.com/big-data/consistent-hashing) algorithm.
+It uses a key value from context `params` or `meta` to route the request to nodes.
+It means that requests with same key value will be routed to the same node.
+
+**Usage**
+
+Shard key is `name` in context `params`:
+
+```java
+// Create sharding strategy
+ShardStrategyFactory strategy = new ShardStrategyFactory();
+strategy.setShardKey("name");
+        
+// Create service broker
+ServiceBroker broker = ServiceBroker.builder().strategy(strategy).build();
+```
+
+Shard key is `user.id` in context `meta`:
+
+```java
+ShardStrategyFactory strategy = new ShardStrategyFactory();
+strategy.setShardKey("#user.id");
+ServiceBroker broker = ServiceBroker.builder().strategy(strategy).build();
+```
+
+{% note info %}
+If shard key is in context's `meta` it must be declared with a `#` at the beginning.
+The actual `#` is ignored.
+{% endnote %}
+
+**Strategy options**
+
+| Name | Type | Default | Description |
+| ---- | ---- | --------| ----------- |
+| `shardKey` | `String` | `null` |  Shard key |
+| `vnodes` | `int` | `10` | Number of virtual nodes |
+| `ringSize` | `Integer` | null | Size of the ring |
+| `cacheSize` | `int` | `1024` | Size of the cache |
 
 ## Custom strategy
 
