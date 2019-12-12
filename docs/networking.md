@@ -20,7 +20,249 @@ It means switching between Transporters without changing any lines of our code i
 
 There are several built-in Transporters in Moleculer framework.
 
-### TCP Transporter
+### Centralized Transporters
+
+#### NATS Transporter
+
+Built-in transporter for [NATS](http://nats.io/).
+NATS Server is a simple, high performance open source messaging system for cloud native applications, IoT messaging, and microservices architectures.
+
+```java
+NatsTransporter transporter = new NatsTransporter("nats://nats.server:4222");
+ServiceBroker broker = ServiceBroker.builder()
+                                    .nodeID("server-1")
+                                    .transporter(transporter)
+                                    .build();
+```
+
+{% note info Dependencies %}
+To use NATS Transporter, add the following dependency to the build script:
+group: 'io.nats', name: 'jnats', version: '2.6.5'
+{% endnote %}
+
+**Detailed example**
+
+```java
+NatsTransporter transporter = new NatsTransporter("host1", "host2");
+transporter.setSecure(true);
+transporter.setUsername("user");
+transporter.setPassword("secret");
+transporter.setNoRandomize(true);
+ServiceBroker broker = ServiceBroker.builder()
+                                    .nodeID("server-1")
+                                    .transporter(transporter)
+                                    .build();
+```
+
+#### Redis Transporter
+
+Built-in Transporter for [Redis](http://redis.io/).
+Redis is an open source (BSD licensed), in-memory data structure store, used as a database, cache and message broker.
+
+```java
+RedisTransporter transporter = new RedisTransporter("redis://redis.server:6379");
+ServiceBroker broker = ServiceBroker.builder()
+                                    .nodeID("server-1")
+                                    .transporter(transporter)
+                                    .build();
+```
+
+{% note info Dependencies %}
+To use Redis Transporter, add the following dependency to the build script:
+group: 'biz.paluch.redis', name: 'lettuce', version: '4.5.0.Final'
+{% endnote %}
+
+**Detailed example**
+
+```java
+RedisTransporter transporter = new RedisTransporter("host1", "host2");
+transporter.setSecure(true);
+transporter.setPassword("secret");
+ServiceBroker broker = ServiceBroker.builder()
+                                    .nodeID("server-1")
+                                    .transporter(transporter)
+                                    .build();
+```
+
+#### MQTT Transporter
+
+Built-in Transporter for [MQTT](http://mqtt.org/) protocol.
+MQTT Transporter (eg. for [Mosquitto](https://mosquitto.org/) MQTT Server or ActiveMQ Server).
+MQTT is a machine-to-machine (M2M)/"Internet of Things" connectivity protocol.
+It was designed as an extremely lightweight publish/subscribe messaging transport.
+ 
+```java
+MqttTransporter transporter = new MqttTransporter("mqtt://mqtt-server:1883");
+ServiceBroker broker = ServiceBroker.builder()
+                                    .nodeID("server-1")
+                                    .transporter(transporter)
+                                    .build();
+```
+
+{% note info Dependencies %}
+To use MQTT Transporter, add the following dependency to the build script:
+group: 'net.sf.xenqtt', name: 'xenqtt', version: '0.9.7'
+{% endnote %}
+
+**Detailed example**
+
+```java
+MqttTransporter transporter = new MqttTransporter("host1");
+transporter.setUsername("user");
+transporter.setPassword("secret");
+transporter.setKeepAliveSeconds(120);
+transporter.setConnectTimeoutSeconds(10);
+transporter.setMessageResendIntervalSeconds(20);
+ServiceBroker broker = ServiceBroker.builder()
+                                    .nodeID("server-1")
+                                    .transporter(transporter)
+                                    .build();
+```
+
+#### AMQP Transporter 
+
+Built-in Transporter for [AMQP](https://www.amqp.org/) protocol.
+AMQP Transporter based on [RabbitMQ's](https://www.rabbitmq.com/) AMQP client API.
+AMQP provides a platform-agnostic method for ensuring information is safely transported
+between applications, among organizations, within mobile infrastructures, and across the Cloud.
+
+```java
+AmqpTransporter transporter = new AmqpTransporter("amqp://rabbitmq-server:5672");
+ServiceBroker broker = ServiceBroker.builder()
+                                    .nodeID("server-1")
+                                    .transporter(transporter)
+                                    .build();
+```
+
+{% note info Dependencies %}
+To use AMQP Transporter, add the following dependency to the build script:
+group: 'com.rabbitmq', name: 'amqp-client', version: '5.7.3'
+{% endnote %}
+
+**Detailed example**
+
+```java
+AmqpTransporter transporter = new AmqpTransporter("host1");
+transporter.setUsername("user");
+transporter.setPassword("secret");
+transporter.setSslContextFactory(customSslFactory);
+transporter.setQueueProperties(customQueueProperties);
+transporter.setExchangeProperties(customExchangeProperties);
+ServiceBroker broker = ServiceBroker.builder()
+                                    .nodeID("server-1")
+                                    .transporter(transporter)
+                                    .build();
+```
+
+#### Kafka Transporter
+
+Built-in Transporter for [Kafka](https://kafka.apache.org/).
+Kafka is used for building real-time data pipelines and streaming apps.
+It is horizontally scalable, fault-tolerant, wicked fast, and runs in production in thousands of companies.
+Kafka Transporter is a very simple implementation.
+It transfers Moleculer packets to consumers via pub/sub.
+There are not implemented offset, replay, etc. features.
+
+```java
+KafkaTransporter transporter = new KafkaTransporter("kafka://server:9092");
+ServiceBroker broker = ServiceBroker.builder()
+                                    .nodeID("server-1")
+                                    .transporter(transporter)
+                                    .build();
+```
+
+{% note info Dependencies %}
+To use Kafka Transporter, add the following dependency to the build script:
+group: 'org.apache.kafka', name: 'kafka-clients', version: '2.3.0'
+{% endnote %}
+
+**Detailed example**
+
+```java
+KafkaTransporter transporter = new KafkaTransporter();
+transporter.setUrls(new String[] { "192.168.51.29:9092" });
+transporter.setDebug(true);
+transporter.setProducerProperty("session.timeout.ms", "30000");
+ServiceBroker broker = ServiceBroker.builder()
+                                    .nodeID("server-1")
+                                    .transporter(transporter)
+                                    .build();
+```
+
+#### JMS Transporter
+
+Built-in Transporter for [Java Message Service](https://www.oracle.com/technical-resources/articles/java/intro-java-message-service.html).
+The Java Message Service API is a Java Message Oriented Middleware API for sending messages between two or more clients.
+It is an implementation to handle the Producer-consumer problem.
+JMS is a part of the Java Enterprise Edition.
+
+```java
+// Sample of usage with Active MQ
+JmsTransporter transporter = new JmsTransporter(new ActiveMQConnectionFactory());
+ServiceBroker broker = ServiceBroker.builder()
+                                    .nodeID("server-1")
+                                    .transporter(transporter)
+                                    .build();
+```
+
+{% note info Dependencies %}
+To use JMS Transporter, add the following dependency to the build script:
+group: 'javax.jms', name: 'javax.jms-api', version: '2.0.1'  
++ dependencies of the JMS driver.
+{% endnote %}
+
+**Detailed example**
+
+```java
+JmsTransporter transporter = new JmsTransporter(new ActiveMQConnectionFactory());
+transporter.setUsername("user");
+transporter.setPassword("secret");
+transporter.setAcknowledgeMode(JMSContext.AUTO_ACKNOWLEDGE);
+transporter.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+transporter.setTransacted(false);
+transporter.setPriority(5);
+transporter.setTtl(10000);
+ServiceBroker broker = ServiceBroker.builder()
+                                    .nodeID("server-1")
+                                    .transporter(transporter)
+                                    .build();
+```
+
+#### Google Pub/Sub Transporter
+
+Built-in Transporter for [Google Cloud Pub/Sub](https://cloud.google.com/pubsub/docs/overview).
+The Google Cloud Pub/Sub service allows applications to exchange messages reliably, quickly, and asynchronously.
+
+```java
+GoogleTransporter transporter = new GoogleTransporter("/credentials.json");
+ServiceBroker broker = ServiceBroker.builder()
+                                    .nodeID("server-1")
+                                    .transporter(transporter)
+                                    .build();
+```
+
+{% note info Dependencies %}
+To use Google Pub/Sub Transporter, add the following dependency to the build script:
+group: 'com.google.cloud', name: 'google-cloud-pubsub', version: '1.96.0'
+{% endnote %}
+
+**Detailed example**
+
+```java
+GoogleTransporter transporter = new GoogleTransporter("/credentials.json");
+transporter.setProjectID("Project-123");
+transporter.setBatchingSettings(customBatchSettings);
+transporter.setCredentialsProvider(customCredentialsProvider);
+transporter.setRetrySettings(customRetrySettings);
+ServiceBroker broker = ServiceBroker.builder()
+                                    .nodeID("server-1")
+                                    .transporter(transporter)
+                                    .build();
+```
+
+### Decentralized, Peer-to-Peer Transporters
+
+#### TCP Transporter
 
 TCP Transporter uses fault tolerant and peer-to-peer
 [Gossip protocol](https://en.wikipedia.org/wiki/Gossip_protocol)
@@ -152,248 +394,13 @@ just shares other remote nodes addresses by gossip messages.
 So all nodes must know only the gossiper node address to be able to communicate with all other nodes.
 {% endnote %}
 
-### NATS Transporter
-
-Built-in transporter for [NATS](http://nats.io/).
-NATS Server is a simple, high performance open source messaging system for cloud native applications, IoT messaging, and microservices architectures.
-
-```java
-NatsTransporter transporter = new NatsTransporter("nats://nats.server:4222");
-ServiceBroker broker = ServiceBroker.builder()
-                                    .nodeID("server-1")
-                                    .transporter(transporter)
-                                    .build();
-```
-
-{% note info Dependencies %}
-To use NATS Transporter, add the following dependency to the build script:
-group: 'io.nats', name: 'jnats', version: '2.6.5'
-{% endnote %}
-
-#### Detailed example
-
-```java
-NatsTransporter transporter = new NatsTransporter("host1", "host2");
-transporter.setSecure(true);
-transporter.setUsername("user");
-transporter.setPassword("secret");
-transporter.setNoRandomize(true);
-ServiceBroker broker = ServiceBroker.builder()
-                                    .nodeID("server-1")
-                                    .transporter(transporter)
-                                    .build();
-```
-
-### Redis Transporter
-
-Built-in Transporter for [Redis](http://redis.io/).
-Redis is an open source (BSD licensed), in-memory data structure store, used as a database, cache and message broker.
-
-```java
-RedisTransporter transporter = new RedisTransporter("redis://redis.server:6379");
-ServiceBroker broker = ServiceBroker.builder()
-                                    .nodeID("server-1")
-                                    .transporter(transporter)
-                                    .build();
-```
-
-{% note info Dependencies %}
-To use Redis Transporter, add the following dependency to the build script:
-group: 'biz.paluch.redis', name: 'lettuce', version: '4.5.0.Final'
-{% endnote %}
-
-#### Detailed example
-
-```java
-RedisTransporter transporter = new RedisTransporter("host1", "host2");
-transporter.setSecure(true);
-transporter.setPassword("secret");
-ServiceBroker broker = ServiceBroker.builder()
-                                    .nodeID("server-1")
-                                    .transporter(transporter)
-                                    .build();
-```
-
-### MQTT Transporter
-
-Built-in Transporter for [MQTT](http://mqtt.org/) protocol.
-MQTT Transporter (eg. for [Mosquitto](https://mosquitto.org/) MQTT Server or ActiveMQ Server).
-MQTT is a machine-to-machine (M2M)/"Internet of Things" connectivity protocol.
-It was designed as an extremely lightweight publish/subscribe messaging transport.
- 
-```java
-MqttTransporter transporter = new MqttTransporter("mqtt://mqtt-server:1883");
-ServiceBroker broker = ServiceBroker.builder()
-                                    .nodeID("server-1")
-                                    .transporter(transporter)
-                                    .build();
-```
-
-{% note info Dependencies %}
-To use MQTT Transporter, add the following dependency to the build script:
-group: 'net.sf.xenqtt', name: 'xenqtt', version: '0.9.7'
-{% endnote %}
-
-#### Detailed example
-
-```java
-MqttTransporter transporter = new MqttTransporter("host1");
-transporter.setUsername("user");
-transporter.setPassword("secret");
-transporter.setKeepAliveSeconds(120);
-transporter.setConnectTimeoutSeconds(10);
-transporter.setMessageResendIntervalSeconds(20);
-ServiceBroker broker = ServiceBroker.builder()
-                                    .nodeID("server-1")
-                                    .transporter(transporter)
-                                    .build();
-```
-
-### AMQP Transporter 
-
-Built-in Transporter for [AMQP](https://www.amqp.org/) protocol.
-AMQP Transporter based on [RabbitMQ's](https://www.rabbitmq.com/) AMQP client API.
-AMQP provides a platform-agnostic method for ensuring information is safely transported
-between applications, among organizations, within mobile infrastructures, and across the Cloud.
-
-```java
-AmqpTransporter transporter = new AmqpTransporter("amqp://rabbitmq-server:5672");
-ServiceBroker broker = ServiceBroker.builder()
-                                    .nodeID("server-1")
-                                    .transporter(transporter)
-                                    .build();
-```
-
-{% note info Dependencies %}
-To use AMQP Transporter, add the following dependency to the build script:
-group: 'com.rabbitmq', name: 'amqp-client', version: '5.7.3'
-{% endnote %}
-
-#### Detailed example
-
-```java
-AmqpTransporter transporter = new AmqpTransporter("host1");
-transporter.setUsername("user");
-transporter.setPassword("secret");
-transporter.setSslContextFactory(customSslFactory);
-transporter.setQueueProperties(customQueueProperties);
-transporter.setExchangeProperties(customExchangeProperties);
-ServiceBroker broker = ServiceBroker.builder()
-                                    .nodeID("server-1")
-                                    .transporter(transporter)
-                                    .build();
-```
-
-### Kafka Transporter
-
-Built-in Transporter for [Kafka](https://kafka.apache.org/).
-Kafka is used for building real-time data pipelines and streaming apps.
-It is horizontally scalable, fault-tolerant, wicked fast, and runs in production in thousands of companies.
-Kafka Transporter is a very simple implementation.
-It transfers Moleculer packets to consumers via pub/sub.
-There are not implemented offset, replay, etc. features.
-
-```java
-KafkaTransporter transporter = new KafkaTransporter("kafka://server:9092");
-ServiceBroker broker = ServiceBroker.builder()
-                                    .nodeID("server-1")
-                                    .transporter(transporter)
-                                    .build();
-```
-
-{% note info Dependencies %}
-To use Kafka Transporter, add the following dependency to the build script:
-group: 'org.apache.kafka', name: 'kafka-clients', version: '2.3.0'
-{% endnote %}
-
-#### Detailed example
-
-```java
-KafkaTransporter transporter = new KafkaTransporter();
-transporter.setUrls(new String[] { "192.168.51.29:9092" });
-transporter.setDebug(true);
-transporter.setProducerProperty("session.timeout.ms", "30000");
-ServiceBroker broker = ServiceBroker.builder()
-                                    .nodeID("server-1")
-                                    .transporter(transporter)
-                                    .build();
-```
-
-### JMS Transporter
-
-Built-in Transporter for [Java Message Service](https://www.oracle.com/technical-resources/articles/java/intro-java-message-service.html).
-The Java Message Service API is a Java Message Oriented Middleware API for sending messages between two or more clients.
-It is an implementation to handle the Producer-consumer problem.
-JMS is a part of the Java Enterprise Edition.
-
-```java
-// Sample of usage with Active MQ
-JmsTransporter transporter = new JmsTransporter(new ActiveMQConnectionFactory());
-ServiceBroker broker = ServiceBroker.builder()
-                                    .nodeID("server-1")
-                                    .transporter(transporter)
-                                    .build();
-```
-
-{% note info Dependencies %}
-To use JMS Transporter, add the following dependency to the build script:
-group: 'javax.jms', name: 'javax.jms-api', version: '2.0.1'  
-+ dependencies of the JMS driver.
-{% endnote %}
-
-#### Detailed example
-
-```java
-JmsTransporter transporter = new JmsTransporter(new ActiveMQConnectionFactory());
-transporter.setUsername("user");
-transporter.setPassword("secret");
-transporter.setAcknowledgeMode(JMSContext.AUTO_ACKNOWLEDGE);
-transporter.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-transporter.setTransacted(false);
-transporter.setPriority(5);
-transporter.setTtl(10000);
-ServiceBroker broker = ServiceBroker.builder()
-                                    .nodeID("server-1")
-                                    .transporter(transporter)
-                                    .build();
-```
-
-### Google Pub/Sub Transporter
-
-Built-in Transporter for [Google Cloud Pub/Sub](https://cloud.google.com/pubsub/docs/overview).
-The Google Cloud Pub/Sub service allows applications to exchange messages reliably, quickly, and asynchronously.
-
-```java
-GoogleTransporter transporter = new GoogleTransporter("/credentials.json");
-ServiceBroker broker = ServiceBroker.builder()
-                                    .nodeID("server-1")
-                                    .transporter(transporter)
-                                    .build();
-```
-
-{% note info Dependencies %}
-To use Google Pub/Sub Transporter, add the following dependency to the build script:
-group: 'com.google.cloud', name: 'google-cloud-pubsub', version: '1.96.0'
-{% endnote %}
-
-#### Detailed example
-
-```java
-GoogleTransporter transporter = new GoogleTransporter("/credentials.json");
-transporter.setProjectID("Project-123");
-transporter.setBatchingSettings(customBatchSettings);
-transporter.setCredentialsProvider(customCredentialsProvider);
-transporter.setRetrySettings(customRetrySettings);
-ServiceBroker broker = ServiceBroker.builder()
-                                    .nodeID("server-1")
-                                    .transporter(transporter)
-                                    .build();
-```
-
-### Internal Transporter
+#### Internal Transporter
 
 Internal Transporter is a built-in message bus that can connect multiple ServiceBrokers running in the same JVM.
-The calls are made in separate Threads (so call timeouts can be used).
+This Transporter is primarily used for testing purposes.
+The calls are made in separate Threads, so call timeouts can be used.
+
+**Using the shared (static) communication group**
 
 ```java
 ServiceBroker broker1 = ServiceBroker.builder()
@@ -406,14 +413,27 @@ ServiceBroker broker2 = ServiceBroker.builder()
                                      .build();
 ```
 
+**Using independent communication groups**
+
 ```java
-// --- COMMUNICATION GROUP 1 ---
+// --- CREATE COMMUNICATION GROUPS ---
 
 Subscriptions group1 = new Subscriptions();
+Subscriptions group2 = new Subscriptions();
 
+// --- CREATE TRANSPORTERS ---
+
+// Group-1
 InternalTransporter transporter1 = new InternalTransporter(group1);
 InternalTransporter transporter2 = new InternalTransporter(group1);
 
+// Group-2
+InternalTransporter transporter3 = new InternalTransporter(group2);
+InternalTransporter transporter4 = new InternalTransporter(group2);
+
+// --- CREATE SERVICE BROKERS ---
+
+// Group-1
 ServiceBroker broker1 = ServiceBroker.builder()
                                      .nodeID("node1")
                                      .transporter(transporter1)
@@ -423,13 +443,7 @@ ServiceBroker broker2 = ServiceBroker.builder()
                                      .transporter(transporter2)
                                      .build();
 
-// --- COMMUNICATION GROUP 2 ---
-
-Subscriptions group2 = new Subscriptions();
-
-InternalTransporter transporter3 = new InternalTransporter(group2);
-InternalTransporter transporter4 = new InternalTransporter(group2);
-
+// Group-2
 ServiceBroker broker3 = ServiceBroker.builder()
                                      .nodeID("node3")
                                      .transporter(transporter3)
@@ -440,12 +454,12 @@ ServiceBroker broker4 = ServiceBroker.builder()
                                      .build();
 ```
 
-### File System Transporter
+#### File System Transporter
 
 Built-in, filesystem-based, server-less Transporter.
-File System Transporter is primarily NOT for production use. It's much slower than other Transporters.
-Rather it can be considered as a reference implementation or a sample.
-With this Transporter multiple Service Brokers can communicate with each other through a common directory structure.
+With this Transporter multiple Service Brokers can communicate with each other through a shared directory structure.
+File System Transporter is not advisable for use in production mode as it is much slower than other Transporter.
+Rather it can be considered as a reference implementation or a code sample.
 
 ```java
 FileSystemTransporter transporter = new FileSystemTransporter("/shared/dir");
@@ -455,13 +469,12 @@ ServiceBroker broker = ServiceBroker.builder()
                                     .build();
 ```
 
-### UDP Multicast Transporter
+#### UDP Multicast Transporter
 
 Built-in, multicast UDP-based, server-less transporter.
-UDP Multicast is primarily NOT for production use -
-UDP does not behave well in a lossy network by itself, and the data packet size is limited.
-This transporter is a reference implementation or code sample.
-Can only be used "safely" if two or three nodes are connected via "localhost".
+This is another Transporter implementation example.
+UDP Multicast Transporter is not for production use -
+UDP communication is lossy, and the packet size is limited.
 
 ```java
 UdpMulticastTransporter transporter = new UdpMulticastTransporter();
@@ -471,13 +484,13 @@ ServiceBroker broker = ServiceBroker.builder()
                                     .build();
 ```
 
-### Custom transporter
+### Custom Transporter
 
-Custom transporter module can be created.
+Custom Transporter module can be created.
 The simplest solution is to copy the source code of an existing Transporter
 and modify the `connect`, `stopped`, `subscribe` and `publish` methods.
 
-#### Create custom transporter
+**Create custom Transporter**
 
 ```java
 public class CustomTransporter extends Transporter {
@@ -488,7 +501,7 @@ public class CustomTransporter extends Transporter {
 }
 ```
 
-#### Use custom transporter
+**Use custom Transporter**
 
 ```java
 ServiceBroker broker = ServiceBroker.builder()
@@ -497,7 +510,7 @@ ServiceBroker broker = ServiceBroker.builder()
                                     .build();
 ```
 
-## Serialization
+## Serializers
 
 Transporter needs a serializer module which serializes & deserializes the transferred packets.
 The default serializer is the `JsonSerializer` but there are several built-in serializer.
@@ -649,7 +662,7 @@ Custom serializer module can be created.
 To make your own Serializer, you need to derive it from the `services.moleculer.serializer.Serializer`
 superclass, and implement the `write` and `read` methods.
 
-#### Create custom serializer
+**Create custom serializer**
 
 ```java
 public class CustomSerializer extends Serializer {
@@ -671,7 +684,7 @@ public class CustomSerializer extends Serializer {
 }
 ```
 
-#### Use custom serializer
+**Use custom serializer**
 
 ```java
 transporter.setSerializer(new CustomSerializer());
