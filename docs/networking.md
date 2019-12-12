@@ -1,10 +1,10 @@
 title: Networking
 ---
-In order to communicate with other nodes (ServiceBroker instances) you need to configure a Transporter.
-
+In order to communicate with other nodes (ServiceBroker instances) you need to configure a Transporter.  
 There are two types of Transporter:
 
 - **Centralized** Transporters: Transporters using a central server. The central server can be, for example, a Redis, NATS, Kafka, MQTT or a JMS server.
+
 - **Decentralized**, Peer-to-Peer Transporters: Transporters without a central server. For example, TCPTransporter belongs to this group, which uses Gossip protocol to publish the status of the nodes.
 
 Each Transporter can be assigned a Serializer. Serializers convert messages into bytes and vice versa.
