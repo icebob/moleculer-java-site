@@ -563,7 +563,7 @@ The `readers` and `writers` parameters are used to specify the JSON API
 to be used by Moleculer for deserialization / serialization.
 This is important if you have multiple JSON implementations on the classpath.
 Several implementations can be specified in order of importance, separated by commas.
-If not specified, ServiceBroker will automatically try to choose the faster JSON API.
+If not specified, ServiceBroker will automatically try to choose the fastest JSON API.
 The values of the `readers` and `writers` parameters are listed below:
 
 | Reader/writer ID | JSON API and Dependency |
@@ -590,7 +590,7 @@ The values of the `readers` and `writers` parameters are listed below:
 So, for example, if you want to use a "FastJSON" implementation,
 put the implementation reference in the "dependencies" block of the (build.gradle or pom.xml) build script,
 then set `readers` and `writers` to "fast". To verify, type "info" command into the REPL console.
-The "info" command will display the current Moleculer configuration, including the implementation of the JSON API.
+The "info" command will display the current Moleculer configuration, including the the JSON API which is in use.
 
 ### MessagePack Serializer
 
