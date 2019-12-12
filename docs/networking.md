@@ -4,7 +4,7 @@ In order to communicate with other nodes (ServiceBroker instances) you need to c
 
 There are two types of Transporter:
 
-- **Centralized** Transporters: Transporters using a central server. The central server can be, for example, a Redis, NATS, Kafka, or a JMS server.
+- **Centralized** Transporters: Transporters using a central server. The central server can be, for example, a Redis, NATS, Kafka, MQTT or a JMS server.
 - **Decentralized**, Peer-to-Peer Transporters: Transporters without a central server. For example, TCPTransporter belongs to this group, which uses Gossip protocol to publish the status of the nodes.
 
 Each Transporter can be assigned a Serializer. Serializers convert messages into bytes and vice versa.
@@ -43,7 +43,7 @@ To use NATS Transporter, add the following dependency to the build script:
 group: 'io.nats', name: 'jnats', version: '2.6.5'
 {% endnote %}
 
-**Detailed example**
+Detailed example:
 
 ```java
 NatsTransporter transporter = new NatsTransporter("host1", "host2");
@@ -75,7 +75,7 @@ To use Redis Transporter, add the following dependency to the build script:
 group: 'biz.paluch.redis', name: 'lettuce', version: '4.5.0.Final'
 {% endnote %}
 
-**Detailed example**
+Detailed example:
 
 ```java
 RedisTransporter transporter = new RedisTransporter("host1", "host2");
@@ -107,7 +107,7 @@ To use MQTT Transporter, add the following dependency to the build script:
 group: 'net.sf.xenqtt', name: 'xenqtt', version: '0.9.7'
 {% endnote %}
 
-**Detailed example**
+Detailed example:
 
 ```java
 MqttTransporter transporter = new MqttTransporter("host1");
@@ -142,7 +142,7 @@ To use AMQP Transporter, add the following dependency to the build script:
 group: 'com.rabbitmq', name: 'amqp-client', version: '5.7.3'
 {% endnote %}
 
-**Detailed example**
+Detailed example:
 
 ```java
 AmqpTransporter transporter = new AmqpTransporter("host1");
@@ -179,7 +179,7 @@ To use Kafka Transporter, add the following dependency to the build script:
 group: 'org.apache.kafka', name: 'kafka-clients', version: '2.3.0'
 {% endnote %}
 
-**Detailed example**
+Detailed example:
 
 ```java
 KafkaTransporter transporter = new KafkaTransporter();
@@ -214,7 +214,7 @@ group: 'javax.jms', name: 'javax.jms-api', version: '2.0.1'
 + dependencies of the JMS driver.
 {% endnote %}
 
-**Detailed example**
+Detailed example:
 
 ```java
 JmsTransporter transporter = new JmsTransporter(new ActiveMQConnectionFactory());
@@ -249,7 +249,7 @@ To use Google Pub/Sub Transporter, add the following dependency to the build scr
 group: 'com.google.cloud', name: 'google-cloud-pubsub', version: '1.96.0'
 {% endnote %}
 
-**Detailed example**
+Detailed example:
 
 ```java
 GoogleTransporter transporter = new GoogleTransporter("/credentials.json");
@@ -308,7 +308,7 @@ broker.createService(new Service("testService") {
 broker.start();
 ```
 
-**Detailed example**
+Detailed example:
 
 ```java
 TcpTransporter transporter = new TcpTransporter();
