@@ -1,7 +1,7 @@
 title: Networking
 ---
-In order to communicate with other nodes (ServiceBrokers) you need to configure a transporter.
-Most of the supported transporters connect to a central message broker that provide a reliable way of exchanging messages among remote nodes.
+In order to communicate with other nodes (ServiceBroker instances) you need to configure a Transporter.
+Most of the supported Transporters connect to a central message broker that provide a reliable way of exchanging messages among remote nodes.
 These message brokers mainly support publish/subscribe messaging pattern.
 
 <div align="center">
@@ -15,20 +15,19 @@ Transporter communicates with other nodes.
 It transfers events, calls requests and processes responses ...etc.
 If a service runs on multiple instances on different nodes, the requests will be load-balanced among live nodes.
 
-The whole communication logic is outside of transporter class.
-It means switching between transporters without changing any lines of our code is easy.
+The whole communication logic is outside of Transporter class.
+It means switching between Transporters without changing any lines of our code is easy.
 
-There are several built-in transporters in Moleculer framework.
+There are several built-in Transporters in Moleculer framework.
 
-### TCP transporter
+### TCP Transporter
 
-![Stable transporter](https://img.shields.io/badge/status-stable-green.svg)
 TCP Transporter uses fault tolerant and peer-to-peer
 [Gossip protocol](https://en.wikipedia.org/wiki/Gossip_protocol)
 to discover location and service information about the other nodes
 participating in a Moleculer Cluster. In Moleculer's P2P architecture all
 nodes are equal, there is no "leader" or "controller" node, so the cluster is
-truly horizontally scalable. This transporter aims to run on top of an
+truly horizontally scalable. This Transporter aims to run on top of an
 infrastructure of hundreds of nodes.
  
 It contains an integrated UDP discovery feature to detect new and disconnected nodes on the network.
@@ -38,7 +37,7 @@ It can be a static list in your configuration or a file path which contains the 
 TCP Transporter provides the highest speed data transfer between Moleculer
 Nodes - hundred thousand packets per second can be transmitted from one node to another over a high-speed LAN.
  
-**Use TCP transporter with default options**
+**Use TCP Transporter with default options**
 
 ```java
 // Create Transporter
@@ -49,7 +48,7 @@ ServiceBroker broker = ServiceBroker.builder()
                                     .nodeID("node1")
                                     .transporter(transporter)
                                     .build();
-			
+            
 // Install distributed Services
 broker.createService(new Service("testService") {
     Action testAction = ctx -> {
@@ -59,12 +58,12 @@ broker.createService(new Service("testService") {
         return new Tree();
     };
 });
-			
+            
 // Connect the Service Broker to other Nodes
 broker.start();
 ```
 
-**All TCP transporter options with default values**
+**All TCP Transporter options with default values**
 
 ```java
 TcpTransporter transporter = new TcpTransporter();
@@ -116,7 +115,7 @@ transporter.setUdpMulticastTTL(1);
 transporter.setUdpBroadcast(false);
 ```
 
-**TCP transporter with static endpoint list**
+**TCP Transporter with static endpoint list**
 
 ```java
 TcpTransporter transporter = new TcpTransporter("172.17.0.1:6000/node-1",
@@ -130,7 +129,7 @@ ServiceBroker broker = ServiceBroker.builder()
 
 _You don't need to set `port` because it find & parse the self TCP port from URL list._
 
-**TCP transporter with static endpoint list file**
+**TCP Transporter with static endpoint list file**
 
 ```java
 TcpTransporter transporter = new TcpTransporter(new URL("file:///nodes.json"));
@@ -155,7 +154,6 @@ So all nodes must know only the gossiper node address to be able to communicate 
 
 ### NATS Transporter
 
-![Stable transporter](https://img.shields.io/badge/status-stable-green.svg)
 Built-in transporter for [NATS](http://nats.io/).
 NATS Server is a simple, high performance open source messaging system for cloud native applications, IoT messaging, and microservices architectures.
 
@@ -168,7 +166,7 @@ ServiceBroker broker = ServiceBroker.builder()
 ```
 
 {% note info Dependencies %}
-To use NATS transporter, add the following dependency to the build script:
+To use NATS Transporter, add the following dependency to the build script:
 group: 'io.nats', name: 'jnats', version: '2.6.5'
 {% endnote %}
 
@@ -188,8 +186,7 @@ ServiceBroker broker = ServiceBroker.builder()
 
 ### Redis Transporter
 
-![Stable transporter](https://img.shields.io/badge/status-stable-green.svg)
-Built-in transporter for [Redis](http://redis.io/).
+Built-in Transporter for [Redis](http://redis.io/).
 Redis is an open source (BSD licensed), in-memory data structure store, used as a database, cache and message broker.
 
 ```java
@@ -201,7 +198,7 @@ ServiceBroker broker = ServiceBroker.builder()
 ```
 
 {% note info Dependencies %}
-To use Redis transporter, add the following dependency to the build script:
+To use Redis Transporter, add the following dependency to the build script:
 group: 'biz.paluch.redis', name: 'lettuce', version: '4.5.0.Final'
 {% endnote %}
 
@@ -219,8 +216,7 @@ ServiceBroker broker = ServiceBroker.builder()
 
 ### MQTT Transporter
 
-![Stable transporter](https://img.shields.io/badge/status-stable-green.svg)
-Built-in transporter for [MQTT](http://mqtt.org/) protocol.
+Built-in Transporter for [MQTT](http://mqtt.org/) protocol.
 MQTT Transporter (eg. for [Mosquitto](https://mosquitto.org/) MQTT Server or ActiveMQ Server).
 MQTT is a machine-to-machine (M2M)/"Internet of Things" connectivity protocol.
 It was designed as an extremely lightweight publish/subscribe messaging transport.
@@ -234,7 +230,7 @@ ServiceBroker broker = ServiceBroker.builder()
 ```
 
 {% note info Dependencies %}
-To use MQTT transporter, add the following dependency to the build script:
+To use MQTT Transporter, add the following dependency to the build script:
 group: 'net.sf.xenqtt', name: 'xenqtt', version: '0.9.7'
 {% endnote %}
 
@@ -255,8 +251,7 @@ ServiceBroker broker = ServiceBroker.builder()
 
 ### AMQP Transporter 
 
-![Stable transporter](https://img.shields.io/badge/status-stable-green.svg)
-Built-in transporter for [AMQP](https://www.amqp.org/) protocol.
+Built-in Transporter for [AMQP](https://www.amqp.org/) protocol.
 AMQP Transporter based on [RabbitMQ's](https://www.rabbitmq.com/) AMQP client API.
 AMQP provides a platform-agnostic method for ensuring information is safely transported
 between applications, among organizations, within mobile infrastructures, and across the Cloud.
@@ -270,7 +265,7 @@ ServiceBroker broker = ServiceBroker.builder()
 ```
 
 {% note info Dependencies %}
-To use AMQP transporter, add the following dependency to the build script:
+To use AMQP Transporter, add the following dependency to the build script:
 group: 'com.rabbitmq', name: 'amqp-client', version: '5.7.3'
 {% endnote %}
 
@@ -291,8 +286,7 @@ ServiceBroker broker = ServiceBroker.builder()
 
 ### Kafka Transporter
 
-![Stable transporter](https://img.shields.io/badge/status-stable-green.svg)
-Built-in transporter for [Kafka](https://kafka.apache.org/).
+Built-in Transporter for [Kafka](https://kafka.apache.org/).
 Kafka is used for building real-time data pipelines and streaming apps.
 It is horizontally scalable, fault-tolerant, wicked fast, and runs in production in thousands of companies.
 Kafka Transporter is a very simple implementation.
@@ -308,7 +302,7 @@ ServiceBroker broker = ServiceBroker.builder()
 ```
 
 {% note info Dependencies %}
-To use Kafka transporter, add the following dependency to the build script:
+To use Kafka Transporter, add the following dependency to the build script:
 group: 'org.apache.kafka', name: 'kafka-clients', version: '2.3.0'
 {% endnote %}
 
@@ -327,8 +321,7 @@ ServiceBroker broker = ServiceBroker.builder()
 
 ### JMS Transporter
 
-![Stable transporter](https://img.shields.io/badge/status-stable-green.svg)
-Built-in transporter for [Java Message Service](https://www.oracle.com/technical-resources/articles/java/intro-java-message-service.html).
+Built-in Transporter for [Java Message Service](https://www.oracle.com/technical-resources/articles/java/intro-java-message-service.html).
 The Java Message Service API is a Java Message Oriented Middleware API for sending messages between two or more clients.
 It is an implementation to handle the Producer-consumer problem.
 JMS is a part of the Java Enterprise Edition.
@@ -343,7 +336,7 @@ ServiceBroker broker = ServiceBroker.builder()
 ```
 
 {% note info Dependencies %}
-To use JMS transporter, add the following dependency to the build script:
+To use JMS Transporter, add the following dependency to the build script:
 group: 'javax.jms', name: 'javax.jms-api', version: '2.0.1'  
 + dependencies of the JMS driver.
 {% endnote %}
@@ -367,8 +360,7 @@ ServiceBroker broker = ServiceBroker.builder()
 
 ### Google Pub/Sub Transporter
 
-![Stable transporter](https://img.shields.io/badge/status-stable-green.svg)
-Built-in transporter for [Google Cloud Pub/Sub](https://cloud.google.com/pubsub/docs/overview).
+Built-in Transporter for [Google Cloud Pub/Sub](https://cloud.google.com/pubsub/docs/overview).
 The Google Cloud Pub/Sub service allows applications to exchange messages reliably, quickly, and asynchronously.
 
 ```java
@@ -380,7 +372,7 @@ ServiceBroker broker = ServiceBroker.builder()
 ```
 
 {% note info Dependencies %}
-To use Google Pub/Sub transporter, add the following dependency to the build script:
+To use Google Pub/Sub Transporter, add the following dependency to the build script:
 group: 'com.google.cloud', name: 'google-cloud-pubsub', version: '1.96.0'
 {% endnote %}
 
@@ -400,21 +392,60 @@ ServiceBroker broker = ServiceBroker.builder()
 
 ### Internal Transporter
 
-![Stable transporter](https://img.shields.io/badge/status-stable-green.svg)
 Internal Transporter is a built-in message bus that can connect multiple ServiceBrokers running in the same JVM.
 The calls are made in separate Threads (so call timeouts can be used).
 
 ```java
-ServiceBroker broker1 = ServiceBroker.builder().nodeID("node1").transporter(new InternalTransporter()).build();
-ServiceBroker broker2 = ServiceBroker.builder().nodeID("node2").transporter(new InternalTransporter()).build();
+ServiceBroker broker1 = ServiceBroker.builder()
+                                     .nodeID("node1")
+                                     .transporter(new InternalTransporter())
+                                     .build();
+ServiceBroker broker2 = ServiceBroker.builder()
+                                     .nodeID("node2")
+                                     .transporter(new InternalTransporter())
+                                     .build();
+```
+
+```java
+// --- COMMUNICATION GROUP 1 ---
+
+Subscriptions group1 = new Subscriptions();
+
+InternalTransporter transporter1 = new InternalTransporter(group1);
+InternalTransporter transporter2 = new InternalTransporter(group1);
+
+ServiceBroker broker1 = ServiceBroker.builder()
+                                     .nodeID("node1")
+                                     .transporter(transporter1)
+                                     .build();
+ServiceBroker broker2 = ServiceBroker.builder()
+                                     .nodeID("node2")
+                                     .transporter(transporter2)
+                                     .build();
+
+// --- COMMUNICATION GROUP 2 ---
+
+Subscriptions group2 = new Subscriptions();
+
+InternalTransporter transporter3 = new InternalTransporter(group2);
+InternalTransporter transporter4 = new InternalTransporter(group2);
+
+ServiceBroker broker3 = ServiceBroker.builder()
+                                     .nodeID("node3")
+                                     .transporter(transporter3)
+                                     .build();
+ServiceBroker broker4 = ServiceBroker.builder()
+                                     .nodeID("node4")
+                                     .transporter(transporter4)
+                                     .build();
 ```
 
 ### File System Transporter
 
-Built-in, filesystem-based, server-less transporter.
-File System Transporter is primarily NOT for production use. It's much slower than other transporters.
+Built-in, filesystem-based, server-less Transporter.
+File System Transporter is primarily NOT for production use. It's much slower than other Transporters.
 Rather it can be considered as a reference implementation or a sample.
-With this transporter multiple Service Brokers can communicate with each other through a common directory structure.
+With this Transporter multiple Service Brokers can communicate with each other through a common directory structure.
 
 ```java
 FileSystemTransporter transporter = new FileSystemTransporter("/shared/dir");
@@ -488,8 +519,8 @@ transporter.setSerializer(new JsonSerializer());
 ServiceBroker broker = ServiceBroker.builder()
                                     .nodeID("server-1")
                                     .transporter(transporter)
-									.readers("jackson,boon")
-									.writers("jackson,fast")
+                                    .readers("jackson,boon")
+                                    .writers("jackson,fast")
                                     .build();
 ```
 
@@ -626,7 +657,7 @@ public class CustomSerializer extends Serializer {
     // --- SERIALIZE TREE TO BYTE ARRAY ---
 
     public byte[] write(Tree value) throws Exception {
-		Object content = value.asObject();
+        Object content = value.asObject();
         // Write Java Object into byte array...
     }
 
@@ -634,7 +665,7 @@ public class CustomSerializer extends Serializer {
 
     public Tree read(byte[] source) throws Exception {
         Object content = // Read Java Object from "source"...
-		return new CheckedTree(content);
+        return new CheckedTree(content);
     }
 
 }
