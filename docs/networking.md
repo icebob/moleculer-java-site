@@ -2,10 +2,12 @@ title: Networking
 ---
 In order to communicate with other nodes (ServiceBroker instances) you need to configure a Transporter.
 
-- Centralized Transporters: Transporters using a central server. The central server can be, for example, a Redis, NATS, Kafka, or a JMS server.
-- Decentralized, Peer-to-Peer Transporters: Transporters without a central server. For example, TCPTransporter belongs to this group, which uses Gossip protocol to publish the status of the nodes.
+There are two types of Transporter:
 
-Each Transporter can be specified which Serializer to use. Serializers convert messages into bytes and vice versa.
+- **Centralized** Transporters: Transporters using a central server. The central server can be, for example, a Redis, NATS, Kafka, or a JMS server.
+- **Decentralized**, Peer-to-Peer Transporters: Transporters without a central server. For example, TCPTransporter belongs to this group, which uses Gossip protocol to publish the status of the nodes.
+
+Each Transporter can be assigned a Serializer. Serializers convert messages into bytes and vice versa.
 Moleculer Framework includes several Serializers that can convert messages into JSON, MessagePack, BSON, CBOR or other binary packets.
 
 ## Transporters
