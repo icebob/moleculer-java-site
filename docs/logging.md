@@ -88,7 +88,9 @@ It looks like this in "web.xml":
 When running standalone (on top of Netty), you need to set the "logging.config" parameter to something like this:
 
 ```
-java -Dlogging.config="classpath:logging.properties" -cp ... services.moleculer.config.MoleculerRunner <app class>
+java -Dlogging.config="classpath:logging.properties"
+     -cp <list of JARs>
+     services.moleculer.config.MoleculerRunner <app class>
 ```
 
 ## Detailed Example

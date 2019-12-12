@@ -55,7 +55,7 @@ public class TestService extends Service {
 
         // Custom initialization code
         cacher = broker.getConfig().getCacher();
-		// ...
+        // ...
     }
 }
 ```
@@ -81,12 +81,12 @@ import services.moleculer.service.*;
 @Name("test")
 public class TestService extends Service {
 
-	@Override
-	public void stopped() {
+    @Override
+    public void stopped() {
         super.stopped();
-		
-		// Release resources...
-	}
+        
+        // Release resources...
+    }
 }
 ```
 
@@ -107,7 +107,7 @@ import services.moleculer.service.*;
 public class TestService extends Service {
 
     // --- STARTING SERVICE ---
-	
+    
     public TestService() {
 
         // 1.) The constructor is called first
@@ -127,11 +127,11 @@ public class TestService extends Service {
     }
 
     // --- RUNNING SERVICE ---
-	
+    
     public Action action = ctx -> {
 
         // 4.) This Action is called by other Actions
-		int foo = ctx.params.get("foo", 0)
+        int foo = ctx.params.get("foo", 0)
         return new Tree().put("result", foo + 3);
     };
 

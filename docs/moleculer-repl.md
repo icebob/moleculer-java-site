@@ -11,12 +11,12 @@ It is also possible to create **custom commands**. The console can be used via s
 
 ```xml
 <dependencies>
-	<dependency>
-		<groupId>com.github.berkesa</groupId>
-		<artifactId>moleculer-java-repl</artifactId>
-		<version>1.2.1</version>
-		<scope>runtime</scope>
-	</dependency>
+    <dependency>
+        <groupId>com.github.berkesa</groupId>
+        <artifactId>moleculer-java-repl</artifactId>
+        <version>1.2.1</version>
+        <scope>runtime</scope>
+    </dependency>
 </dependencies>
 ```
 
@@ -24,7 +24,7 @@ It is also possible to create **custom commands**. The console can be used via s
 
 ```gradle
 dependencies {
-	compile group: 'com.github.berkesa', name: 'moleculer-java-repl', version: '1.2.1' 
+    compile group: 'com.github.berkesa', name: 'moleculer-java-repl', version: '1.2.1' 
 }
 ```
 
@@ -44,39 +44,39 @@ broker.repl();
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
-	   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-	   http://www.springframework.org/schema/context
-	   http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<!-- ENABLE ANNOTATION PROCESSING -->
+    <!-- ENABLE ANNOTATION PROCESSING -->
 
-	<context:annotation-config />
+    <context:annotation-config />
 
-	<!-- PACKAGE OF THE MOLECULER SERVICES -->
-	
-	<context:component-scan base-package="my.services" />
+    <!-- PACKAGE OF THE MOLECULER SERVICES -->
+    
+    <context:component-scan base-package="my.services" />
 
-	<!-- SPRING REGISTRATOR FOR MOLECULER SERVICES -->
+    <!-- SPRING REGISTRATOR FOR MOLECULER SERVICES -->
 
-	<bean id="registrator" class="services.moleculer.config.SpringRegistrator" depends-on="broker" />
+    <bean id="registrator" class="services.moleculer.config.SpringRegistrator" depends-on="broker" />
 
-	<!-- SERVICE BROKER INSTANCE -->
+    <!-- SERVICE BROKER INSTANCE -->
 
-	<bean id="broker" class="services.moleculer.ServiceBroker" init-method="start" destroy-method="stop">
-		<constructor-arg ref="brokerConfig" />
-	</bean>
+    <bean id="broker" class="services.moleculer.ServiceBroker" init-method="start" destroy-method="stop">
+        <constructor-arg ref="brokerConfig" />
+    </bean>
 
-	<!-- SERVICE BROKER SETTINGS -->
+    <!-- SERVICE BROKER SETTINGS -->
 
-	<bean id="brokerConfig" class="services.moleculer.config.ServiceBrokerConfig">
-		<property name="nodeID" value="node-1" />
-	</bean>
+    <bean id="brokerConfig" class="services.moleculer.config.ServiceBrokerConfig">
+        <property name="nodeID" value="node-1" />
+    </bean>
 
-	<!-- LOCAL DEVELOPER CONSOLE -->
+    <!-- LOCAL DEVELOPER CONSOLE -->
 
-	<bean id="$repl" class="services.moleculer.repl.LocalRepl" />
+    <bean id="$repl" class="services.moleculer.repl.LocalRepl" />
 
 </beans>
 ```
@@ -382,53 +382,56 @@ import services.moleculer.service.Name;
 @Name("hello")
 public class HelloCommand extends Command {
 
-	public HelloCommand() {
-		option("uppercase, -u", "uppercase the name");
-	}
-	
-	@Override
-	public String getDescription() {
-		return "Call the greeter.hello service with name";
-	}
+    public HelloCommand() {
+        option("uppercase, -u", "uppercase the name");
+    }
+    
+    @Override
+    public String getDescription() {
+        return "Call the greeter.hello service with name";
+    }
 
-	@Override
-	public String getUsage() {
-		return "hello [options] <name>";
-	}
+    @Override
+    public String getUsage() {
+        return "hello [options] <name>";
+    }
 
-	@Override
-	public int getNumberOfRequiredParameters() {
-		
-		// One parameter (the "name") is required
-		return 1;
-	}
+    @Override
+    public int getNumberOfRequiredParameters() {
+        
+        // One parameter (the "name") is required
+        return 1;
+    }
 
-	@Override
-	public void onCommand(ServiceBroker broker, PrintWriter out, String[] parameters) throws Exception {
-		
-		// Parse parameters
-		List<String> params = Arrays.asList(parameters);
-		boolean uppercase = params.contains("--uppercase") || params.contains("-u");
-		
-		// Last parameter is the name
-		String name = parameters[parameters.length - 1];
-		if (uppercase) {
-			name = name.toUpperCase();
-		}
-		
-		// Call the "greeter.hello" service
-		broker.call("greeter.hello", name).then(rsp -> {
-			
-			// Print response
-			out.println(rsp.asString());
-			
-		}).catchError(err -> {
-			
-			// Print error
-			err.printStackTrace(out);
-			
-		});
-	}
+    @Override
+    public void onCommand(ServiceBroker broker,
+	                      PrintWriter out,
+	                      String[] parameters) throws Exception {
+        
+        // Parse parameters
+        List<String> params = Arrays.asList(parameters);
+        boolean uppercase = params.contains("--uppercase") ||
+	                        params.contains("-u");
+        
+        // Last parameter is the name
+        String name = parameters[parameters.length - 1];
+        if (uppercase) {
+            name = name.toUpperCase();
+        }
+        
+        // Call the "greeter.hello" service
+        broker.call("greeter.hello", name).then(rsp -> {
+            
+            // Print response
+            out.println(rsp.asString());
+            
+        }).catchError(err -> {
+            
+            // Print error
+            err.printStackTrace(out);
+            
+        });
+    }
 }
 ```
 
@@ -442,11 +445,11 @@ import services.moleculer.service.*;
 @Name("greeter")
 public class GreeterService extends Service {
 
-	@Name("hello")
-	public Action helloAction = ctx -> {
-		return "Hello " + ctx.params.asString();
-	};
-	
+    @Name("hello")
+    public Action helloAction = ctx -> {
+        return "Hello " + ctx.params.asString();
+    };
+    
 }
 ```
 
@@ -465,7 +468,7 @@ broker.createService("$repl", repl);
 
 ```xml
 <bean id="$repl" class="services.moleculer.repl.LocalRepl">
-	<property name="packagesToScan" value="my.commands" />		
+    <property name="packagesToScan" value="my.commands" />        
 </bean>
 ```
 
