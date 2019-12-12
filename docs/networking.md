@@ -1,26 +1,27 @@
 title: Networking
 ---
 In order to communicate with other nodes (ServiceBroker instances) you need to configure a Transporter.
-Most of the supported Transporters connect to a central message broker that provide a reliable way of exchanging messages among remote nodes.
-These message brokers mainly support publish/subscribe messaging pattern.
+
+- Centralized Transporters: Transporters using a central server. The central server can be, for example, a Redis, NATS, Kafka, or a JMS server.
+- Decentralized, Peer-to-Peer Transporters: Transporters without a central server. For example, TCPTransporter belongs to this group, which uses Gossip protocol to publish the status of the nodes.
+
+Each Transporter can be specified which Serializer to use. Serializers convert messages into bytes and vice versa.
+Moleculer Framework includes several Serializers that can convert messages into JSON, MessagePack, BSON, CBOR or other binary packets.
+
+## Transporters
+
+Transporter communicates with other nodes, transfers events, calls requests and processes responses.
+If a service runs on multiple instances on different nodes, the requests will be load-balanced among live nodes.
+There are several built-in Transporters in Moleculer Framework.
+
+### Centralized Transporters
+
+Centralized Transporters connect to a central message broker that provide a reliable way of exchanging messages among remote nodes.
+These brokers use publish/subscribe messaging pattern to deliver data packets.
 
 <div align="center">
     <img src="assets/networking.svg" alt="Networking diagram" />
 </div>
-
-## Transporters
-
-Transporter is an important module if you are running services on multiple nodes.
-Transporter communicates with other nodes.
-It transfers events, calls requests and processes responses ...etc.
-If a service runs on multiple instances on different nodes, the requests will be load-balanced among live nodes.
-
-The whole communication logic is outside of Transporter class.
-It means switching between Transporters without changing any lines of our code is easy.
-
-There are several built-in Transporters in Moleculer framework.
-
-### Centralized Transporters
 
 #### NATS Transporter
 
@@ -305,7 +306,7 @@ broker.createService(new Service("testService") {
 broker.start();
 ```
 
-**All TCP Transporter options with default values**
+**Detailed example**
 
 ```java
 TcpTransporter transporter = new TcpTransporter();
