@@ -28,7 +28,8 @@ These brokers use publish/subscribe messaging pattern to deliver data packets.
 #### NATS Transporter
 
 Built-in transporter for [NATS](http://nats.io/).
-NATS Server is a simple, high performance open source messaging system for cloud native applications, IoT messaging, and microservices architectures.
+NATS Server is a simple, high performance open source messaging system for cloud native applications,
+IoT messaging, and microservices architectures.
 
 ```java
 NatsTransporter transporter = new NatsTransporter("nats://nats.server:4222");
@@ -39,22 +40,40 @@ ServiceBroker broker = ServiceBroker.builder()
 ```
 
 {% note info Dependencies %}
-To use NATS Transporter, add the following dependency to the build script:
+To use NATS Transporter, add the following dependency to the build script:  
 group: 'io.nats', name: 'jnats', version: '2.6.5'
 {% endnote %}
 
 Detailed example:
 
 ```java
+// Create Transporter
 NatsTransporter transporter = new NatsTransporter("host1", "host2");
+
+// Configure Transporter
 transporter.setSecure(true);
 transporter.setUsername("user");
 transporter.setPassword("secret");
 transporter.setNoRandomize(true);
+
+// Create Service Broker
 ServiceBroker broker = ServiceBroker.builder()
                                     .nodeID("server-1")
                                     .transporter(transporter)
                                     .build();
+
+// Install distributed Services
+broker.createService(new Service("testService") {
+    Action testAction = ctx -> {
+
+        // Process request JSON (ctx.params),
+        // and create response JSON structure
+        return new Tree();
+    };
+});
+            
+// Connect the Service Broker to other Nodes
+broker.start();
 ```
 
 #### Redis Transporter
@@ -71,7 +90,7 @@ ServiceBroker broker = ServiceBroker.builder()
 ```
 
 {% note info Dependencies %}
-To use Redis Transporter, add the following dependency to the build script:
+To use Redis Transporter, add the following dependency to the build script:  
 group: 'biz.paluch.redis', name: 'lettuce', version: '4.5.0.Final'
 {% endnote %}
 
@@ -103,7 +122,7 @@ ServiceBroker broker = ServiceBroker.builder()
 ```
 
 {% note info Dependencies %}
-To use MQTT Transporter, add the following dependency to the build script:
+To use MQTT Transporter, add the following dependency to the build script:  
 group: 'net.sf.xenqtt', name: 'xenqtt', version: '0.9.7'
 {% endnote %}
 
@@ -138,7 +157,7 @@ ServiceBroker broker = ServiceBroker.builder()
 ```
 
 {% note info Dependencies %}
-To use AMQP Transporter, add the following dependency to the build script:
+To use AMQP Transporter, add the following dependency to the build script:  
 group: 'com.rabbitmq', name: 'amqp-client', version: '5.7.3'
 {% endnote %}
 
@@ -175,7 +194,7 @@ ServiceBroker broker = ServiceBroker.builder()
 ```
 
 {% note info Dependencies %}
-To use Kafka Transporter, add the following dependency to the build script:
+To use Kafka Transporter, add the following dependency to the build script:  
 group: 'org.apache.kafka', name: 'kafka-clients', version: '2.3.0'
 {% endnote %}
 
@@ -209,7 +228,7 @@ ServiceBroker broker = ServiceBroker.builder()
 ```
 
 {% note info Dependencies %}
-To use JMS Transporter, add the following dependency to the build script:
+To use JMS Transporter, add the following dependency to the build script:  
 group: 'javax.jms', name: 'javax.jms-api', version: '2.0.1'  
 + dependencies of the JMS driver.
 {% endnote %}
@@ -245,7 +264,7 @@ ServiceBroker broker = ServiceBroker.builder()
 ```
 
 {% note info Dependencies %}
-To use Google Pub/Sub Transporter, add the following dependency to the build script:
+To use Google Pub/Sub Transporter, add the following dependency to the build script:  
 group: 'com.google.cloud', name: 'google-cloud-pubsub', version: '1.96.0'
 {% endnote %}
 
@@ -282,7 +301,7 @@ It can be a static list in your configuration or a file path which contains the 
 TCP Transporter provides the highest speed data transfer between Moleculer
 Nodes - hundred thousand packets per second can be transmitted from one node to another over a high-speed LAN.
  
-**Use TCP Transporter with default options**
+Use TCP Transporter with default options:
 
 ```java
 // Create Transporter
@@ -360,7 +379,7 @@ transporter.setUdpMulticastTTL(1);
 transporter.setUdpBroadcast(false);
 ```
 
-**TCP Transporter with static endpoint list**
+TCP Transporter with static endpoint list:
 
 ```java
 TcpTransporter transporter = new TcpTransporter("172.17.0.1:6000/node-1",
@@ -374,7 +393,7 @@ ServiceBroker broker = ServiceBroker.builder()
 
 _You don't need to set `port` because it find & parse the self TCP port from URL list._
 
-**TCP Transporter with static endpoint list file**
+TCP Transporter with static endpoint list file:
 
 ```java
 TcpTransporter transporter = new TcpTransporter(new URL("file:///nodes.json"));
@@ -403,7 +422,7 @@ Internal Transporter is a built-in message bus that can connect multiple Service
 This Transporter is primarily used for testing purposes.
 The calls are made in separate Threads, so call timeouts can be used.
 
-**Using the shared (static) communication group**
+Using the shared (static) communication group:
 
 ```java
 ServiceBroker broker1 = ServiceBroker.builder()
@@ -416,7 +435,7 @@ ServiceBroker broker2 = ServiceBroker.builder()
                                      .build();
 ```
 
-**Using independent communication groups**
+Using independent communication groups:
 
 ```java
 // --- CREATE COMMUNICATION GROUPS ---
@@ -476,7 +495,7 @@ ServiceBroker broker = ServiceBroker.builder()
 
 Built-in, multicast UDP-based, server-less transporter.
 This is another Transporter implementation example.
-UDP Multicast Transporter is not for production use -
+UDP Multicast Transporter is not for production use;
 UDP communication is lossy, and the packet size is limited.
 
 ```java
@@ -493,7 +512,7 @@ Custom Transporter module can be created.
 The simplest solution is to copy the source code of an existing Transporter
 and modify the `connect`, `stopped`, `subscribe` and `publish` methods.
 
-**Create custom Transporter**
+Create custom Transporter:
 
 ```java
 public class CustomTransporter extends Transporter {
@@ -504,7 +523,7 @@ public class CustomTransporter extends Transporter {
 }
 ```
 
-**Use custom Transporter**
+Use custom Transporter:
 
 ```java
 ServiceBroker broker = ServiceBroker.builder()
@@ -515,16 +534,16 @@ ServiceBroker broker = ServiceBroker.builder()
 
 ## Serializers
 
-Transporter needs a serializer module which serializes & deserializes the transferred packets.
-The default serializer is the `JsonSerializer` but there are several built-in serializer.
+Transporter needs a Serializer module which serializes & deserializes the transferred packets.
+The default Serializer is the `JsonSerializer` but there are several built-in Serializer.
 
 ### JSON Serializer
 
-This is the built-in default serializer.
-It serializes the packets to JSON string and deserializes the received data to packet.
-The speed of JSON serializers in Java and JavaScript is very good,
-JSON serialization is usually faster than most binary serializers.
-This serializer is compatible with the JavaScript/Node version of Moleculer.
+This is the built-in default Serializer.
+It serializes the packets to JSON string and deserializes the received JSON bytes to `Tree` objects.
+The performance of JSON Serializers in Java and JavaScript is very good,
+JSON serialization is usually faster than most binary Serializers.
+This Serializer is compatible with the JavaScript/Go version of Moleculer.
 
 ```java
 NatsTransporter transporter = new NatsTransporter("nats://nats.server:4222");
@@ -543,7 +562,7 @@ ServiceBroker broker = ServiceBroker.builder()
 The `readers` and `writers` parameters are used to specify the JSON API
 to be used by Moleculer for deserialization / serialization.
 This is important if you have multiple JSON implementations on the classpath.
-Several implementations can be specified in order of importance.
+Several implementations can be specified in order of importance, separated by commas.
 If not specified, ServiceBroker will automatically try to choose the faster JSON API.
 The values of the `readers` and `writers` parameters are listed below:
 
@@ -568,104 +587,104 @@ The values of the `readers` and `writers` parameters are listed below:
 | "ion"     | [Amazon Ion](https://mvnrepository.com/artifact/software.amazon.ion/ion-java) |
 | "builtin" | Built-in JSON parser |
 
+So, for example, if you want to use a "FastJSON" implementation,
+put the implementation reference in the "dependencies" block of the (build.gradle or pom.xml) build script,
+then set `readers` and `writers` to "fast". To verify, type "info" command into the REPL console.
+The "info" command will display the current Moleculer configuration, including the implementation of the JSON API.
+
 ### MessagePack Serializer
 
-Built-in [MsgPack](https://msgpack.org) serializer.
+Built-in [MsgPack](https://msgpack.org) Serializer.
 MessagePack is an efficient binary serialization format. It lets you exchange
 data among multiple languages like JSON. But it's smaller. Small
 integers are encoded into a single byte, and typical short strings require
-only one extra byte in addition to the strings themselves. This serializer is
-compatible with the JavaScript/Node version of Moleculer.
+only one extra byte in addition to the strings themselves. This Serializer is
+compatible with the JavaScript version of Moleculer.
  
 ```java
 transporter.setSerializer(new MsgPackSerializer());
 ```
 
 {% note info Dependencies %}
-To use MessagePack serializer, add the following dependency to the build script:
+To use MessagePack Serializer, add the following dependency to the build script:  
 group: 'org.msgpack', name: 'msgpack', version: '0.6.12'
 {% endnote %}
 
 ### BSON Serializer
 
-Built-in [BSON](http://bsonspec.org/) serializer.
+Built-in [BSON](http://bsonspec.org/) Serializer.
 BSON, short for Binary JSON, is a binary-encoded serialization of JSON-like documents.
 Like JSON, BSON supports the embedding of documents and arrays within other documents and arrays. 
-This serializer is NOT compatible with the JavaScript/Node version of Moleculer.
  
 ```java
 transporter.setSerializer(new BsonSerializer());
 ```
 
 {% note info Dependencies %}
-To use BSON serializer, add the following dependency to the build script:
+To use BSON Serializer, add the following dependency to the build script:  
 group: 'de.undercouch', name: 'bson4jackson', version: '2.9.2'
 {% endnote %}
 
 ### CBOR Serializer
 
-Built-in [CBOR](https://cbor.io/) serializer.
+Built-in [CBOR](https://cbor.io/) Serializer.
 CBOR is based on the wildly successful JSON data model: numbers, strings,
 arrays, maps (called objects in JSON), and a few values such as false, true,
 and null. One of the major practical wins of JSON is that successful data
 interchange is possible without casting a schema in concrete.
-This serializer is NOT compatible with the JavaScript/Node version of Moleculer.
  
 ```java
 transporter.setSerializer(new CborSerializer());
 ```
 
 {% note info Dependencies %}
-To use CBOR serializer, add the following dependency to the build script:
+To use CBOR Serializer, add the following dependency to the build script:  
 group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-cbor', version: '2.10.0'
 {% endnote %}
 
 ### Amazon ION Serializer
 
-Built-in [ION](http://amzn.github.io/ion-docs/) serializer.
+Built-in [ION](http://amzn.github.io/ion-docs/) Serializer.
 Amazon Ion is a richly-typed, self-describing, hierarchical data
 serialization format offering interchangeable binary and text
 representations. The binary representation is efficient to store, transmit,
 and skip-scan parse.
-This serializer is NOT compatible with the JavaScript/Node version of Moleculer.
  
 ```java
 transporter.setSerializer(new IonSerializer());
 ```
 
 {% note info Dependencies %}
-To use ION serializer, add the following dependency to the build script:
+To use ION Serializer, add the following dependency to the build script:  
 group: 'software.amazon.ion', name: 'ion-java', version: '1.5.1'
 {% endnote %}
 
 ### SMILE Serializer
 
-Built-in [SMILE](https://en.wikipedia.org/wiki/Smile_(data_interchange_format)) serializer.
+Built-in [SMILE](https://en.wikipedia.org/wiki/Smile_(data_interchange_format)) Serializer.
 SMILE is a computer data interchange format based on JSON. It can also be
 considered as a binary serialization of generic JSON data model, which means
 that tools that operate on JSON may be used with SMILE as well, as long as
 proper encoder/decoder exists for tool to use. Compared to JSON, SMILE is
 both more compact and more efficient to process (both to read and write).
-It is the FASTEST serializer, but it is NOT compatible with the
-JavaScript/Node version of Moleculer.
  
 ```java
 transporter.setSerializer(new SmileSerializer());
 ```
 
 {% note info Dependencies %}
-To use SMILE serializer, add the following dependency to the build script:
+To use SMILE Serializer, add the following dependency to the build script:  
 group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-smile', version: '2.10.0'
 {% endnote %}
 
 
-### Custom serializer
+### Custom Serializer
 
-Custom serializer module can be created.
+Custom Serializer module can be created.
 To make your own Serializer, you need to derive it from the `services.moleculer.serializer.Serializer`
 superclass, and implement the `write` and `read` methods.
 
-**Create custom serializer**
+Create custom Serializer:
 
 ```java
 public class CustomSerializer extends Serializer {
@@ -675,6 +694,7 @@ public class CustomSerializer extends Serializer {
     public byte[] write(Tree value) throws Exception {
         Object content = value.asObject();
         // Write Java Object into byte array...
+		// The "content" is mostly a Map or List.
     }
 
     // --- DESERIALIZE BYTE ARRAY TO TREE ---
@@ -687,7 +707,7 @@ public class CustomSerializer extends Serializer {
 }
 ```
 
-**Use custom serializer**
+Use custom Serializer:
 
 ```java
 transporter.setSerializer(new CustomSerializer());
