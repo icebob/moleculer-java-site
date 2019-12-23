@@ -1,60 +1,85 @@
 title: Services
 ---
-The `Service` represents a microservice in the Moleculer framework. You can define actions and subscribe to events. To create a service you must define a schema. The service schema is similar to [a component of VueJS](https://vuejs.org/v2/guide/components.html#What-are-Components).
 
-## Schema
-The schema has some main parts: `name`, `version`, `settings`, `actions`, `methods`, `events`.
+The `Service` represents a microservice in the Moleculer framework.
+Services can include Actions that other Services can invoke - even over a network.
+These remote Services can be implemented in Java, JavaScript or Go programming language.
+Services can also define Event Listeners that can react to events created in the Molecular Cluster.
 
 ### Simple service schema to define two actions
-```java
-{
-    name: "math",
-    actions: {
-        add(ctx) {
-            return Number(ctx.params.a) + Number(ctx.params.b);
-        },
 
-        sub(ctx) {
-            return Number(ctx.params.a) - Number(ctx.params.b);
-        }
-    }
+```java
+@Name("math")
+public class MathService extends Service {
+
+    Action add = ctx -> {
+        return ctx.params.get("a", 0) + 
+               ctx.params.get("b", 0);
+    };
+    
+    Action sub = ctx -> {
+        return ctx.params.get("a", 0) -
+               ctx.params.get("b", 0);
+    };
+    
 }
 ```
 
-## Base properties
-The Service has some base properties in the schema.
+The `@Name` attribute isn't a mandatory property, if missing, MessageBroker will generate the Service name from the Class name.
+The algorithm used to create Services names is similar to when Spring registers Beans;
+the first letter will be lowercase, the rest will not change
+(for example, `MathService` registers as "mathService").
+This rule also applies to Action names;
+you can specify the name with the "@Name" attribute;
+if missing, the Java field name will be the action name (eg. `add` Action registers as "add").
+To register the `MathService` in a MessageBroker, use the `createService` method:
+
 ```java
-{
-    name: "posts",
-    version: 1
+MessageBroker broker = MessageBroker.builder().build();
+broker.createService(new MathService());
+```
+
+To call the Service, use the `call` method:
+
+```java
+Tree rsp = broker.call("math.add", "a", 5, "b", 3).waitFor();
+System.out.println("Response: " + rsp.asInteger());
+
+// ...or, in non-blocking style:
+
+broker.call("math.sub", "a", 5, "b", 3).then(rsp -> {
+    System.out.println("Response: " + rsp.asInteger());
+});
+```
+
+The "math.add" and "math.sub" Actions can be on another machine,
+written in a different programming language.
+
+## Services with different versions
+
+```java
+@Name("math")
+@Version("2")
+public class MathV2Service extends Service {
+
+    // Modified "add" and "sub" Actions...    
 }
 ```
-The `name` is a mandatory property so it must be defined. It's the first part of action name when you call it.
 
-> To disable service name prefixing set `$noServiceNamePrefix: true` in Service settings.
+To call the versioned Service, use the "v2." prefix:
 
-The `version` is an optional property. Use it to run multiple version from the same service. It is a prefix in the action name. It can be a `Number` or a `String`.
 ```java
-{
-    name: "posts",
-    version: 2,
-    actions: {
-        find() {...}
-    }
-}
-```
-To call this `find` action on version `2` service:
-```java
-broker.call("v2.posts.find");
+broker.call("v2.math.add", "a", 5, "b", 3);
 ```
 
 {% note info REST call %}
-Via [API Gateway](moleculer-web.html), make a request to `GET /v2/posts/find`.
+Via [API Gateway](moleculer-web.html), make a request to `GET /v2/math/add`.
 {% endnote %}
 
-> To disable version prefixing set `$noVersionPrefix: true` in Service settings.
+## Dependencies
 
-## Settings
+## Converting Java Annotations to platform-independent properties
+
 The `settings` property is a store, where you can store every settings/options to your service. You can reach it via `this.settings` inside the service.
 
 ```java
@@ -73,90 +98,11 @@ The `settings` property is a store, where you can store every settings/options t
     }
 }
 ```
+
 > The `settings` is also obtainable on remote nodes. It is transferred during service discovering.
 
-### Internal Settings
-There are some internal settings which are used by core modules. These setting names start with `$` _(dollar sign)_.
-
-| Name | Type | Default | Description |
-| ---- | ---- | ------- | ----------- |
-| `$noVersionPrefix` | `Boolean` | `false` | Disable version prefixing in action names. |
-| `$noServiceNamePrefix` | `Boolean` | `false` | Disable service name prefixing in action names. |
-| `$dependencyTimeout` | `Number` | `0` | Timeout for dependency waiting. |
-| `$shutdownTimeout` | `Number` | `0` | Timeout for waiting for active requests at shutdown. |
-| `$secureSettings` | `Array` | `[]` | List of secure settings. |
-
-### Secure service settings
-To protect your tokens & API keys, define a `$secureSettings: []` property in service settings and set the protected property keys. The protected settings won't be published to other nodes and it won't appear in Service Registry. These settings will only available under `this.settings` inside the service functions.
-
-*** Example ***
-```java
-// mail.service.js
-module.exports = {
-    name: "mailer",
-    settings: {
-        $secureSettings: ["transport.auth.user", "transport.auth.pass"],
-
-        from: "sender@moleculer.services",
-        transport: {
-            service: 'gmail',
-            auth: {
-                user: 'gmail.user@gmail.com',
-                pass: 'yourpass'
-            }
-        }
-    }        
-    // ...
-};
-```
-
-## Mixins
-Mixins are a flexible way to distribute reusable functionalities for Moleculer services. The Service constructor merges these mixins with the current schema. It is to extend another service to your service. When a service uses mixins, all properties in the mixin will be "mixed" into the current service.
-
-**Example how to extend `moleculer-web` service**
-
-```java
-const ApiGwService = require("moleculer-web");
-
-module.exports = {
-    name: "api",
-    mixins: [ApiGwService]
-    settings: {
-        // Change port setting
-        port: 8080
-    },
-    actions: {
-        myAction() {
-            // Add a new action to apiGwService service
-        }
-    }
-}
-```
-The above example creates an `api` service which inherits all from `ApiGwService` but overwrite the port setting and extend it with a new `myAction` action.
-
-### Merge algorithm
-The merge algorithm depends on the property type.
-
-| Property | Algorithm |
-|----------|-----------|
-| `name`, `version` | Merge & overwrite. |
-| `settings` | Extend with [defaultsDeep](https://lodash.com/docs/4.17.4#defaultsDeep). |
-| `metadata` | Extend with [defaultsDeep](https://lodash.com/docs/4.17.4#defaultsDeep). |
-| `actions` | Extend with [defaultsDeep](https://lodash.com/docs/4.17.4#defaultsDeep). _You can disable an action from mixin if you set to `false` in your service._ |
-| `hooks` | Extend with [defaultsDeep](https://lodash.com/docs/4.17.4#defaultsDeep). |
-| `methods` | Merge & overwrite. |
-| `events` | Concatenate listeners. |
-| `created`, `started`, `stopped` | Concatenate listeners. |
-| `mixins` | Merge & overwrite. |
-| `dependencies` | Merge & overwrite. |
-| any other | Merge & overwrite. |
-
-{% note info Merge algorithm examples %}
-__Merge & overwrite__: if serviceA has `a: 5`, `b: 8` and serviceB has `c: 10`, `b: 15`, the mixed service will have `a: 5`, `b: 15` and `c: 10`.
-__Concatenate__: if serviceA & serviceB subscribe to `users.created` event, both event handler will be called when the `users.created` event emitted.
-{% endnote %}
-
 ## Actions
+
 The actions are the callable/public methods of the service. They are callable with `broker.call` or `ctx.call`.
 The action could be a `Function` (shorthand for handler) or an object with some properties and `handler`.
 The actions should be placed under the `actions` key in the schema. For more information check the [actions documentation](actions.html).

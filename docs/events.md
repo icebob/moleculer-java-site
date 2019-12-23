@@ -1,5 +1,6 @@
 title: Events
 ---
+
 Molculer Service Broker has a built-in event bus for sending events to local and remote services.
 Events can be used to create event-driven,
 runtime scalable applications from services
@@ -29,60 +30,73 @@ The group name comes from the service name, but it can be overwritten in event d
 
 **Example**
 ```java
-module.exports = {
-    name: "payment",
-    events: {
-        "order.created": {
-            // Register handler to the "other" group instead of "payment" group.
-            group: "other",
-            handler(ctx) {
-                console.log("Payload:", ctx.params);
-                console.log("Sender:", ctx.nodeID);
-                console.log("Metadata:", ctx.meta);
-                console.log("The called event name:", ctx.eventName);
-            }
-        }
-    }
+@Name("payment")
+public class PaymentService extends Service {
+
+    @Subscribe("order.created")
+    @Group("other")
+    Listener orderCreated = ctx -> {
+        logger.info("Payload:", ctx.params);
+        logger.info("Sender:", ctx.nodeID);
+        logger.info("Metadata:", ctx.params.getMeta());
+        logger.info("The called event name:", ctx.name);            
+    };
+
 }
 ```
 
 ## Emit balanced events
-Send balanced events with `broker.emit` function. The first parameter is the name of the event, the second parameter is the payload. 
-_To send multiple values, wrap them into an `Object`._
+
+Send balanced events with `broker.emit` function.
+The first parameter is the name of the event, the second parameter is the payload. 
+_To send multiple/hierarchical values, wrap them into a `Tree` object._
 
 ```java
-// The `user` will be serialized to transportation.
+// The `user` is a `Tree` object (~=JSON structure)
+// that will be serialized for transport.
 broker.emit("user.created", user);
 ```
 
 Specify which groups/services shall receive the event:
+
 ```java
-// Only the `mail` & `payments` services receives it
-broker.emit("user.created", user, ["mail", "payments"]);
+// Only the `mail` & `payments` services receive this event
+broker.emit("user.created", user, Groups.of("mail", "payments"));
 ```
 
 # Broadcast event
-The broadcast event is sent to all available local & remote services. It is not balanced, all service instances will receive it.
+
+The broadcast event is sent to all available local & remote services.
+It is not balanced, all event listener instances receive this event.
 
 <div align="center">
     <img src="assets/broadcast-events.gif" alt="Broadcast events diagram" />
 </div>
 
 Send broadcast events with `broker.broadcast` method.
+
 ```java
+// The `config` is a hierarchical (~=JSON) structure
+Tree config = new Tree();
+config.put("key", "value");
+config.putList("anArray").add(1).add(2).add(3);
+
+// Send "config" to all listeners
 broker.broadcast("config.changed", config);
 ```
 
 Specify which groups/services shall receive the event:
+
 ```java
 // Send to all "mail" service instances
-broker.broadcast("user.created", { user }, "mail");
+broker.broadcast("user.created", user, Groups.of("mail"));
 
 // Send to all "user" & "purchase" service instances.
-broker.broadcast("user.created", { user }, ["user", "purchase"]);
+broker.broadcast("user.created", user, Groups.of("user", "purchase"));
 ```
 
 ## Local broadcast event
+
 Send broadcast events only to all local services with `broker.broadcastLocal` method.
 ```java
 broker.broadcastLocal("config.changed", config);
@@ -90,147 +104,97 @@ broker.broadcastLocal("config.changed", config);
 
 # Subscribe to events
 
-The `v0.14` version supports Context-based event handlers. Event context is useful if you are using event-driven architecture and want to trace your events. If you are familiar with [Action Context](actions.html#Context) you will feel at home. The Event Context is very similar to Action Context, except for a few new event related properties. [Check the complete list of properties](events.html#Context)
-
-{% note info Legacy event handlers %}
-
-You don't have to rewrite all existing event handlers as Moleculer still supports legacy signature `"user.created"(payload) { ... }`. It is capable to detect different signatures of event handlers: 
-- If it finds that the signature is `"user.created"(ctx) { ... }`, it will call it with Event Context. 
-- If not, it will call with old arguments & the 4th argument will be the Event Context, like `"user.created"(payload, sender, eventName, ctx) {...}`
-
-{% endnote %}
+The contents of the events are wrapped in an object called Event Context to receive the message.
+The Event Context is very similar to Action Context.
 
 **Context-based event handler & emit a nested event**
-```java
-module.exports = {
-    name: "accounts",
-    events: {
-        "user.created"(ctx) {
-            console.log("Payload:", ctx.params);
-            console.log("Sender:", ctx.nodeID);
-            console.log("Metadata:", ctx.meta);
-            console.log("The called event name:", ctx.eventName);
-
-            ctx.emit("accounts.created", { user: ctx.params.user });
-        }
-    }
-};
-```
-
-
-Subscribe to events in ['events' property of services](services.html#events). Use of wildcards (`?`, `*`, `**`) is available in event names.
 
 ```java
-module.exports = {
-    events: {
-        // Subscribe to `user.created` event
-        "user.created"(ctx) {
-            console.log("User created:", ctx.params);
-        },
+@Name("accounts")
+public class AccountService extends Service {
 
-        // Subscribe to all `user` events
-        "user.*"(ctx) {
-            console.log("User event:", ctx.params);
-        }
+    @Subscribe("user.created")
+    Listener userCreated = ctx -> {
+        logger.info("Payload:", ctx.params);
+        logger.info("Sender:", ctx.nodeID);
+        logger.info("Metadata:", ctx.params.getMeta());
+        logger.info("The called event name:", ctx.name);
 
-        // Legacy event handler signature with context
-        "$**"(payload, sender, event, ctx) {
-            console.log(`Event '${event}' received from ${sender} node:`, payload);
-        }
-    }
+        // Emit a new Event
+        Tree payload = new Tree();
+        payload.copyFrom(ctx.params, "user");
+        ctx.emit("accounts.created", payload);
+    };
+
 }
 ```
+
+Subscribe to events in ['events' property of services](services.html#events).
+Use of wildcards (`?`, `*`, `**`) is available in event names.
+
+```java
+public class MyService extends Service {
+
+    // Subscribe to `user.created` event
+    @Subscribe("user.created")
+    Listener userCreated = ctx -> {
+        logger.info("User created event received:", ctx.params);
+    };
+
+    // Subscribe to all `user` events
+    @Subscribe("user.*")
+    Listener userEvents = ctx -> {
+        logger.info("User event event received:", ctx.params);
+    };
+        
+    // Subscribe to all internal events
+    // (internal event names start with "$" prefix)
+    @Subscribe("$**")
+    Listener internalEvents = ctx -> {
+        logger.info("Event " + ctx.name + " received:", ctx.params);
+    };
+        
+}
+```
+
 # Context
+
 When you emit an event, the broker creates a `Context` instance which contains all request information and passes it to the event handler as a single argument.
 
 **Available properties & methods of `Context`:**
 
 | Name | Type |  Description |
 | ------- | ----- | ------- |
-| `ctx.id` | `String` | Context ID |
-| `ctx.broker` | `ServiceBroker` | Instance of the broker. |
-| `ctx.event` | `Object` | Instance of event definition. |
+| `ctx.id` | `String` | Unique Context ID. |
+| `ctx.name` | `String` | Name of the event. |
+| `ctx.params` | `Tree` | Request params. Contains meta-data (`ctx.params.getMeta()`). |
+| `ctx.level` | `int` | Request level (in nested-calls). The first level is `1`. |
 | `ctx.nodeID` | `String` | The caller or target Node ID. |
-| `ctx.caller` | `String` | Action name of the caller. E.g.: `v3.myService.myAction` |
-| `ctx.eventName` | `String` | Name of the event. |
-| `ctx.eventType` | `String` | Type of the event (e.g. `emit` or `broadcast`). |
-| `ctx.eventGroups` | `Array<String>` | Group of the events that should receive the event. |
-| `ctx.params` | `Any` | Request params. *Second argument from `broker.call`.* |
-| `ctx.meta` | `Any` | Request metadata. *It will be also transferred to nested-calls.* |
-| `ctx.locals` | `Any` | Local data. *It will be also transferred to nested-calls.* |
-| `ctx.level` | `Number` | Request level (in nested-calls). The first level is `1`. |
+| `ctx.parentID` | `String` | Parent context ID (in nested-calls). |
+| `ctx.requestID` | `String` | Request ID (does not change during the call chain). |
+| `ctx.stream` | `PacketStream` | Streamed content. |
+| `ctx.opts` | `Options` | Calling options. |
 | `ctx.call()` | `Function` | Make nested-calls. Same arguments like in `broker.call` |
 | `ctx.emit()` | `Function` | Emit an event, same as `broker.emit` |
 | `ctx.broadcast()` | `Function` | Broadcast an event, same as `broker.broadcast` |
 
-## Context tracking
-If you want graceful service shutdowns, enable the Context tracking feature in broker options. If you enable it, all services will wait for all running contexts before shutdown. 
-A timeout value can be defined with `shutdownTimeout` broker option. The default values is `5` seconds.
-
-**Enable context tracking & change the timeout value.
-```java
-const broker = new ServiceBroker({
-    nodeID: "node-1",
-    tracking: {
-        enabled: true,
-        shutdownTimeout: 10 * 1000
-    }
-});
-```
-
-> The shutdown timeout can be overwritten by `$shutdownTimeout` property in service settings.
-
-**Disable tracking in calling option**
-
-```java
-broker.emit("posts.find", {}, { tracking: false });
-```
-
 # Internal events
-The broker broadcasts some internal events. These events always starts with `$` prefix.
+
+The broker broadcasts some internal events.
+Internal events always starts with `$` prefix.
 
 ## `$services.changed`
+
 The broker sends this event if the local node or a remote node loads or destroys services.
 
 **Payload**
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| `localService ` | `Boolean` | True if a local service changed. |
-
-## `$circuit-breaker.opened`
-The broker sends this event when the circuit breaker module change its state to `open`.
-
-**Payload**
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| `nodeID` | `String` | Node ID |
-| `action` | `String` | Action name |
-| `failures` | `Number` | Count of failures |
-
-
-## `$circuit-breaker.half-opened`
-The broker sends this event when the circuit breaker module change its state to `half-open`.
-
-**Payload**
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| `nodeID` | `String` | Node ID |
-| `action` | `String` | Action name |
-
-## `$circuit-breaker.closed`
-The broker sends this event when the circuit breaker module change its state to `closed`.
-
-**Payload**
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| `nodeID` | `String` | Node ID |
-| `action` | `String` | Action name |
+| `localService ` | `boolean` | True if a local service changed. |
 
 ## `$node.connected`
+
 The broker sends this event when a node connected or reconnected.
 
 **Payload**
@@ -241,7 +205,9 @@ The broker sends this event when a node connected or reconnected.
 | `reconnected` | `Boolean` | Is reconnected? |
 
 ## `$node.updated`
-The broker sends this event when it has received an INFO message from a node, (i.e. a service is loaded or destroyed).
+
+The broker sends this event when it has received an INFO message from a node
+(ie. a service is loaded or destroyed).
 
 **Payload**
 
@@ -250,6 +216,7 @@ The broker sends this event when it has received an INFO message from a node, (i
 | `node` | `Node` | Node info object |
 
 ## `$node.disconnected`
+
 The broker sends this event when a node disconnected (gracefully or unexpectedly).
 
 **Payload**
@@ -260,14 +227,18 @@ The broker sends this event when a node disconnected (gracefully or unexpectedly
 | `unexpected` | `Boolean` | `true` - Not received heartbeat, `false` - Received `DISCONNECT` message from node. |
 
 ## `$broker.started`
+
 The broker sends this event once `broker.start()` is called and all local services are started.
 
 ## `$broker.stopped`
+
 The broker sends this event once `broker.stop()` is called and all local services are stopped.
 
 ## `$transporter.connected`
+
 The transporter sends this event once the transporter is connected.
 
 ## `$transporter.disconnected`
+
 The transporter sends this event once the transporter is disconnected.
 
