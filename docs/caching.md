@@ -119,7 +119,8 @@ posts.list:10|30|123
 ```
 
 {% note info Performance %}
-This solution is pretty fast, so we recommend to use it in production. ![](https://img.shields.io/badge/performance-%2B20%25-brightgreen.svg)
+Using "Cache keys" can greatly speed up the application by reducing the amount of data to be serialized.  
+![](https://img.shields.io/badge/performance-%2B20%25-brightgreen.svg)
 {% endnote %}
 
 ### Limiting cache key length
@@ -292,7 +293,7 @@ public class UserService extends Service {
 ### Memory cacher
 
 The `MemoryCacher` works with each node having its own local heap-based cache.
-This is the fastest cache, but the programmer has to take care of emptying the cache with event broadcasting.
+This is **the fastest** cache, but the programmer has to take care of emptying the cache with event broadcasting.
 Memory cache is not a distributed cache, it works like a local Map in the VM's memory.
 But the number of queries can be millions per second,
 because repetitive queries do not generate network traffic.
@@ -303,9 +304,10 @@ ServiceBroker uses `MemoryCacher` by default.
 
 ```java
 MemoryCacher cacher = new MemoryCacher();
-cacher.setTtl(60);
-cacher.setCleanup(10);
-cacher.setCapacity(2048);
+cacher.setAccessOrder(true); // true = LRU cache
+cacher.setTtl(60);           // default TTL
+cacher.setCleanup(10);       // period time of cleanup process
+cacher.setCapacity(2048);    // max cached entries per region
 ServiceBroker broker = ServiceBroker.builder().cacher(cacher).build();
 ```
 

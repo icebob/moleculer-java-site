@@ -55,7 +55,8 @@ broker.call("math.sub", "a", 5, "b", 3).then(rsp -> {
 });
 ```
 
-The "math.add" and "math.sub" Actions can be on another machine,
+From the caller perspective does not matter the physical location of the Service.
+The "math.add" and "math.sub" Actions can be on other machine,
 written in a different programming language.
 
 ## Services with different versions
@@ -93,28 +94,28 @@ You can subscribe to events under the `events` key. For more information check t
 
 ## Lifecycle Events
 
-There are some lifecycle service events, that will be triggered by broker. They are placed in the root of schema.
+There are some lifecycle service events, that will be triggered by the ServiceBroker.
+These are called when ServiceBroker starts or stops the Services.  
+[Read more about lifecycle of Services.](lifecycle.html).
 
 ```java
-module.exports = {
-    name: "www",
-    actions: {...},
-    events: {...},
-    methods: {...},
+public class TestService extends Service {
 
-    created() {
-        // Fired when the service instance created (with `broker.loadService` or `broker.createService`)
-    },
-
-    async started() {
-        // Fired when broker starts this service (in `broker.start()`)
+    public void started(ServiceBroker broker) throws Exception {
+        super.started(broker);
     }
 
-    async stopped() {
-        // Fired when broker stops this service (in `broker.stop()`)
+    @Override
+    public void stopped() {
     }
-};
+	
+} 
 ```
+
+Other system-level events can be handled by Event Listeners
+(examples of such events are: another Node joining the cluster or a change in the Service list).  
+[Read more about internal events.](events.html).
+
 ## Dependencies
 
 If your service depends on other services, use the `dependencies` property in the schema.
