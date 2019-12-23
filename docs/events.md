@@ -69,9 +69,9 @@ Specify which groups/services shall receive the event:
 broker.emit("user.created", user, Groups.of("mail", "payments"));
 ```
 
-Simplified syntax for sending key-value pairs
+### Simplified syntax for sending key-value pairs
 
-If the data structure to be sent consists only of **key-value pairs**,
+If the data structure to be sent consists only of key-value pairs,
 it is not necessary to create a `Tree` object.
 It is enough to list the key-value pairs after the event name:
 
