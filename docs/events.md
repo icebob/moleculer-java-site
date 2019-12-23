@@ -100,6 +100,46 @@ ctx.emit("user.created",
 Creating a Tree object is required when passing more complex data structures between Nodes,
 which contain sub-structures (~=hierarchical JSON objects and JSON arrays).
 
+### Streaming binary files
+
+In addition to JSON structures, it is possible to send large files
+and/or media content (videos, audio).
+
+```java
+// Opening stream
+PacketStream stream = broker.createStream();
+broker.emit("service.listener", stream);
+
+// Sending file...
+stream.transferFrom(new File("source.bin")).then(rsp -> {
+
+    // File submitted
+
+}).catchError(err -> {
+
+    // Unexpected error occurred
+
+});
+```
+
+It is possible to send data immediately if we are not sending data from a file
+(for example, transmitting a microphone signal).
+
+```java
+// Opening stream
+PacketStream stream = broker.createStream();
+broker.emit("service.listener", stream);
+
+// Sending packets
+stream.sendData("packet1".getBytes());
+stream.sendData("packet2".getBytes());
+stream.sendData("packet3".getBytes());
+
+// Streams must be closed!
+stream.sendClose();
+});
+```
+
 # Broadcast event
 
 The broadcast event is sent to all available local & remote services.
@@ -210,6 +250,45 @@ and cannot be called from other Service Brokers.
 private Listener listener = ctx -> {
     logger.info("The list of services has changed!");
 };
+```
+
+Redirecting streamed content
+
+Stream data can be redirected to a File, ByteChannel or OutputStream.
+
+```java
+ctx.stream.transferTo(new File("/temp.bin")).then(rsp -> {
+
+    // File saved successfully
+
+}).catchError(err -> {
+
+    // Unexpected error occurred
+
+});
+```
+
+Processing streamed content
+
+Stream data can also be processed per packet.
+
+```java
+ctx.stream.onPacket((bytes, error, closed) -> {
+    if (bytes != null) {
+
+        // A byte-array has arrived
+
+    } else if (error != null) {
+
+        // Error occurred
+
+    }
+    if (closed) {
+
+        // Incoming stream closed (EOF)
+
+    }
+});
 ```
 
 # Context
