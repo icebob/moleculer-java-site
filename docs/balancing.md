@@ -1,17 +1,17 @@
-title: Load balancing
+title: Load Balancing
 ---
 
-Moleculer has several built-in load balancing strategies.
+Moleculer has several built-in load Balancing Strategies.
 If services have multiple running instances,
-ServiceRegistry uses these strategies to select a node from all available nodes.
-The default (pre-set) invocation mode is the round-robin strategy.
+ServiceRegistry uses these Strategies to select a node from all available nodes.
+The default (pre-set) invocation mode is the Round-Robin Strategy.
 
-## Built-in strategies
+## Built-in Strategies
 
-To configure strategy, set `strategy()` builder option when creating the ServiceBroker.
-Alternatively, set up the strategy of the ServiceBrokerConfig using the `setStrategyFactory()` method.
+To configure Strategy, set `strategy()` builder option when creating the ServiceBroker.
+Alternatively, set up the Strategy of the ServiceBrokerConfig using the `setStrategyFactory()` method.
 
-**Configure balancing strategy**
+**Configure balancing Strategy**
 
 ```java
 StrategyFactory strategy = new XorShiftRandomStrategyFactory();
@@ -27,10 +27,10 @@ ServiceBroker broker = ServiceBroker.builder()
                                     .build();
 ```
 
-### Round-Robin strategy
+### Round-Robin Strategy
 
-This strategy selects a node based on [round-robin](https://en.wikipedia.org/wiki/Round-robin_DNS) algorithm.
-This is the default invocation strategy.
+This Strategy selects a node based on [round-robin](https://en.wikipedia.org/wiki/Round-robin_DNS) algorithm.
+This is the default invocation Strategy.
 You can use the `setPreferLocal` function to configure ServiceRegistry
 to invoke locally available services whenever they are available in the JVM.
 If set to "true", ServiceBroker will always use internal action calls, if possible.
@@ -44,9 +44,9 @@ strategy.setPreferLocal(true);
 ServiceBroker broker = ServiceBroker.builder().strategy(strategy).build();
 ```
 
-### Random strategies
+### Random Strategies
 
-These strategies randomly select the node.
+These Strategies randomly select the node.
 The load on each node (as in round-robin) will be roughly the same.
 
 **Usage**
@@ -58,9 +58,9 @@ XorShiftRandomStrategyFactory strategy = new XorShiftRandomStrategyFactory();
 // Slower random
 SecureRandomStrategyFactory strategy = new SecureRandomStrategyFactory();
 ```
-### CPU usage-based strategy
+### CPU usage-based Strategy
 
-This strategy selects a node which has the lowest CPU usage.
+This Strategy selects a node which has the lowest CPU usage.
 Due to the node list can be very long,
 it gets samples and selects the node with the lowest CPU usage from only samples instead of the whole node list.
 CPU-based load balancing works even when the application is heterogeneous (consisting of Java and Node.js modules).
@@ -95,9 +95,9 @@ It is also necessary to copy the [native Sigar binaries](https://github.com/hype
 | `sampleCount` | `int` | `3` | The number of samples. The minimum value is "1" (you can't turn off sampling). |
 | `lowCpuUsage` | `int` | `10` | The low CPU usage percent (%). The node which has lower CPU usage than this value is selected immediately. |
 
-### Latency-based strategy
+### Latency-based Strategy
 
-This strategy selects a node which has the lowest latency, measured by periodic ping commands.
+This Strategy selects a node which has the lowest latency, measured by periodic ping commands.
 Strategy will ping each node one by one.
 Due to slow sampling, it may take a few minutes for the Services to select optimal Nodes.
 
@@ -124,9 +124,9 @@ ServiceBroker broker = ServiceBroker.builder().strategy(strategy).build();
 | `pingInterval` | `int` | `10` | Ping interval in SECONDS. If you have a lot of host/nodes, it's recommended to *increase* the value. |
 | `pingTimeout` | `long` | `5000` | Ping timeout time, in MILLISECONDS. |
 
-### Sharding strategy
+### Sharding Strategy
 
-Shard invocation strategy is based on [consistent-hashing](https://www.toptal.com/big-data/consistent-hashing) algorithm.
+Shard invocation Strategy is based on [consistent-hashing](https://www.toptal.com/big-data/consistent-hashing) algorithm.
 It uses a key value from context `params` or `meta` to route the request to nodes.
 It means that requests with same key value will be routed to the same node.
 
@@ -165,7 +165,7 @@ The actual `#` is ignored.
 | `ringSize` | `Integer` | null | Size of the ring |
 | `cacheSize` | `int` | `1024` | Size of the cache |
 
-## Custom strategy
+## Custom Strategy
 
 Custom Strategy can be created by implementing StrategyFactory and Strategy interfaces.
 We recommend to copy the source of [SecureRandomStrategyFactory](https://github.com/moleculer-java/moleculer-java/blob/master/src/main/java/services/moleculer/strategy/SecureRandomStrategyFactory.java)
