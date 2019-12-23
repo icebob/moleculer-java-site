@@ -137,7 +137,6 @@ stream.sendData("packet3".getBytes());
 
 // Streams must be closed!
 stream.sendClose();
-});
 ```
 
 # Broadcast event
@@ -190,7 +189,7 @@ broker.broadcastLocal("config.changed", config);
 The contents of the events are wrapped in an object called Event Context to receive the message.
 The Event Context is very similar to Action Context.
 
-Context-based event handler & emit a nested event
+**Context-based event handler & emit a nested event**
 
 ```java
 @Name("accounts")
@@ -211,6 +210,8 @@ public class AccountService extends Service {
 
 }
 ```
+
+**Wildcards**
 
 Wildcards (`?`, `*`, `**`) can be used when making event subscriptions.
 
@@ -239,7 +240,7 @@ public class MyService extends Service {
 }
 ```
 
-Invisible (private or internal) Event Listeners
+**Invisible (private or internal) Event Listeners**
 
 With the "private" modifier, only the local events are monitored by the Event Listener.
 Such Event Listeners are invisible from the outside of the Node,
@@ -252,7 +253,7 @@ private Listener listener = ctx -> {
 };
 ```
 
-Redirecting streamed content
+**Redirecting streamed content**
 
 Stream data can be redirected to a File, ByteChannel or OutputStream.
 
@@ -268,7 +269,7 @@ ctx.stream.transferTo(new File("/temp.bin")).then(rsp -> {
 });
 ```
 
-Processing streamed content
+**Processing streamed content**
 
 Stream data can also be processed per packet.
 
