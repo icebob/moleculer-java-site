@@ -98,6 +98,11 @@ ServiceBroker broker = ServiceBroker.builder()
 ```
 
 With this setting, Spring will dynamically load Moleculer Services from the "my.services" package.
+In a Spring environment, Moleculer Services are also Spring Beans,
+the Services must be marked with a `@Controller` annotation.
+Because of the annotation, Spring creates these Services,
+then at the end of the creation process,
+`SpringRegistrator` will register the Service instances into the `ServiceBroker`.
 A simple, Spring-compatible Moleculer Service looks like this:
 
 ```java
@@ -163,7 +168,7 @@ public class MoleculerApplication {
 
 {% note info Moleculer runner %}
 The Moleculer Runner is a utility API that helps the application run as a background service.
-Use the Moleculer Runner to create, start, stop the ServiceBroker simply and reliably.
+Use the Moleculer Runner to create, start, stop the ServiceBroker simply and reliably.  
 [Read more about Moleculer Runner](runner.html).
 {% endnote %}
 
