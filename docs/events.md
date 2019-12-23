@@ -27,7 +27,7 @@ It means that only one listener is triggered in every group.
 </div>
 
 The group name comes from the service name, but it can be overwritten in event definition in services
-(by the @Group Annotation).
+(by the `@Group` Annotation).
 
 **Example:**
 ```java
@@ -40,7 +40,11 @@ public class PaymentService extends Service {
         logger.info("Payload:", ctx.params);
         logger.info("Sender:", ctx.nodeID);
         logger.info("Metadata:", ctx.params.getMeta());
-        logger.info("The called event name:", ctx.name);            
+        logger.info("The called event name:", ctx.name);
+
+        // Example of parsing the "params" block:
+        String firstName = ctx.params.get("firstName", "defaultValue");
+        String lastName  = ctx.params.get("lastName").asString();
     };
 
 }
@@ -112,6 +116,7 @@ Send broadcast events with `broker.broadcast` method.
 Tree config = new Tree();
 config.put("key", "value");
 config.putList("anArray").add(1).add(2).add(3);
+config.putMap("anObject").put("port", 1234).put("host", "server1");
 
 // Send "config" to all listeners
 broker.broadcast("config.changed", config);
