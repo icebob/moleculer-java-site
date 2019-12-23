@@ -260,7 +260,7 @@ Stream data can be redirected to a File, ByteChannel or OutputStream.
 ```java
 ctx.stream.transferTo(new File("/temp.bin")).then(rsp -> {
 
-    // File saved successfully
+    // File received and saved successfully
 
 }).catchError(err -> {
 
