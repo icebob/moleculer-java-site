@@ -56,12 +56,14 @@ Send balanced events with `broker.emit` function.
 The first parameter is the name of the event, the second parameter is the payload. 
 _To send multiple/hierarchical values, wrap them into a `Tree` object._
 
-Molecular does not require a recommended JSON API, it uses an
+Moleculer does not require a recommended JSON API, it uses an
 [abstract API](https://berkesa.github.io/datatree/)
 instead of a certain implementation.
 The `Tree` object is an **abstract layer** that uses an arbitrary JSON implementation.
 Tree API supports 18 popular JSON implementations (eg. Jackson, Gson, Boon, Jodd, FastJson),
 and 10 non-JSON data formats (YAML, ION, BSON, MessagePack, etc.).
+Besides that Tree API adds manipulation capabilities to the underlaying JSON API,
+such as sorting, filtering, merging, cloning, or changing data types.
 The specific JSON (or non-JSON) implementation can be configured
 in the Moleculer configuration (see in section "Serializer").
 Regardless of implementation, sending events looks like this:
@@ -112,13 +114,9 @@ broker.emit("service.listener", stream);
 
 // Sending file...
 stream.transferFrom(new File("source.bin")).then(rsp -> {
-
     // File submitted
-
 }).catchError(err -> {
-
     // Unexpected error occurred
-
 });
 ```
 
@@ -259,13 +257,9 @@ Stream data can be redirected to a File, ByteChannel or OutputStream.
 
 ```java
 ctx.stream.transferTo(new File("/temp.bin")).then(rsp -> {
-
     // File received and saved successfully
-
 }).catchError(err -> {
-
     // Unexpected error occurred
-
 });
 ```
 
@@ -276,18 +270,13 @@ Stream data can also be processed per packet.
 ```java
 ctx.stream.onPacket((bytes, error, closed) -> {
     if (bytes != null) {
-
         // A byte-array has arrived
-
-    } else if (error != null) {
-
+    }
+    if (error != null) {
         // Error occurred
-
     }
     if (closed) {
-
         // Incoming stream closed (EOF)
-
     }
 });
 ```

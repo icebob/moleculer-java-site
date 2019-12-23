@@ -4,7 +4,7 @@ title: Services
 The `Service` represents a microservice in the Moleculer framework.
 Services can include Actions that other Services can invoke - even over a network.
 These remote Services can be implemented in Java, JavaScript or Go programming language.
-Services can also define Event Listeners that can react to events created in the Molecular Cluster.
+Services can also define Event Listeners that can react to events created in the Moleculer Cluster.
 
 ### Simple service schema to define two actions
 

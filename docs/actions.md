@@ -41,8 +41,17 @@ var params = {param1: "value1",
 ```
 
 There is no similar native support for dynamic creation of JSON objects in Java language.
-Because of this, the Java-based Moleculer implementation uses [Tree](https://berkesa.github.io/datatree/)
-Objects to create hierarchical data structures.
+Because of this, Moleculer uses an
+[abstract API](https://berkesa.github.io/datatree/)
+instead of a certain JSON implementation.
+The `Tree` object is an **abstract layer** that uses an arbitrary JSON implementation.
+Tree API supports 18 popular JSON implementations (eg. Jackson, Gson, Boon, Jodd, FastJson),
+and 10 non-JSON data formats (YAML, ION, BSON, MessagePack, etc.).
+Besides that Tree API adds manipulation capabilities to the underlaying JSON API,
+such as sorting, filtering, merging, cloning, or changing data types.
+The specific JSON (or non-JSON) implementation can be configured
+in the Moleculer configuration (see in section "Serializer").
+
 The following Java code snippet builds similar JSON structure like the previous JavaScript code:
 
 ```java
@@ -67,12 +76,6 @@ System.out.println(params);
 }
 ```
 
-[Tree](https://berkesa.github.io/datatree/) isn't a JSON parser/generator.
-It’s a top-level API layer that uses existing JSON implementations,
-like Jackson, Gson or Fastjson.
-Tree adds manipulation capabilities to the underlaying JSON API,
-such as sorting, filtering, merging, cloning, or changing data types.
-
 The last parameter is the `opts`.
 The `opts` is an CallOptions to set/override some request parameters,
 for example `timeout`, `retryCount` or `nodeID`.
@@ -93,12 +96,12 @@ promise.then(rsp -> {
 
     // The response is also a Tree Object
     logger.info("Response: " + rsp);
-	
+    
 }).catchError(err -> {
 
     // The 'err' is a 'Throwable'
     logger.error("Error!", err);
-	
+    
 });
 ```
 
@@ -195,8 +198,8 @@ Meta is merged at nested calls:
 ```java
 broker.createService(new Service("test") {
     Action first = ctx -> {
-	
-		// The "_meta" prefix is a shorthand to access meta:
+    
+        // The "_meta" prefix is a shorthand to access meta:
         return ctx.call("test.second", "_meta.b", 5);
     };
     Action second = ctx -> {
@@ -287,7 +290,7 @@ public class ReceiverService extends Service {
                 // Stream closed
             }
         });
-		// ...
+        // ...
     };
 }
 ```
