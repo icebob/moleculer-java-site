@@ -1,12 +1,15 @@
 title: Services
 ---
 
-The `Service` represents a microservice in the Moleculer framework.
-Services can include Actions that other Services can invoke - even over a network.
-These remote Services can be implemented in Java, JavaScript or Go programming language.
+The `Service` is the top-level component in the Moleculer Ecosystem.
+Services may have Actions that other Services can invoke locally or over the network.
 Services can also define Event Listeners that can react to events created in the Moleculer Cluster.
+Using the Moleculer Framework, Services written in different (Java, JavaScript or Go)
+languages can work effectively with each other.
 
-### Simple service schema to define two actions
+## Simple example
+
+A `Service` schema of adding and subtracting two numbers (the example defines two `Actions`):
 
 ```java
 @Name("math")
@@ -76,142 +79,17 @@ broker.call("v2.math.add", "a", 5, "b", 3);
 Via [API Gateway](moleculer-web.html), make a request to `GET /v2/math/add`.
 {% endnote %}
 
-## Dependencies
-
 ## Converting Java Annotations to platform-independent properties
-
-The `settings` property is a store, where you can store every settings/options to your service. You can reach it via `this.settings` inside the service.
-
-```java
-{
-    name: "mailer",
-    settings: {
-        transport: "mailgun"
-    },
-
-    action: {
-        send(ctx) {
-            if (this.settings.transport == "mailgun") {
-                ...
-            }
-        }
-    }
-}
-```
 
 > The `settings` is also obtainable on remote nodes. It is transferred during service discovering.
 
 ## Actions
 
 The actions are the callable/public methods of the service. They are callable with `broker.call` or `ctx.call`.
-The action could be a `Function` (shorthand for handler) or an object with some properties and `handler`.
-The actions should be placed under the `actions` key in the schema. For more information check the [actions documentation](actions.html).
-
-```java
-module.exports = {
-    name: "math",
-    actions: {
-        // Shorthand definition, only a handler function
-        add(ctx) {
-            return Number(ctx.params.a) + Number(ctx.params.b);
-        },
-
-        // Normal definition with other properties. In this case
-        // the `handler` function is required!
-        mult: {
-            cache: false,
-            params: {
-                a: "number",
-                b: "number"
-            },
-            handler(ctx) {
-                // The action properties are accessible as `ctx.action.*`
-                if (!ctx.action.cache)
-                    return Number(ctx.params.a) * Number(ctx.params.b);
-            }
-        }
-    }
-};
-```
-You can call the above actions as
-```java
-const res = await broker.call("math.add", { a: 5, b: 7 });
-const res = await broker.call("math.mult", { a: 10, b: 31 });
-```
-
-Inside actions, you can call other nested actions in other services with `ctx.call` method. It is an alias to `broker.call`, but it sets itself as parent context (due to tracing).
-```java
-module.exports = {
-    name: "posts",
-    actions: {
-        async get(ctx) {
-            // Find a post by ID
-            let post = posts[ctx.params.id];
-
-            // Populate the post.author field through "users" service
-            // Call the "users.get" action with author ID
-            const user = await ctx.call("users.get", { id: post.author });
-            if (user) {
-                // Replace the author ID with the received user object
-                post.author = user;
-            }
-
-            return post;
-        }
-    }
-};
-```
-> In handlers the `this` is always pointed to the Service instance.
-
 
 ## Events
+
 You can subscribe to events under the `events` key. For more information check the [events documentation](events.html).
-
-```java
-module.exports = {
-    name: "report",
-
-    events: {
-        // Subscribe to "user.created" event
-        "user.created"(ctx) {
-            this.logger.info("User created:", ctx.params);
-            // Do something
-        },
-
-        // Subscribe to all "user.*" events
-        "user.*"(ctx) {
-            console.log("Payload:", ctx.params);
-            console.log("Sender:", ctx.nodeID);
-            console.log("Metadata:", ctx.meta);
-            console.log("The called event name:", ctx.eventName);
-        }
-
-        // Subscribe to a local event
-        "$node.connected"(ctx) {
-            this.logger.info(`Node '${ctx.params.id}' is connected!`);
-        }
-    }
-};
-```
-> In handlers the `this` is always pointed to the Service instance.
-
-### Grouping 
-The broker groups the event listeners by group name. By default, the group name is the service name. But you can overwrite it in the event definition.
-
-```java
-module.exports = {
-    name: "payment",
-    events: {
-        "order.created": {
-            // Register handler to the "other" group instead of "payment" group.
-            group: "other",
-            handler(payload) {
-                // ...
-            }
-        }
-    }
-}
-```
 
 ## Lifecycle Events
 

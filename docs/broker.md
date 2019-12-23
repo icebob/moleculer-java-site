@@ -1,8 +1,11 @@
-title: Broker
+title: Service Broker
 ---
 The `ServiceBroker` is the main component of Moleculer.
-It handles services, calls actions, emits events and communicates with remote nodes. 
-You must create a `ServiceBroker` instance for each node.
+Each Node connected to a Moleculer Cluster has a `ServiceBroker` instance.
+It registers Services, handles Action calls, and forwards Events between the Nodes.
+The Java-based `ServiceBroker` can run as standalone back-end (Windows or Linux) service
+or can be built into a J2EE application server as a standard web module.
+Another key feature of `ServiceBroker` is that it is essentially designed to be non-blocking.
 
 ## Create Service Broker
 
@@ -49,7 +52,7 @@ ServiceBroker broker = ServiceBroker.builder()
                                     .build();
 ```
 
-**Create Broker using "classic" Spring XML config:**
+**Create Broker using Spring XML config:**
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -159,8 +162,8 @@ public class MoleculerApplication {
 ```
 
 {% note info Moleculer runner %}
-You don't need to create manually ServiceBroker in your project.
-Use the [Moleculer Runner](runner.html) to create and execute a broker and load services.
+The Moleculer Runner is a utility API that helps the application run as a background service.
+Use the Moleculer Runner to create, start, stop the ServiceBroker simply and reliably.
 [Read more about Moleculer Runner](runner.html).
 {% endnote %}
 
@@ -171,20 +174,19 @@ List of all available broker options:
 | Name | Type | Default | Description |
 | ------- | ----- | ------- | ------- |
 | `namespace` | `String` | `""` | Namespace of nodes to segment your nodes on the same network. |
-| `nodeID` | `String` | hostname + PID | Unique node identifier. Must be unique in a namespace. If not the broker will throw a fatal error and stop the process.|
-| `internalServices` | `boolean` | `true` | Register [internal services](services.html#Internal-Services). |
+| `nodeID` | `String` | hostname + PID | Node identifier. Must be unique in the cluster. |
+| `internalServices` | `boolean` | `true` | Register [internal services](internal-services.html). |
 | `jsonReaders` | `String` | `null` | Comma-separated list of the preferred JSON deserializer APIs ("jackson", "boon", "fastjson", "genson", etc.). |
 | `jsonWriters` | `String` | `null` | Comma-separated list of the preferred JSON serializer APIs ("jackson", "boon", "fastjson", "genson", etc.). |
 | `uidGenerator` | `UidGenerator` | `IncrementalUidGenerator` | Implementation of the UID generator. |
-| `strategyFactory` | `StrategyFactory` | `RoundRobinStrategyFactory` | Implementation of the Invocation Strategy. |
-| `contextFactory` | `ContextFactory` | `DefaultContextFactory` | Implementation of the Context Factory. |
-| `eventbus` | `Eventbus` | `DefaultEventbus` | Implementation of the Event Bus. |
-| `serviceRegistry` | `ServiceRegistry` | `DefaultServiceRegistry` | Implementation of the [Service Registry](registry.html). |
-| `cacher` | `Cacher` | `MemoryCacher` | Implementation of the service-level Cache. [Read more](caching.html) |
-| `serviceInvoker` | `ServiceInvoker` | `DefaultServiceInvoker` | Implementation of the [Service Invoker](fault-tolerance.html#Circuit-Breaker). |
-| `transporter` | `Transporter` | `null` | Transporter settings. [Read more](networking.html). |
-| `monitor` | `Monitor` | `SigarMonitor` | CPU monitor. [Read more](balancing.html). |
-| `shutDownThreadPools` | `boolean` | `true` | Shut down thread pools during the shutdown stage |
+| `strategyFactory` | `StrategyFactory` | `RoundRobinStrategyFactory` | Implementation of the [Invocation Strategy](balancing.html). |
+| `eventbus` | `Eventbus` | `DefaultEventbus` | Implementation of the [Event Bus](events.html). |
+| `serviceRegistry` | `ServiceRegistry` | `DefaultServiceRegistry` | Implementation of the [Service Registry](services.html). |
+| `cacher` | `Cacher` | `MemoryCacher` | Implementation of the [service-level Cache](caching.html) |
+| `serviceInvoker` | `ServiceInvoker` | `DefaultServiceInvoker` | Implementation of the [Service Invoker](fault-tolerance.html). |
+| `transporter` | `Transporter` | `null` | Implementation of the [Transporter](transporters.html). |
+| `monitor` | `Monitor` | `SigarMonitor` | Implementation of the [CPU monitor](balancing.html). |
+| `shutDownThreadPools` | `boolean` | `true` | Shut down thread pools during the shutdown stage. |
 
 This
 [demo project](https://github.com/moleculer-java/moleculer-spring-boot-demo)
