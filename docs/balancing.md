@@ -11,17 +11,18 @@ The default (pre-set) invocation mode is the Round-Robin Strategy.
 To configure Strategy, set `strategy()` builder option when creating the ServiceBroker.
 Alternatively, set up the Strategy of the ServiceBrokerConfig using the `setStrategyFactory()` method.
 
-**Configure balancing Strategy**
+**Configure a balancing Strategy**
 
 ```java
+// Create a "StrategyFactory"
 StrategyFactory strategy = new XorShiftRandomStrategyFactory();
 
-// Setup using ServiceBrokerConfig
+// Method #1: Setup using ServiceBrokerConfig
 ServiceBrokerConfig config = new ServiceBrokerConfig();
 config.setStrategyFactory(strategy);
 ServiceBroker broker = new ServiceBroker(config);
 
-// Setup using ServiceBroker.builder()
+// Method #2: Setup using ServiceBroker.builder()
 ServiceBroker broker = ServiceBroker.builder()
                                     .strategy(strategy)
                                     .build();
@@ -87,6 +88,7 @@ To determine CPU usage, ServiceBroker needs a Monitor instance that can query th
 Such Monitor is the SigarMonitor based on the [Sigar API](https://github.com/hyperic/sigar).
 It requires the presence of [JAR files for the Sigar API](https://mvnrepository.com/artifact/org.hyperic/sigar/1.6.4) in the Java classpath.
 It is also necessary to copy the [native Sigar binaries](https://github.com/hyperic/sigar/wiki/binaries) into the "java.library.path" directory.
+Using the Sigar API is optional; if it not found on the classpath, ServiceBroker will automatically use the JMX-based CPU monitor.
 
 **Strategy options**
 

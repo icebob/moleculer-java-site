@@ -160,7 +160,7 @@ public class CustomSerializer extends Serializer {
     public byte[] write(Tree value) throws Exception {
         Object content = value.asObject();
         // Write Java Object into byte array...
-		// The "content" is "java.util.Map" or "java.util.List".
+        // The "content" is "java.util.Map" or "java.util.List".
     }
 
     // --- DESERIALIZE BYTE ARRAY TO TREE ---

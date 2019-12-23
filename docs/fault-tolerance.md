@@ -1,11 +1,15 @@
 title: Fault tolerance
 ---
 
+ServiceBroker protects against circular function calls.
+It also manages call-level timeout and has a retry logic handler.
+In addition, there is a built-in Circuit Breaker solution in Moleculer.
+A Circuit Breaker does the Action calls and it monitors the service health. Once it gets some issue,
+it trips and all further calls goto another Node and finally restores automatically once the Service came back.
+
 ## Default Service Invoker
 
-The Default Service Invoker can protect against circular function calls.
-It also manages call-level timeout and has a retry logic handler.
-If you do not change it, this will be the default call logic when you create a Service Broker instance.
+This is the default call logic when you create a ServiceBroker instance.
 
 ```java
 // Create a Default Service Invoker
@@ -64,9 +68,8 @@ because the first call has already been rejected with a `RequestTimeoutError` er
 ## Circuit Breaker
 
 Moleculer has a built-in circuit-breaker solution.
-It is a threshold-based implementation.
-It uses a time window to check the failed request rate.
-Once the threshold value is reached, it trips the circuit breaker.
+It uses a time window to check the number of the failed requests.
+Once the error limit is reached, it trips the circuit breaker.
 The Circuit Breaker is a descendant of Default Service Invoker.
 
 {% note info What is the circuit breaker? %}
@@ -111,5 +114,3 @@ ServiceBroker broker = ServiceBroker.builder().invoker(invoker).build();
 | `ignoredTypes` | `Throwable[]` | null | Ignorable Error/Exception types |
 | `maxCallLevel` | `int` | `100` | Max call level to avoid circular calls |
 | `writeErrorsToLog` | `boolean` | `true` | Write errors to log file |
-
-> If the circuit-breaker state is changed, ServiceBroker will send [internal events](events.html#Internal-events).
