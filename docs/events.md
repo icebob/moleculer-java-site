@@ -50,6 +50,7 @@ public class PaymentService extends Service {
 Send balanced events with `broker.emit` function.
 The first parameter is the name of the event, the second parameter is the payload. 
 _To send multiple/hierarchical values, wrap them into a `Tree` object._
+
 Molecular does not require a recommended JSON API, it uses an
 [abstract API](https://berkesa.github.io/datatree/)
 instead of a certain implementation.
@@ -143,7 +144,7 @@ broker.broadcastLocal("config.changed", config);
 The contents of the events are wrapped in an object called Event Context to receive the message.
 The Event Context is very similar to Action Context.
 
-**Context-based event handler & emit a nested event**
+Context-based event handler & emit a nested event
 
 ```java
 @Name("accounts")
@@ -165,8 +166,7 @@ public class AccountService extends Service {
 }
 ```
 
-Subscribe to events in ['events' property of services](services.html#events).
-Use of wildcards (`?`, `*`, `**`) is available in event names.
+Wildcards (`?`, `*`, `**`) can be used when making event subscriptions.
 
 ```java
 public class MyService extends Service {
@@ -195,7 +195,8 @@ public class MyService extends Service {
 
 # Context
 
-When you emit an event, the broker creates a `Context` instance which contains all request information and passes it to the event handler as a single argument.
+When you emit an event, the broker creates a `Context` instance which contains all
+request information and passes it to the event handler as a single argument.
 
 **Available properties & methods of `Context`:**
 
@@ -277,4 +278,3 @@ The transporter sends this event once the transporter is connected.
 ## `$transporter.disconnected`
 
 The transporter sends this event once the transporter is disconnected.
-
