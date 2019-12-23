@@ -215,7 +215,7 @@ request information and passes it to the event handler as a single argument.
 | `ctx.nodeID` | `String` | The caller or target Node ID. |
 | `ctx.parentID` | `String` | Parent context ID (in nested-calls). |
 | `ctx.requestID` | `String` | Request ID (does not change during the call chain). |
-| `ctx.stream` | `PacketStream` | Streamed content. |
+| `ctx.stream` | `PacketStream` | Streamed content (large files or real-time media). |
 | `ctx.opts` | `Options` | Calling options. |
 | `ctx.call()` | `Method` | Make nested-calls. Same arguments like in `broker.call` |
 | `ctx.emit()` | `Method` | Emit an event, same as `broker.emit` |
