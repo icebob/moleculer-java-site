@@ -54,6 +54,11 @@ _To send multiple/hierarchical values, wrap them into a `Tree` object._
 ```java
 // The `user` is a `Tree` object (~=JSON structure)
 // that will be serialized for transport.
+Tree user = new Tree();
+user.put("firstName", "John");
+user.put("lastName", "Doe");
+
+// Emit event
 broker.emit("user.created", user);
 ```
 
@@ -63,6 +68,22 @@ Specify which groups/services shall receive the event:
 // Only the `mail` & `payments` services receive this event
 broker.emit("user.created", user, Groups.of("mail", "payments"));
 ```
+
+*Simplified syntax for sending key-value pairs*
+
+If the data structure to be sent consists only of name-value pairs,
+it is not necessary to create a `Tree` object.
+It is enough to list the name-value pairs after the event name:
+
+```java
+ctx.emit("user.created",
+         "firstName", "John",
+         "lastName", "Doe",
+         Groups.of("mail", "payments"));
+```
+
+Creating a Tree object is required when passing more complex data structures between Nodes,
+which contain sub-structures (~=hierarchical JSON objects and JSON arrays).
 
 # Broadcast event
 
@@ -93,6 +114,12 @@ broker.broadcast("user.created", user, Groups.of("mail"));
 
 // Send to all "user" & "purchase" service instances.
 broker.broadcast("user.created", user, Groups.of("user", "purchase"));
+
+// Same thing, but with simplified syntax
+ctx.broadcast("user.created",
+              "firstName", "John",
+              "lastName", "Doe",
+              Groups.of("user", "purchase"));
 ```
 
 ## Local broadcast event
@@ -120,7 +147,7 @@ public class AccountService extends Service {
         logger.info("Metadata:", ctx.params.getMeta());
         logger.info("The called event name:", ctx.name);
 
-        // Emit a new Event
+        // Emit a new, nested Event
         Tree payload = new Tree();
         payload.copyFrom(ctx.params, "user");
         ctx.emit("accounts.created", payload);
@@ -174,9 +201,9 @@ When you emit an event, the broker creates a `Context` instance which contains a
 | `ctx.requestID` | `String` | Request ID (does not change during the call chain). |
 | `ctx.stream` | `PacketStream` | Streamed content. |
 | `ctx.opts` | `Options` | Calling options. |
-| `ctx.call()` | `Function` | Make nested-calls. Same arguments like in `broker.call` |
-| `ctx.emit()` | `Function` | Emit an event, same as `broker.emit` |
-| `ctx.broadcast()` | `Function` | Broadcast an event, same as `broker.broadcast` |
+| `ctx.call()` | `Method` | Make nested-calls. Same arguments like in `broker.call` |
+| `ctx.emit()` | `Method` | Emit an event, same as `broker.emit` |
+| `ctx.broadcast()` | `Method` | Broadcast an event, same as `broker.broadcast` |
 
 # Internal events
 
@@ -201,8 +228,8 @@ The broker sends this event when a node connected or reconnected.
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| `node` | `Node` | Node info object |
-| `reconnected` | `Boolean` | Is reconnected? |
+| `node` | `Tree` | Node info object |
+| `reconnected` | `boolean` | Is reconnected? |
 
 ## `$node.updated`
 
@@ -213,7 +240,7 @@ The broker sends this event when it has received an INFO message from a node
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| `node` | `Node` | Node info object |
+| `node` | `Tree` | Node info object |
 
 ## `$node.disconnected`
 
@@ -223,8 +250,8 @@ The broker sends this event when a node disconnected (gracefully or unexpectedly
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| `node` | `Node` | Node info object |
-| `unexpected` | `Boolean` | `true` - Not received heartbeat, `false` - Received `DISCONNECT` message from node. |
+| `node` | `Tree` | Node info object |
+| `unexpected` | `boolean` | `true` - Not received heartbeat, `false` - Received `DISCONNECT` message from node. |
 
 ## `$broker.started`
 
