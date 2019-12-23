@@ -199,6 +199,19 @@ public class MyService extends Service {
 }
 ```
 
+Invisible (private or internal) Event Listeners
+
+With the "private" modifier, only the local events are monitored by the Event Listener.
+Such Event Listeners are invisible from the outside of the Node,
+and cannot be called from other Service Brokers.
+
+```java
+@Subscribe("$services.changed")
+private Listener listener = ctx -> {
+    logger.info("The list of services has changed!");
+};
+```
+
 # Context
 
 When you emit an event, the broker creates a `Context` instance which contains all
