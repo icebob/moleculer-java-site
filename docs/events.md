@@ -26,9 +26,10 @@ It means that only one listener is triggered in every group.
     <img src="assets/balanced-events.gif" alt="Balanced events diagram" />
 </div>
 
-The group name comes from the service name, but it can be overwritten in event definition in services.
+The group name comes from the service name, but it can be overwritten in event definition in services
+(by the @Group Annotation).
 
-**Example**
+**Example:**
 ```java
 @Name("payment")
 public class PaymentService extends Service {
@@ -62,7 +63,7 @@ in the Moleculer configuration (see in section "Serializer").
 Regardless of implementation, sending events looks like this:
 
 ```java
-// The `user` is a `Tree` object (~=JSON structure)
+// The "user" is a "Tree" object (~=JSON structure)
 // that will be serialized for transport.
 Tree user = new Tree();
 user.put("firstName", "John");
@@ -75,7 +76,7 @@ broker.emit("user.created", user);
 Specify which groups/services shall receive the event:
 
 ```java
-// Only the `mail` & `payments` services receive this event
+// Only the "mail" & "payments" services receive this event
 broker.emit("user.created", user, Groups.of("mail", "payments"));
 ```
 
@@ -107,7 +108,7 @@ It is not balanced, all event listener instances receive this event.
 Send broadcast events with `broker.broadcast` method.
 
 ```java
-// The `config` is a hierarchical (~=JSON) structure
+// The "config" is a hierarchical (~=JSON) structure
 Tree config = new Tree();
 config.put("key", "value");
 config.putList("anArray").add(1).add(2).add(3);
@@ -171,13 +172,13 @@ Wildcards (`?`, `*`, `**`) can be used when making event subscriptions.
 ```java
 public class MyService extends Service {
 
-    // Subscribe to `user.created` event
+    // Subscribe to "user.created" event
     @Subscribe("user.created")
     Listener userCreated = ctx -> {
         logger.info("User created event received:", ctx.params);
     };
 
-    // Subscribe to all `user` events
+    // Subscribe to all "user" events
     @Subscribe("user.*")
     Listener userEvents = ctx -> {
         logger.info("User event event received:", ctx.params);
