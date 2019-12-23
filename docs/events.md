@@ -50,6 +50,14 @@ public class PaymentService extends Service {
 Send balanced events with `broker.emit` function.
 The first parameter is the name of the event, the second parameter is the payload. 
 _To send multiple/hierarchical values, wrap them into a `Tree` object._
+Molecular does not require a recommended JSON implementation,
+it uses an abstract API instead of a fixed implementation.
+The `Tree` object is an **abstract layer** that uses an arbitrary JSON implementation.
+Tree API supports 18 popular JSON implementations (eg. Jackson, Gson, Boon, Jodd, FastJson),
+and 10 non-JSON data formats (YAML, ION, BSON, MessagePack, etc.).
+The specific JSON (or non-JSON) implementation can be configured
+in the Moleculer configuration (see in section "Serializer").
+Regardless of implementation, sending events looks like this:
 
 ```java
 // The `user` is a `Tree` object (~=JSON structure)
