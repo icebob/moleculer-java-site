@@ -11,6 +11,7 @@
 - [Services](docs/services.md)
 - [Lifecycle](docs/lifecycle.md)
 - [Actions](docs/actions.md)
+- [Middlewares](docs/middlewares.md)
 - [Caching](docs/caching.md)
 - [Events](docs/events.md)
 - [Internal Services](docs/internal-services.md)
