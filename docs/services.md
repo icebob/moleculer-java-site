@@ -7,9 +7,15 @@ Services can also define Event Listeners that can react to events created in the
 Using the Moleculer Framework, Services written in different (Java, JavaScript or Go)
 languages can work effectively with each other.
 
-## Simple example
+## Actions
 
-A `Service` schema of adding and subtracting two numbers (the example defines two `Actions`):
+The actions are the callable/public methods of a Service.
+They are callable with `broker.call` or `ctx.call` methods.  
+[Read more about Actions.](actions.html).
+
+**Example**
+
+A Service schema of adding and subtracting two numbers (the example defines two Actions):
 
 ```java
 @Name("math")
@@ -28,7 +34,8 @@ public class MathService extends Service {
 }
 ```
 
-The `@Name` attribute isn't a mandatory property, if missing, MessageBroker will generate the Service name from the Class name.
+The `@Name` attribute isn't a mandatory property, if missing,
+MessageBroker will generate the Service name from the Class name.
 The algorithm used to create Services names is similar to when Spring registers Beans;
 the first letter will be lowercase, the rest will not change
 (for example, `MathService` registers as "mathService").
@@ -124,7 +131,7 @@ Generated Service Descriptor:
 "service.action":{
     "name": "service.action",
     "deprecated": true,
-    "singleValue": "test"
+    "singleValue": "test",
     "multiValue": {
         "key1": "value",
         "key2": 123
@@ -157,16 +164,25 @@ To install the above Middleware, call the ServiceBroker `use` function:
 broker.use(new DeprecationChecker());
 ```
 
-## Actions
-
-The actions are the callable/public methods of the service. They are callable with `broker.call` or `ctx.call`.
-
 ## Events
 
-You can subscribe to events under the `events` key.
-For more information check the [events documentation](events.html).
+Services can monitor Events.
+Event source can be local or remote node.  
+[Read more about event handling.](events.html).
 
-## Lifecycle Events
+**Example**
+
+```java
+public class PaymentService extends Service {
+
+    @Subscribe("order.created")
+    Listener orderCreated = ctx -> {
+        logger.info("Received data:", ctx.params);
+    };
+}
+```
+
+## Lifecycle handlers
 
 There are some lifecycle service events, that will be triggered by the ServiceBroker.
 These are called when ServiceBroker starts or stops the Services.  
@@ -192,58 +208,40 @@ Other system-level events can be handled by Event Listeners
 
 ## Dependencies
 
-If your service depends on other services, use the `dependencies` property in the schema.
+If a Service depends on other Services, use the `@Dependencies` Annotation to denote dependencies.
 The service waits for dependent services before calls the `started` lifecycle event handler. 
 
 ```java
-module.exports = {
-  name: "posts",
-  settings: {
-      $dependencyTimeout: 30000 // Default: 0 - no timeout
-  },
-  dependencies: [
-      "likes", // shorthand w/o version
-      { name: "users", version: 2 }, // with numeric version
-      { name: "comments", version: "staging" } // with string version
-  ],
-  async started() {
-      this.logger.info("It will be called after all dependent services are available.");
-      const users = await this.broker.call("users.list");
-  }
-  ....
+@Dependencies({"logService", "backendService"})
+public class RestService extends Service {
+    // ...
 }
 ```
 
-The `started` service handler is called once the `likes`,
-`users` and `comments` services are available (either the local or remote nodes).
+The main difference between the `@Dependencies` Annotation and Spring `@DependsOn` Annotation
+is that `@Dependencies` monitors the entire Moleculer Cluster.
+In the example above, "logService" or "backendService" can be a **remote** Service.
+The Spring `@DependsOn` Annotation only monitors the local `ApplicationContext`.
 
 ### Wait for services via ServiceBroker
 
 To wait for services, you can also use the `waitForServices` method of `ServiceBroker`.
-It returns a `Promise` which will be resolved, when all defined services are available & started.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-| --------- | ---- | ------- | ----------- |
-| `services` | `String` or `Array` | - | Service list to waiting |
-| `timeout` | `Number` | `0` | Waiting timeout. `0` means no timeout. If reached, a `MoleculerServerError` will be rejected. |
-| `interval` | `Number` | `1000` | Frequency of watches in milliseconds |
+It returns a `Promise` which will be resolved when all defined services are available & started.
 
 **Example**
 
 ```java
-broker.waitForServices(["posts", "users"]).then(() => {
-    // Called after the `posts` & `users` services are available
+broker.waitForServices("posts", "users").then(rsp -> {
+    // Called after the "posts" and "users" services are available
 });
 ```
 
 **Set timeout & interval**
 
 ```java
-broker.waitForServices("accounts", 10 * 1000, 500).then(() => {
-    // Called if `accounts` service becomes available in 10 seconds
-}).catch(err => {
-    // Called if service is not available in 10 seconds
+broker.waitForServices(10 * 1000, "accounts").then(rsp -> {
+    // Call it when the "accounts" service becomes available within 10 seconds
+}).catchError(err -> {
+    // Called if the wait time is more than 10 seconds
 });
 ```
