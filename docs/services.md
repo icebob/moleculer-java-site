@@ -4,7 +4,8 @@ title: Services
 The `Service` is the top-level component in the Moleculer Ecosystem.
 Services may have Actions that other Services can invoke locally or over the network.
 Services can also define Event Listeners that can react to events created in the Moleculer Cluster.
-Using the Moleculer Framework, Services written in different (Java, JavaScript or Go)
+Using the Moleculer Framework, Services written in different (Java,
+[JavaScript](https://moleculer.services/) or [Go](https://github.com/moleculer-go))
 languages can work effectively with each other.
 
 Moleculer can be integrated with the Spring Framework.
@@ -136,7 +137,7 @@ public class TestService extends Service {
 }
 ```
 
-Generated Service Descriptor:
+Generated service description, also available on remote nodes:
 
 ```json
 "service.action":{
@@ -180,7 +181,8 @@ broker.use(new DeprecationChecker());
 ## Events
 
 Services can monitor Events.
-Event source can be local or remote node.  
+Events can come from local but also from remote nodes.
+The data content of Events, like Action's, is a JSON structure.
 [Read more about event handling.](events.html)
 
 **Example**
@@ -206,17 +208,19 @@ public class TestService extends Service {
 
     public void started(ServiceBroker broker) throws Exception {
         super.started(broker);
+        // Custom initialization functions
     }
 
     @Override
     public void stopped() {
+        // Closing resources, stopping timers
     }
     
 } 
 ```
 
 Other system-level events can be handled by Event Listeners
-(examples of such events are: another Node joining the cluster or a change in the Service list).  
+(eg. another Node joining the cluster or a change in the Service list).  
 [Read more about internal events.](events.html)
 
 ## Dependencies
