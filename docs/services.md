@@ -82,7 +82,74 @@ Via [API Gateway](moleculer-web.html), make a request to `GET /v2/math/add`.
 
 ## Converting Java Annotations to platform-independent properties
 
-> The `settings` is also obtainable on remote nodes. It is transferred during service discovering.
+ServiceBroker converts Java Annotations of Actions into JSON format,
+therefore, they can be parsed on remote nodes.
+The programming language doesn't matter, such as those available on JavaScript based nodes.
+These properties are passed on as the service is discovered.
+
+It is advisable to process these properties using (Java or JavaScipt-based) **Middlewares**,
+and based on the values of the properties, Middlewares may change the way the services work.
+
+The following example shows three types of Annotation conversions.
+The first one (the `@Deprecated`) is an Annotation without parameters.
+Such Annotations are passed as logical values with a "true" value.
+The second Annotation (the `@SingleValue`) can have only one value.
+Such Annotations are passed as a key-value pair.
+The third Annotation (the `@MultiValue`) contains more values.
+Such Annotations are converted into a JSON structures by the ServiceBroker.
+
+```java
+@Name("service")
+public class TestService extends Service {
+
+    @Deprecated
+    @SingleValue("test")
+    @MultiValue(key1:"value", key2: 123)
+    Action action = ctx -> {
+        // ...
+    };
+
+}
+```
+
+Generated Service Descriptor:
+
+```json
+"service.action":{
+    "name": "service.action",
+    "deprecated": true,
+    "singleValue": "test"
+    "multiValue": {
+        "key1": "value",
+        "key2": 123
+    }
+}
+```
+
+The Service Descriptor is received by all remote nodes and can be processed,
+regardless of the programming language.
+Sample Middleware that checks the configuration of a Java (or JavaScript) Action:
+
+```java
+public class DeprecationChecker extends Middleware {
+
+    public Action install(Action action, Tree config) {
+
+        boolean deprecated = config.get("deprecated", false);
+        
+        if (deprecated) {
+            logger.warn(config.get("name", "") + " action is deprecated!");
+        }
+        return null;
+    }
+}
+```
+
+To install the above Middleware, call the ServiceBroker `use` function:
+
+```java
+broker.use(new DeprecationChecker());
+```
 
 ## Actions
 
@@ -90,7 +157,8 @@ The actions are the callable/public methods of the service. They are callable wi
 
 ## Events
 
-You can subscribe to events under the `events` key. For more information check the [events documentation](events.html).
+You can subscribe to events under the `events` key.
+For more information check the [events documentation](events.html).
 
 ## Lifecycle Events
 
@@ -108,7 +176,7 @@ public class TestService extends Service {
     @Override
     public void stopped() {
     }
-	
+    
 } 
 ```
 
