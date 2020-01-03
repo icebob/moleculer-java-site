@@ -7,11 +7,20 @@ Services can also define Event Listeners that can react to events created in the
 Using the Moleculer Framework, Services written in different (Java, JavaScript or Go)
 languages can work effectively with each other.
 
+Moleculer can be integrated with the Spring Framework.
+In the Spring Environment, Moleculer Services and ServiceBroker are Spring Beans.
+This will allow Moleculer Services to access the other Spring Components.
+
+The [WEB API Gateway](moleculer-web.html)
+module enables the Moleculer Services to function as REST/HTML services
+generating HTML pages using server-side Template Engines.
+In addition, they can receive / send large files or send WebSocket packets to browsers.
+
 ## Actions
 
 The actions are the callable/public methods of a Service.
 They are callable with `broker.call` or `ctx.call` methods.  
-[Read more about Actions.](actions.html).
+[Read more about Actions.](actions.html)
 
 **Example**
 
@@ -47,6 +56,7 @@ To register the `MathService` in a MessageBroker, use the `createService` method
 ```java
 MessageBroker broker = MessageBroker.builder().build();
 broker.createService(new MathService());
+broker.start();
 ```
 
 To call the Service, use the `call` method:
@@ -86,7 +96,7 @@ broker.call("v2.math.add", "a", 5, "b", 3);
 ```
 
 {% note info REST call %}
-Via [API Gateway](moleculer-web.html), make a request to `GET /v2/math/add`.
+Via [WEB API Gateway](moleculer-web.html), make a request to `GET /v2/math/add`.
 {% endnote %}
 
 ## Converting Java Annotations to platform-independent properties
@@ -96,8 +106,9 @@ therefore, they can be parsed on remote nodes.
 The programming language doesn't matter, such as those available on JavaScript based nodes.
 These properties are passed on as the service is discovered.
 
-It is advisable to process these properties using (Java or JavaScipt-based) **Middlewares**,
-and based on the values of the properties, Middlewares may change the way the services work.
+It is advisable to process these properties using (Java or JavaScipt-based)
+[Middlewares](middlewares.html), and based on the values of the properties,
+Middlewares may change the way the services work.
 
 The following example shows three types of Annotation conversions.
 The first one (the `@Deprecated`) is an Annotation without parameters.
@@ -148,8 +159,10 @@ public class DeprecationChecker extends Middleware {
 
     public Action install(Action action, Tree config) {
 
+        // Get value of the property (false = default value)
         boolean deprecated = config.get("deprecated", false);
-        
+
+        // Print warning if the Action is deprecated 
         if (deprecated) {
             logger.warn(config.get("name", "") + " action is deprecated!");
         }
@@ -168,7 +181,7 @@ broker.use(new DeprecationChecker());
 
 Services can monitor Events.
 Event source can be local or remote node.  
-[Read more about event handling.](events.html).
+[Read more about event handling.](events.html)
 
 **Example**
 
@@ -186,7 +199,7 @@ public class PaymentService extends Service {
 
 There are some lifecycle service events, that will be triggered by the ServiceBroker.
 These are called when ServiceBroker starts or stops the Services.  
-[Read more about lifecycle of Services.](lifecycle.html).
+[Read more about lifecycle of Services.](lifecycle.html)
 
 ```java
 public class TestService extends Service {
@@ -204,7 +217,7 @@ public class TestService extends Service {
 
 Other system-level events can be handled by Event Listeners
 (examples of such events are: another Node joining the cluster or a change in the Service list).  
-[Read more about internal events.](events.html).
+[Read more about internal events.](events.html)
 
 ## Dependencies
 
