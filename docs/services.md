@@ -253,7 +253,7 @@ broker.waitForServices("posts", "users").then(rsp -> {
 });
 ```
 
-**Set timeout & interval**
+**Handle timeout**
 
 ```java
 broker.waitForServices(10 * 1000, "accounts").then(rsp -> {
