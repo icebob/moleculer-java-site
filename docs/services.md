@@ -45,6 +45,8 @@ broker.createService(new MathService());
 To call the Service, use the `call` method:
 
 ```java
+// in thread-blocking style:
+
 Tree rsp = broker.call("math.add", "a", 5, "b", 3).waitFor();
 System.out.println("Response: " + rsp.asInteger());
 
@@ -100,7 +102,7 @@ Such Annotations are converted into a JSON structures by the ServiceBroker.
 It is important to note that only Annotations with a `RetentionPolicy` value of `RUNTIME`
 will be available in the Service Descriptor
 (for example, `@SuppressWarnings` is not visible on remote nodes
-because it is not a `RUNTIME` Annotation).
+because it exists only at the source level).
 
 ```java
 @Name("service")
