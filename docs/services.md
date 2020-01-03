@@ -97,6 +97,10 @@ The second Annotation (the `@SingleValue`) can have only one value.
 Such Annotations are passed as a key-value pair.
 The third Annotation (the `@MultiValue`) contains more values.
 Such Annotations are converted into a JSON structures by the ServiceBroker.
+It is important to note that only Annotations with a `RetentionPolicy` value of `RUNTIME`
+will be available in the Service Descriptor
+(for example, `@SuppressWarnings` is not visible on remote nodes
+because it is not a `RUNTIME` Annotation).
 
 ```java
 @Name("service")
