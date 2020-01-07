@@ -3,7 +3,7 @@ module.exports = {
 	theme: '@vuepress/theme-default',
 	title: 'Moleculer',
 	description: 'Progressive microservices framework for Java',	
-	dest: 'docs',
+	dest: '../docs',
  
 	themeConfig: {
 		nav: [
