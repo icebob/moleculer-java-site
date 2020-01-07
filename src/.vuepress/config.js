@@ -2,7 +2,8 @@ module.exports = {
 
 	theme: '@vuepress/theme-default',
 	title: 'Moleculer',
-	description: 'Progressive microservices framework for Java',	
+	description: 'Progressive microservices framework for Java',
+	base: '/site/',
 	dest: '../docs',
  
 	themeConfig: {
