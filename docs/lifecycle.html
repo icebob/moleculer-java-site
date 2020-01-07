@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Lifecycle | Moleculer</title>
+    <meta name="description" content="Progressive microservices framework for Java">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.75b8d9ca.css" as="style"><link rel="preload" href="/assets/js/app.65085a66.js" as="script"><link rel="preload" href="/assets/js/2.fcf054ee.js" as="script"><link rel="preload" href="/assets/js/18.0b06b6d3.js" as="script"><link rel="prefetch" href="/assets/js/10.a7e3169b.js"><link rel="prefetch" href="/assets/js/11.c0d5d77a.js"><link rel="prefetch" href="/assets/js/12.db708969.js"><link rel="prefetch" href="/assets/js/13.2437f45c.js"><link rel="prefetch" href="/assets/js/14.908fcc0e.js"><link rel="prefetch" href="/assets/js/15.6652a86c.js"><link rel="prefetch" href="/assets/js/16.2d5e7dc8.js"><link rel="prefetch" href="/assets/js/17.8aca03ef.js"><link rel="prefetch" href="/assets/js/19.d92054b9.js"><link rel="prefetch" href="/assets/js/20.c1bf770c.js"><link rel="prefetch" href="/assets/js/21.e6e3e63a.js"><link rel="prefetch" href="/assets/js/22.9e873365.js"><link rel="prefetch" href="/assets/js/23.f4d8183c.js"><link rel="prefetch" href="/assets/js/24.00bce936.js"><link rel="prefetch" href="/assets/js/25.45daa85f.js"><link rel="prefetch" href="/assets/js/26.a93a76b5.js"><link rel="prefetch" href="/assets/js/27.d61b2d89.js"><link rel="prefetch" href="/assets/js/3.f084eaa4.js"><link rel="prefetch" href="/assets/js/4.647cd2ea.js"><link rel="prefetch" href="/assets/js/5.80568245.js"><link rel="prefetch" href="/assets/js/6.2902dce8.js"><link rel="prefetch" href="/assets/js/7.9441232c.js"><link rel="prefetch" href="/assets/js/8.edf9dbb7.js"><link rel="prefetch" href="/assets/js/9.d2d2095b.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.75b8d9ca.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">Moleculer</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">Home</a></div><div class="nav-item"><a href="/introduction.html" class="nav-link">Documentation</a></div><div class="nav-item"><a href="https://github.com/moleculer-java/moleculer-java" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  GitHub
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">Home</a></div><div class="nav-item"><a href="/introduction.html" class="nav-link">Documentation</a></div><div class="nav-item"><a href="https://github.com/moleculer-java/moleculer-java" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  GitHub
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Getting Started</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>Core</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/broker.html" class="sidebar-link">Service Broker</a></li><li><a href="/services.html" class="sidebar-link">Services</a></li><li><a href="/lifecycle.html" class="active sidebar-link">Lifecycle</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/lifecycle.html#broker-lifecycle" class="sidebar-link">Broker lifecycle</a></li><li class="sidebar-sub-header"><a href="/lifecycle.html#service-lifecycle" class="sidebar-link">Service lifecycle</a></li></ul></li><li><a href="/actions.html" class="sidebar-link">Actions</a></li><li><a href="/middlewares.html" class="sidebar-link">Middlewares</a></li><li><a href="/caching.html" class="sidebar-link">Caching</a></li><li><a href="/events.html" class="sidebar-link">Events</a></li><li><a href="/internal-services.html" class="sidebar-link">Internal Services</a></li></ul></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Clustering</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Modules</span> <span class="arrow right"></span></p> <!----></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h2 id="broker-lifecycle"><a href="#broker-lifecycle" class="header-anchor">#</a> Broker lifecycle</h2> <p>This section describes what happens when the broker is starting &amp; stopping.</p> <h3 id="starting-logic"><a href="#starting-logic" class="header-anchor">#</a> Starting logic</h3> <p>The broker starts transporter connecting but it doesn't publish the local service list to remote nodes.
+When it's done, it starts all services (calls service <code>started</code> handler). Once all services start successfully,
+broker publishes the local service list to remote nodes.
+Hence remote nodes send requests only after all local service are started properly.</p> <div class="custom-block warning"><p class="custom-block-title">Avoid deadlocks</p> <p>Dead-locks can be made when two services wait for each other. E.g.: <code>users</code> service has <code>dependencies: [&quot;posts&quot;]</code> and <code>posts</code> service has <code>dependencies: [&quot;users&quot;]</code>.
+To avoid it, remove the concerned service from <code>dependencies</code> and use <code>waitForServices</code> method in <code>started</code> handler instead.</p></div> <h3 id="stopping-logic"><a href="#stopping-logic" class="header-anchor">#</a> Stopping logic</h3> <p>When you call <code>broker.stop</code> or stop the process, at first broker send a <code>DISCONNECT</code> message to remote nodes,
+so they can route the requests to other instances instead of services under stopping.
+Next, the broker starts stopping all local services. After that, the transporter disconnects.</p> <h2 id="service-lifecycle"><a href="#service-lifecycle" class="header-anchor">#</a> Service lifecycle</h2> <p>This section describes what happens when a service is starting &amp; stopping and how you should use the lifecycle event handler.</p> <h3 id="started-event-handler"><a href="#started-event-handler" class="header-anchor">#</a> <code>started</code> event handler</h3> <p>It is triggered when the <code>broker.start</code> is called and the broker starts all local services.
+Use it to connect to database, listen servers...etc.</p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">import</span> <span class="token namespace">services<span class="token punctuation">.</span>moleculer</span><span class="token punctuation">.</span><span class="token class-name">ServiceBroker</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">services<span class="token punctuation">.</span>moleculer<span class="token punctuation">.</span>cacher</span><span class="token punctuation">.</span><span class="token class-name">Cacher</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">services<span class="token punctuation">.</span>moleculer<span class="token punctuation">.</span>service</span><span class="token punctuation">.</span>*<span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@Name</span><span class="token punctuation">(</span><span class="token string">&quot;test&quot;</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TestService</span> <span class="token keyword">extends</span> <span class="token class-name">Service</span> <span class="token punctuation">{</span>
+
+    <span class="token comment">/**
+     * Object to initialize
+     */</span>
+    <span class="token keyword">private</span> <span class="token class-name">Cacher</span> cacher<span class="token punctuation">;</span>
+
+    <span class="token comment">/**
+     * Starting the Service instance...
+     */</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">started</span><span class="token punctuation">(</span><span class="token class-name">ServiceBroker</span> broker<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+        <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">started</span><span class="token punctuation">(</span>broker<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// Custom initialization code</span>
+        cacher <span class="token operator">=</span> broker<span class="token punctuation">.</span><span class="token function">getConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getCacher</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// ...</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>To register for the above Service at the Service Broker:</p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token class-name">ServiceBrokerConfig</span> cfg <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ServiceBrokerConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+cfg<span class="token punctuation">.</span><span class="token function">setNodeID</span><span class="token punctuation">(</span><span class="token string">&quot;node1&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">ServiceBroker</span> broker <span class="token operator">=</span> <span class="token class-name">ServiceBroker</span><span class="token punctuation">(</span>cfg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+broker<span class="token punctuation">.</span><span class="token function">createService</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">TestService</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+broker<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><h3 id="stopped-event-handler"><a href="#stopped-event-handler" class="header-anchor">#</a> <code>stopped</code> event handler</h3> <p>It is triggered when the <code>broker.stop</code> is called and the broker starts stopping all local services.
+Use it to close database connections, stop Executors and Timers, close sockets...etc.</p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">import</span> <span class="token namespace">services<span class="token punctuation">.</span>moleculer<span class="token punctuation">.</span>service</span><span class="token punctuation">.</span>*<span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@Name</span><span class="token punctuation">(</span><span class="token string">&quot;test&quot;</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TestService</span> <span class="token keyword">extends</span> <span class="token class-name">Service</span> <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">stopped</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">stopped</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+        <span class="token comment">// Release resources...</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>If you use Spring, the above <code>started</code> and <code>stopped</code> functions should not be called by Spring as <code>init-method</code> or <code>destroy-method</code>).
+These functions are invoked in all cases by the Service Broker, not by the Spring Framework.
+However, you can create <code>init</code> / <code>destroy</code> functions for Spring, regardless of the <code>started</code> / <code>stopped</code> functions.
+In this case, the start and stop order is as follows:</p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">import</span> <span class="token namespace">javax<span class="token punctuation">.</span>annotation</span><span class="token punctuation">.</span>*<span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>stereotype</span><span class="token punctuation">.</span><span class="token class-name">Controller</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>datatree</span><span class="token punctuation">.</span><span class="token class-name">Tree</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">services<span class="token punctuation">.</span>moleculer</span><span class="token punctuation">.</span><span class="token class-name">ServiceBroker</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">services<span class="token punctuation">.</span>moleculer<span class="token punctuation">.</span>service</span><span class="token punctuation">.</span>*<span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@Name</span><span class="token punctuation">(</span><span class="token string">&quot;test&quot;</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@Controller</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TestService</span> <span class="token keyword">extends</span> <span class="token class-name">Service</span> <span class="token punctuation">{</span>
+
+    <span class="token comment">// --- STARTING SERVICE ---</span>
+    
+    <span class="token keyword">public</span> <span class="token class-name">TestService</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token comment">// 1.) The constructor is called first</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@PostConstruct</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+
+        <span class="token comment">// 2.) This invoked before the &quot;started&quot; method</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">started</span><span class="token punctuation">(</span><span class="token class-name">ServiceBroker</span> broker<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+        <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">started</span><span class="token punctuation">(</span>broker<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 3.) Initialize service...</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// --- RUNNING SERVICE ---</span>
+    
+    <span class="token keyword">public</span> <span class="token class-name">Action</span> action <span class="token operator">=</span> ctx <span class="token operator">-&gt;</span> <span class="token punctuation">{</span>
+
+        <span class="token comment">// 4.) This Action is called by other Actions</span>
+        <span class="token keyword">int</span> foo <span class="token operator">=</span> ctx<span class="token punctuation">.</span>params<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">&quot;foo&quot;</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Tree</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">&quot;result&quot;</span><span class="token punctuation">,</span> foo <span class="token operator">+</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// --- STOPPING SERVICE ---</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">stopped</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token comment">// 5.) Invoked by the Service Broker</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@PreDestroy</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">destroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+
+        <span class="token comment">// 6.) Invoked by Spring after the &quot;stopped&quot; method</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">finalize</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Throwable</span> <span class="token punctuation">{</span>
+
+        <span class="token comment">// 7.) This called last by the Garbage Collector</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div></div> <footer class="page-edit"><!----> <!----></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/services.html" class="prev">Services</a></span> <span class="next"><a href="/actions.html">Actions</a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.65085a66.js" defer></script><script src="/assets/js/2.fcf054ee.js" defer></script><script src="/assets/js/18.0b06b6d3.js" defer></script>
+  </body>
+</html>

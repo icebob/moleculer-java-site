@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>API Gateway | Moleculer</title>
+    <meta name="description" content="Progressive microservices framework for Java">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.75b8d9ca.css" as="style"><link rel="preload" href="/assets/js/app.65085a66.js" as="script"><link rel="preload" href="/assets/js/2.fcf054ee.js" as="script"><link rel="preload" href="/assets/js/22.9e873365.js" as="script"><link rel="prefetch" href="/assets/js/10.a7e3169b.js"><link rel="prefetch" href="/assets/js/11.c0d5d77a.js"><link rel="prefetch" href="/assets/js/12.db708969.js"><link rel="prefetch" href="/assets/js/13.2437f45c.js"><link rel="prefetch" href="/assets/js/14.908fcc0e.js"><link rel="prefetch" href="/assets/js/15.6652a86c.js"><link rel="prefetch" href="/assets/js/16.2d5e7dc8.js"><link rel="prefetch" href="/assets/js/17.8aca03ef.js"><link rel="prefetch" href="/assets/js/18.0b06b6d3.js"><link rel="prefetch" href="/assets/js/19.d92054b9.js"><link rel="prefetch" href="/assets/js/20.c1bf770c.js"><link rel="prefetch" href="/assets/js/21.e6e3e63a.js"><link rel="prefetch" href="/assets/js/23.f4d8183c.js"><link rel="prefetch" href="/assets/js/24.00bce936.js"><link rel="prefetch" href="/assets/js/25.45daa85f.js"><link rel="prefetch" href="/assets/js/26.a93a76b5.js"><link rel="prefetch" href="/assets/js/27.d61b2d89.js"><link rel="prefetch" href="/assets/js/3.f084eaa4.js"><link rel="prefetch" href="/assets/js/4.647cd2ea.js"><link rel="prefetch" href="/assets/js/5.80568245.js"><link rel="prefetch" href="/assets/js/6.2902dce8.js"><link rel="prefetch" href="/assets/js/7.9441232c.js"><link rel="prefetch" href="/assets/js/8.edf9dbb7.js"><link rel="prefetch" href="/assets/js/9.d2d2095b.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.75b8d9ca.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">Moleculer</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">Home</a></div><div class="nav-item"><a href="/introduction.html" class="nav-link">Documentation</a></div><div class="nav-item"><a href="https://github.com/moleculer-java/moleculer-java" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  GitHub
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">Home</a></div><div class="nav-item"><a href="/introduction.html" class="nav-link">Documentation</a></div><div class="nav-item"><a href="https://github.com/moleculer-java/moleculer-java" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  GitHub
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Getting Started</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Core</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Clustering</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>Modules</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/moleculer-web.html" class="active sidebar-link">API Gateway</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/moleculer-web.html#moleculer-web" class="sidebar-link">moleculer-web ![npm](https://img.shields.io/npm/v/moleculer-web.svg?maxAge=3600)</a></li><li class="sidebar-sub-header"><a href="/moleculer-web.html#features" class="sidebar-link">Features</a></li><li class="sidebar-sub-header"><a href="/moleculer-web.html#install" class="sidebar-link">Install</a></li><li class="sidebar-sub-header"><a href="/moleculer-web.html#usage" class="sidebar-link">Usage</a></li><li class="sidebar-sub-header"><a href="/moleculer-web.html#whitelist" class="sidebar-link">Whitelist</a></li><li class="sidebar-sub-header"><a href="/moleculer-web.html#aliases" class="sidebar-link">Aliases</a></li><li class="sidebar-sub-header"><a href="/moleculer-web.html#parameters" class="sidebar-link">Parameters</a></li><li class="sidebar-sub-header"><a href="/moleculer-web.html#middlewares" class="sidebar-link">Middlewares</a></li><li class="sidebar-sub-header"><a href="/moleculer-web.html#serve-static-files" class="sidebar-link">Serve static files</a></li><li class="sidebar-sub-header"><a href="/moleculer-web.html#calling-options" class="sidebar-link">Calling options</a></li><li class="sidebar-sub-header"><a href="/moleculer-web.html#multiple-routes" class="sidebar-link">Multiple routes</a></li><li class="sidebar-sub-header"><a href="/moleculer-web.html#response-type-status-code" class="sidebar-link">Response type &amp; status code</a></li><li class="sidebar-sub-header"><a href="/moleculer-web.html#authorization" class="sidebar-link">Authorization</a></li><li class="sidebar-sub-header"><a href="/moleculer-web.html#authentication" class="sidebar-link">Authentication</a></li><li class="sidebar-sub-header"><a href="/moleculer-web.html#route-hooks" class="sidebar-link">Route hooks</a></li><li class="sidebar-sub-header"><a href="/moleculer-web.html#error-handlers" class="sidebar-link">Error handlers</a></li><li class="sidebar-sub-header"><a href="/moleculer-web.html#cors-headers" class="sidebar-link">CORS headers</a></li><li class="sidebar-sub-header"><a href="/moleculer-web.html#rate-limiter" class="sidebar-link">Rate limiter</a></li><li class="sidebar-sub-header"><a href="/moleculer-web.html#etag" class="sidebar-link">ETag</a></li><li class="sidebar-sub-header"><a href="/moleculer-web.html#http2-server" class="sidebar-link">HTTP2 Server</a></li><li class="sidebar-sub-header"><a href="/moleculer-web.html#expressjs-middleware-usage" class="sidebar-link">ExpressJS middleware usage</a></li><li class="sidebar-sub-header"><a href="/moleculer-web.html#full-service-settings" class="sidebar-link">Full service settings</a></li><li class="sidebar-sub-header"><a href="/moleculer-web.html#service-methods" class="sidebar-link">Service Methods</a></li><li class="sidebar-sub-header"><a href="/moleculer-web.html#examples" class="sidebar-link">Examples</a></li></ul></li><li><a href="/moleculer-repl.html" class="sidebar-link">Moleculer REPL</a></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h2 id="moleculer-web"><a href="#moleculer-web" class="header-anchor">#</a> moleculer-web <a href="https://www.npmjs.com/package/moleculer-web" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/npm/v/moleculer-web.svg?maxAge=3600" alt="npm"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></h2> <p>The <a href="https://github.com/moleculerjs/moleculer-web" target="_blank" rel="noopener noreferrer">moleculer-web<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> is the official API gateway service for Moleculer framework. Use it to publish your services as RESTful APIs.</p> <h2 id="features"><a href="#features" class="header-anchor">#</a> Features</h2> <ul><li>support HTTP &amp; HTTPS</li> <li>serve static files</li> <li>multiple routes</li> <li>support Connect-like middlewares in global-level, route-level and alias-level.</li> <li>alias names (with named parameters &amp; REST routes)</li> <li>whitelist</li> <li>multiple body parsers (json, urlencoded)</li> <li>CORS headers</li> <li>Rate limiter</li> <li>before &amp; after call hooks</li> <li>Buffer &amp; Stream handling</li> <li>middleware mode (use as a middleware with Express)</li></ul> <p>{% note info Try it in your browser! %}
+<a href="https://codesandbox.io/s/github/moleculerjs/sandbox-moleculer-api-routing/tree/master/?fontsize=14" target="_blank" rel="noopener noreferrer"><img src="https://codesandbox.io/static/img/play-codesandbox.svg" alt="Edit moleculer-web"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>
+:::</p> <h2 id="install"><a href="#install" class="header-anchor">#</a> Install</h2> <div class="language-bash extra-class"><pre class="language-bash"><code><span class="token function">npm</span> i moleculer-web
+</code></pre></div><h2 id="usage"><a href="#usage" class="header-anchor">#</a> Usage</h2> <h3 id="run-with-default-settings"><a href="#run-with-default-settings" class="header-anchor">#</a> Run with default settings</h3> <p>This example uses API Gateway service with default settings.
+You can access all services (including internal <code>$node.</code>) via <code>http://localhost:3000/</code></p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">const</span> <span class="token punctuation">{</span> <span class="token class-name">ServiceBroker</span> <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;moleculer&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> <span class="token class-name">ApiService</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;moleculer-web&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> broker <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ServiceBroker</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Load API Gateway</span>
+broker<span class="token punctuation">.</span><span class="token function">createService</span><span class="token punctuation">(</span><span class="token class-name">ApiService</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Start server</span>
+broker<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p><strong>Example URLs:</strong></p> <ul><li><p>Call <code>test.hello</code> action: <code>http://localhost:3000/test/hello</code></p></li> <li><p>Call <code>math.add</code> action with params: <code>http://localhost:3000/math/add?a=25&amp;b=13</code></p></li> <li><p>Get health info of node: <code>http://localhost:3000/~node/health</code></p></li> <li><p>List all actions: <code>http://localhost:3000/~node/actions</code></p></li></ul> <h2 id="whitelist"><a href="#whitelist" class="header-anchor">#</a> Whitelist</h2> <p>If you don't want to publish all actions, you can filter them with whitelist option.
+Use match strings or regexp in list. <em>To enable all actions, use <code>&quot;**&quot;</code> item.</em></p> <div class="language-java extra-class"><pre class="language-java"><code>broker<span class="token punctuation">.</span><span class="token function">createService</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    mixins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token class-name">ApiService</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+        routes<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+            path<span class="token operator">:</span> <span class="token string">&quot;/api&quot;</span><span class="token punctuation">,</span>
+
+            whitelist<span class="token operator">:</span> <span class="token punctuation">[</span>
+                <span class="token comment">// Access any actions in 'posts' service</span>
+                <span class="token string">&quot;posts.*&quot;</span><span class="token punctuation">,</span>
+                <span class="token comment">// Access call only the `users.list` action</span>
+                <span class="token string">&quot;users.list&quot;</span><span class="token punctuation">,</span>
+                <span class="token comment">// Access any actions in 'math' service</span>
+                <span class="token operator">/</span><span class="token operator">^</span>math\<span class="token punctuation">.</span>\w<span class="token operator">+</span>$<span class="token operator">/</span>
+            <span class="token punctuation">]</span>
+        <span class="token punctuation">}</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><h2 id="aliases"><a href="#aliases" class="header-anchor">#</a> Aliases</h2> <p>You can use alias names instead of action names. You can also specify the method. Otherwise it will handle every method types.</p> <p>Using named parameters in aliases is possible. Named parameters are defined by prefixing a colon to the parameter name (<code>:name</code>).</p> <div class="language-java extra-class"><pre class="language-java"><code>broker<span class="token punctuation">.</span><span class="token function">createService</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    mixins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token class-name">ApiService</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+        routes<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+            aliases<span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token comment">// Call `auth.login` action with `GET /login` or `POST /login`</span>
+                <span class="token string">&quot;login&quot;</span><span class="token operator">:</span> <span class="token string">&quot;auth.login&quot;</span><span class="token punctuation">,</span>
+
+                <span class="token comment">// Restrict the request method</span>
+                <span class="token string">&quot;POST users&quot;</span><span class="token operator">:</span> <span class="token string">&quot;users.create&quot;</span><span class="token punctuation">,</span>
+
+                <span class="token comment">// The `name` comes from named param. </span>
+                <span class="token comment">// You can access it with `ctx.params.name` in action</span>
+                <span class="token string">&quot;GET greeter/:name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;test.greeter&quot;</span><span class="token punctuation">,</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>{% note info %}
+The named parameter is handled with <a href="https://github.com/pillarjs/path-to-regexp" target="_blank" rel="noopener noreferrer">path-to-regexp<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> module. Therefore you can use <a href="https://github.com/pillarjs/path-to-regexp#optional" target="_blank" rel="noopener noreferrer">optional<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> and <a href="https://github.com/pillarjs/path-to-regexp#zero-or-more" target="_blank" rel="noopener noreferrer">repeated<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> parameters, as well.
+:::</p> <p>You can also create RESTful APIs.</p> <div class="language-java extra-class"><pre class="language-java"><code>broker<span class="token punctuation">.</span><span class="token function">createService</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    mixins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token class-name">ApiService</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+        routes<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+            aliases<span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token string">&quot;GET users&quot;</span><span class="token operator">:</span> <span class="token string">&quot;users.list&quot;</span><span class="token punctuation">,</span>
+                <span class="token string">&quot;GET users/:id&quot;</span><span class="token operator">:</span> <span class="token string">&quot;users.get&quot;</span><span class="token punctuation">,</span>
+                <span class="token string">&quot;POST users&quot;</span><span class="token operator">:</span> <span class="token string">&quot;users.create&quot;</span><span class="token punctuation">,</span>
+                <span class="token string">&quot;PUT users/:id&quot;</span><span class="token operator">:</span> <span class="token string">&quot;users.update&quot;</span><span class="token punctuation">,</span>
+                <span class="token string">&quot;DELETE users/:id&quot;</span><span class="token operator">:</span> <span class="token string">&quot;users.remove&quot;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>For REST routes you can also use this simple shorthand alias:</p> <div class="language-java extra-class"><pre class="language-java"><code>broker<span class="token punctuation">.</span><span class="token function">createService</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    mixins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token class-name">ApiService</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+        routes<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+            aliases<span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token string">&quot;REST users&quot;</span><span class="token operator">:</span> <span class="token string">&quot;users&quot;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>{% note warn %}
+To use this shorthand alias, create a service which has <code>list</code>, <code>get</code>, <code>create</code>, <code>update</code> and <code>remove</code> actions.
+:::</p> <p>You can make use of custom functions within the declaration of aliases. In this case, the handler's signature is <code>function (req, res) {...}</code>.</p> <p>{% note info %}
+Please note that Moleculer uses native Node.js <a href="https://nodejs.org/api/http.html" target="_blank" rel="noopener noreferrer">HTTP server<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>
+:::</p> <div class="language-java extra-class"><pre class="language-java"><code>broker<span class="token punctuation">.</span><span class="token function">createService</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    mixins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token class-name">ApiService</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+        routes<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+            aliases<span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token string">&quot;POST upload&quot;</span><span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">parseUploadedFile</span><span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span><span class="token punctuation">,</span>
+                <span class="token string">&quot;GET custom&quot;</span><span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    res<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token string">'hello from custom handler'</span><span class="token punctuation">)</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>{% note info %}
+There are some internal pointer in <code>req</code> &amp; <code>res</code> objects:</p> <ul><li><code>req.$ctx</code> are pointed to request context.</li> <li><code>req.$service</code> &amp; <code>res.$service</code> are pointed to this service instance.</li> <li><code>req.$route</code> &amp; <code>res.$route</code> are pointed to the resolved route definition.</li> <li><code>req.$params</code> is pointed to the resolved parameters (from query string &amp; post body)</li> <li><code>req.$alias</code> is pointed to the resolved alias definition.</li> <li><code>req.$action</code> is pointed to the resolved action.</li> <li><code>req.$endpoint</code> is pointed to the resolved action endpoint.</li> <li><code>req.$next</code> is pointed to the <code>next()</code> handler if the request comes from ExpressJS.</li></ul> <p>E.g.: To access the broker, use <code>req.$service.broker</code>.
+:::</p> <h3 id="mapping-policy"><a href="#mapping-policy" class="header-anchor">#</a> Mapping policy</h3> <p>The <code>route</code> has a <code>mappingPolicy</code> property to handle routes without aliases.</p> <p><strong>Available options:</strong></p> <ul><li><code>all</code> - enable to request all routes with or without aliases (default)</li> <li><code>restrict</code> - enable to request only the routes with aliases.</li></ul> <div class="language-java extra-class"><pre class="language-java"><code>broker<span class="token punctuation">.</span><span class="token function">createService</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    mixins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token class-name">ApiService</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+        routes<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+            mappingPolicy<span class="token operator">:</span> <span class="token string">&quot;restrict&quot;</span><span class="token punctuation">,</span>
+            aliases<span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token string">&quot;POST add&quot;</span><span class="token operator">:</span> <span class="token string">&quot;math.add&quot;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>You can't request the <code>/math.add</code> or <code>/math/add</code> URLs, only <code>POST /add</code>.</p> <h3 id="file-upload-aliases"><a href="#file-upload-aliases" class="header-anchor">#</a> File upload aliases</h3> <p>API Gateway has implemented file uploads. You can upload files as a multipart form data (thanks to <a href="https://github.com/mscdex/busboy" target="_blank" rel="noopener noreferrer">busboy<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> library) or as a raw request body. In both cases, the file is transferred to an action as a <code>Stream</code>. In multipart form data mode you can upload multiple files, as well.</p> <p>{% note warn %}
+Please note, you have to disable other body parsers in order to accept files.
+:::</p> <p><strong>Example</strong></p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">const</span> <span class="token class-name">ApiGateway</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;moleculer-web&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">module</span><span class="token punctuation">.</span><span class="token keyword">exports</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+    mixins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token class-name">ApiGateway</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+        path<span class="token operator">:</span> <span class="token string">&quot;/upload&quot;</span><span class="token punctuation">,</span>
+
+        routes<span class="token operator">:</span> <span class="token punctuation">[</span>
+            <span class="token punctuation">{</span>
+                path<span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+
+                <span class="token comment">// You should disable body parsers</span>
+                bodyParsers<span class="token operator">:</span> <span class="token punctuation">{</span>
+                    json<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+                    urlencoded<span class="token operator">:</span> <span class="token boolean">false</span>
+                <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+                aliases<span class="token operator">:</span> <span class="token punctuation">{</span>
+                    <span class="token comment">// File upload from HTML multipart form</span>
+                    <span class="token string">&quot;POST /&quot;</span><span class="token operator">:</span> <span class="token string">&quot;multipart:file.save&quot;</span><span class="token punctuation">,</span>
+                    
+                    <span class="token comment">// File upload from AJAX or cURL</span>
+                    <span class="token string">&quot;PUT /&quot;</span><span class="token operator">:</span> <span class="token string">&quot;stream:file.save&quot;</span><span class="token punctuation">,</span>
+
+                    <span class="token comment">// File upload from HTML form and overwrite busboy config</span>
+                    <span class="token string">&quot;POST /multi&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+                        type<span class="token operator">:</span> <span class="token string">&quot;multipart&quot;</span><span class="token punctuation">,</span>
+                        <span class="token comment">// Action level busboy config</span>
+                        busboyConfig<span class="token operator">:</span> <span class="token punctuation">{</span>
+                            limits<span class="token operator">:</span> <span class="token punctuation">{</span> files<span class="token operator">:</span> <span class="token number">3</span> <span class="token punctuation">}</span>
+                        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+                        action<span class="token operator">:</span> <span class="token string">&quot;file.save&quot;</span>
+                    <span class="token punctuation">}</span>
+                <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+                <span class="token comment">// Route level busboy config.</span>
+                <span class="token comment">// More info: https://github.com/mscdex/busboy#busboy-methods</span>
+                busboyConfig<span class="token operator">:</span> <span class="token punctuation">{</span>
+                    limits<span class="token operator">:</span> <span class="token punctuation">{</span> files<span class="token operator">:</span> <span class="token number">1</span> <span class="token punctuation">}</span>
+                    <span class="token comment">// Can be defined limit event handlers</span>
+                    <span class="token comment">// `onPartsLimit`, `onFilesLimit` or `onFieldsLimit`</span>
+                <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+                mappingPolicy<span class="token operator">:</span> <span class="token string">&quot;restrict&quot;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><h3 id="auto-alias"><a href="#auto-alias" class="header-anchor">#</a> Auto-alias</h3> <p>The auto-alias feature allows you to declare your route alias directly in your services. The gateway will dynamically build the full routes from service schema.</p> <p>{% note info %}
+Gateway will regenerate the routes every time a service joins or leaves the network.
+:::</p> <p>Use <code>whitelist</code> parameter to specify services that the Gateway should track and build the routes.</p> <p><strong>Example</strong></p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token comment">// api.service.js</span>
+<span class="token keyword">module</span><span class="token punctuation">.</span><span class="token keyword">exports</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+    mixins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token class-name">ApiGateway</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+        routes<span class="token operator">:</span> <span class="token punctuation">[</span>
+            <span class="token punctuation">{</span>
+                path<span class="token operator">:</span> <span class="token string">&quot;/api&quot;</span><span class="token punctuation">,</span>
+
+                whitelist<span class="token operator">:</span> <span class="token punctuation">[</span>
+                    <span class="token string">&quot;posts.*&quot;</span><span class="token punctuation">,</span>
+                    <span class="token string">&quot;test.*&quot;</span>
+                <span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+                aliases<span class="token operator">:</span> <span class="token punctuation">{</span>
+                    <span class="token string">&quot;GET /hi&quot;</span><span class="token operator">:</span> <span class="token string">&quot;test.hello&quot;</span>
+                <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+                autoAliases<span class="token operator">:</span> <span class="token boolean">true</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre></div><div class="language-java extra-class"><pre class="language-java"><code><span class="token comment">// posts.service.js</span>
+<span class="token keyword">module</span><span class="token punctuation">.</span><span class="token keyword">exports</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+    name<span class="token operator">:</span> <span class="token string">&quot;posts&quot;</span><span class="token punctuation">,</span>
+    version<span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
+
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Base path</span>
+        rest<span class="token operator">:</span> <span class="token string">&quot;posts/&quot;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+    actions<span class="token operator">:</span> <span class="token punctuation">{</span>
+        list<span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token comment">// Expose as &quot;/api/v2/posts/&quot;</span>
+            rest<span class="token operator">:</span> <span class="token string">&quot;GET /&quot;</span><span class="token punctuation">,</span>
+            <span class="token function">handler</span><span class="token punctuation">(</span>ctx<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+        get<span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token comment">// Expose as &quot;/api/v2/posts/:id&quot;</span>
+            rest<span class="token operator">:</span> <span class="token string">&quot;GET /:id&quot;</span><span class="token punctuation">,</span>
+            <span class="token function">handler</span><span class="token punctuation">(</span>ctx<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+        create<span class="token operator">:</span> <span class="token punctuation">{</span>
+            rest<span class="token operator">:</span> <span class="token string">&quot;POST /&quot;</span><span class="token punctuation">,</span>
+            <span class="token function">handler</span><span class="token punctuation">(</span>ctx<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+        update<span class="token operator">:</span> <span class="token punctuation">{</span>
+            rest<span class="token operator">:</span> <span class="token string">&quot;PUT /:id&quot;</span><span class="token punctuation">,</span>
+            <span class="token function">handler</span><span class="token punctuation">(</span>ctx<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+        remove<span class="token operator">:</span> <span class="token punctuation">{</span>
+            rest<span class="token operator">:</span> <span class="token string">&quot;DELETE /:id&quot;</span><span class="token punctuation">,</span>
+            <span class="token function">handler</span><span class="token punctuation">(</span>ctx<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre></div><p><strong>The generated aliases</strong></p> <div class="language-bash extra-class"><pre class="language-bash"><code>    GET     /api/hi             <span class="token operator">=</span><span class="token operator">&gt;</span> test.hello
+    GET     /api/v2/posts       <span class="token operator">=</span><span class="token operator">&gt;</span> v2.posts.list
+    GET     /api/v2/posts/:id   <span class="token operator">=</span><span class="token operator">&gt;</span> v2.posts.get
+    POST    /api/v2/posts       <span class="token operator">=</span><span class="token operator">&gt;</span> v2.posts.create
+    PUT     /api/v2/posts/:id   <span class="token operator">=</span><span class="token operator">&gt;</span> v2.posts.update
+    DELETE  /api/v2/posts/:id   <span class="token operator">=</span><span class="token operator">&gt;</span> v2.posts.remove
+</code></pre></div><p><strong>Example to define full path alias</strong></p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token comment">// posts.service.js</span>
+<span class="token keyword">module</span><span class="token punctuation">.</span><span class="token keyword">exports</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+    name<span class="token operator">:</span> <span class="token string">&quot;posts&quot;</span><span class="token punctuation">,</span>
+    version<span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
+
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Base path</span>
+        rest<span class="token operator">:</span> <span class="token string">&quot;posts/&quot;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+    actions<span class="token operator">:</span> <span class="token punctuation">{</span>
+        tags<span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token comment">// Expose as &quot;/tags&quot; instead of &quot;/api/v2/posts/tags&quot;</span>
+            rest<span class="token operator">:</span> <span class="token punctuation">{</span>
+                method<span class="token operator">:</span> <span class="token string">&quot;GET&quot;</span><span class="token punctuation">,</span>
+                fullPath<span class="token operator">:</span> <span class="token string">&quot;/tags&quot;</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token function">handler</span><span class="token punctuation">(</span>ctx<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre></div><h2 id="parameters"><a href="#parameters" class="header-anchor">#</a> Parameters</h2> <p>API gateway collects parameters from URL querystring, request params &amp; request body and merges them. The results is placed to the <code>req.$params</code>.</p> <h3 id="disable-merging"><a href="#disable-merging" class="header-anchor">#</a> Disable merging</h3> <p>To disable parameter merging set <code>mergeParams: false</code> in route settings. In this case the parameters is separated.</p> <p><strong>Example</strong></p> <div class="language-java extra-class"><pre class="language-java"><code>broker<span class="token punctuation">.</span><span class="token function">createService</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    mixins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token class-name">ApiService</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+        routes<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+            path<span class="token operator">:</span> <span class="token string">&quot;/&quot;</span><span class="token punctuation">,</span>
+            mergeParams<span class="token operator">:</span> <span class="token boolean">false</span>
+        <span class="token punctuation">}</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p><strong>Un-merged <code>req.$params</code>:</strong></p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token punctuation">{</span>
+    <span class="token comment">// Querystring params</span>
+    query<span class="token operator">:</span> <span class="token punctuation">{</span>
+        category<span class="token operator">:</span> <span class="token string">&quot;general&quot;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// Request body content</span>
+    body<span class="token operator">:</span> <span class="token punctuation">{</span>
+        title<span class="token operator">:</span> <span class="token string">&quot;Hello&quot;</span><span class="token punctuation">,</span>
+        content<span class="token operator">:</span> <span class="token string">&quot;...&quot;</span><span class="token punctuation">,</span>
+        createdAt<span class="token operator">:</span> <span class="token number">1530796920203</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+    <span class="token comment">// Request params</span>
+    params<span class="token operator">:</span> <span class="token punctuation">{</span>
+        id<span class="token operator">:</span> <span class="token number">5</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="query-string-parameters"><a href="#query-string-parameters" class="header-anchor">#</a> Query string parameters</h3> <p>More information: https://github.com/ljharb/qs</p> <p><strong>Array parameters</strong>
+URL: <code>GET /api/opt-test?a=1&amp;a=2</code></p> <div class="language-java extra-class"><pre class="language-java"><code>a<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">&quot;1&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;2&quot;</span><span class="token punctuation">]</span>
+</code></pre></div><p><strong>Nested objects &amp; arrays</strong>
+URL: <code>GET /api/opt-test?foo[bar]=a&amp;foo[bar]=b&amp;foo[baz]=c</code></p> <div class="language-java extra-class"><pre class="language-java"><code>foo<span class="token operator">:</span> <span class="token punctuation">{</span> 
+    bar<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">&quot;a&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;b&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span> 
+    baz<span class="token operator">:</span> <span class="token string">&quot;c&quot;</span> 
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="middlewares"><a href="#middlewares" class="header-anchor">#</a> Middlewares</h2> <p>It supports Connect-like middlewares in global-level, route-level &amp; alias-level. Signature: <code>function(req, res, next) {...}</code>. For more info check <a href="https://expressjs.com/en/guide/using-middleware.html" target="_blank" rel="noopener noreferrer">express middleware<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <p><strong>Example</strong></p> <div class="language-java extra-class"><pre class="language-java"><code>broker<span class="token punctuation">.</span><span class="token function">createService</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    mixins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token class-name">ApiService</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Global middlewares. Applied to all routes.</span>
+        use<span class="token operator">:</span> <span class="token punctuation">[</span>
+            <span class="token function">cookieParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            <span class="token function">helmet</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+        routes<span class="token operator">:</span> <span class="token punctuation">[</span>
+            <span class="token punctuation">{</span>
+                path<span class="token operator">:</span> <span class="token string">&quot;/&quot;</span><span class="token punctuation">,</span>
+
+                <span class="token comment">// Route-level middlewares.</span>
+                use<span class="token operator">:</span> <span class="token punctuation">[</span>
+                    <span class="token function">compression</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                    
+                    passport<span class="token punctuation">.</span><span class="token function">initialize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                    passport<span class="token punctuation">.</span><span class="token function">session</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+
+                    <span class="token function">serveStatic</span><span class="token punctuation">(</span>path<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span>__dirname<span class="token punctuation">,</span> <span class="token string">&quot;public&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">]</span><span class="token punctuation">,</span>
+                
+                aliases<span class="token operator">:</span> <span class="token punctuation">{</span>
+                    <span class="token string">&quot;GET /secret&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+                        <span class="token comment">// Alias-level middlewares.</span>
+                        auth<span class="token punctuation">.</span><span class="token function">isAuthenticated</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                        auth<span class="token punctuation">.</span><span class="token function">hasRole</span><span class="token punctuation">(</span><span class="token string">&quot;admin&quot;</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                        <span class="token string">&quot;top.secret&quot;</span> <span class="token comment">// Call the `top.secret` action</span>
+                    <span class="token punctuation">]</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><h3 id="error-handler-middleware"><a href="#error-handler-middleware" class="header-anchor">#</a> Error-handler middleware</h3> <p>There is support to use error-handler middlewares in the API Gateway. So if you pass an <code>Error</code> to the <code>next(err)</code> function, it will call error handler middlewares which have signature as <code>(err, req, res, next)</code>.</p> <div class="language-java extra-class"><pre class="language-java"><code>broker<span class="token punctuation">.</span><span class="token function">createService</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    mixins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token class-name">ApiService</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Global middlewares. Applied to all routes.</span>
+        use<span class="token operator">:</span> <span class="token punctuation">[</span>
+            <span class="token function">cookieParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            <span class="token function">helmet</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+        routes<span class="token operator">:</span> <span class="token punctuation">[</span>
+            <span class="token punctuation">{</span>
+                path<span class="token operator">:</span> <span class="token string">&quot;/&quot;</span><span class="token punctuation">,</span>
+
+                <span class="token comment">// Route-level middlewares.</span>
+                use<span class="token operator">:</span> <span class="token punctuation">[</span>
+                    <span class="token function">compression</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                    
+                    passport<span class="token punctuation">.</span><span class="token function">initialize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                    passport<span class="token punctuation">.</span><span class="token function">session</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+
+                    <span class="token function">function</span><span class="token punctuation">(</span>err<span class="token punctuation">,</span> req<span class="token punctuation">,</span> res<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                        <span class="token keyword">this</span><span class="token punctuation">.</span>logger<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">&quot;Error is occured in middlewares!&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                        <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">sendError</span><span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">,</span> err<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token punctuation">}</span>
+                <span class="token punctuation">]</span><span class="token punctuation">,</span>
+</code></pre></div><h2 id="serve-static-files"><a href="#serve-static-files" class="header-anchor">#</a> Serve static files</h2> <p>It serves assets with the <a href="https://github.com/expressjs/serve-static" target="_blank" rel="noopener noreferrer">serve-static<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> module like ExpressJS.</p> <div class="language-java extra-class"><pre class="language-java"><code>broker<span class="token punctuation">.</span><span class="token function">createService</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    mixins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token class-name">ApiService</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+        assets<span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token comment">// Root folder of assets</span>
+            folder<span class="token operator">:</span> <span class="token string">&quot;./assets&quot;</span><span class="token punctuation">,</span>
+
+            <span class="token comment">// Further options to `server-static` module</span>
+            options<span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>        
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><h2 id="calling-options"><a href="#calling-options" class="header-anchor">#</a> Calling options</h2> <p>The <code>route</code> has a <code>callOptions</code> property which is passed to <code>broker.call</code>. So you can set <code>timeout</code>, <code>retries</code> or <code>fallbackResponse</code> options for routes. <a href="/actions.html#Call-services">Read more about calling options</a></p> <div class="language-java extra-class"><pre class="language-java"><code>broker<span class="token punctuation">.</span><span class="token function">createService</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    mixins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token class-name">ApiService</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+        routes<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+
+            callOptions<span class="token operator">:</span> <span class="token punctuation">{</span>
+                timeout<span class="token operator">:</span> <span class="token number">500</span><span class="token punctuation">,</span>
+                retries<span class="token operator">:</span> <span class="token number">3</span><span class="token punctuation">,</span>
+                <span class="token function">fallbackResponse</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> err<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+
+        <span class="token punctuation">}</span><span class="token punctuation">]</span>        
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><h2 id="multiple-routes"><a href="#multiple-routes" class="header-anchor">#</a> Multiple routes</h2> <p>You can create multiple routes with different prefix, whitelist, alias, calling options &amp; authorization.</p> <p>{% note info %}
+When using multiple routes you should explicitly set the body parser(s) for each route.
+:::</p> <div class="language-java extra-class"><pre class="language-java"><code>broker<span class="token punctuation">.</span><span class="token function">createService</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    mixins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token class-name">ApiService</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+        routes<span class="token operator">:</span> <span class="token punctuation">[</span>
+            <span class="token punctuation">{</span>
+                path<span class="token operator">:</span> <span class="token string">&quot;/admin&quot;</span><span class="token punctuation">,</span>
+
+                authorization<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+
+                whitelist<span class="token operator">:</span> <span class="token punctuation">[</span>
+                    <span class="token string">&quot;$node.*&quot;</span><span class="token punctuation">,</span>
+                    <span class="token string">&quot;users.*&quot;</span><span class="token punctuation">,</span>
+                <span class="token punctuation">]</span>
+
+                bodyParsers<span class="token operator">:</span> <span class="token punctuation">{</span>
+                    json<span class="token operator">:</span> <span class="token boolean">true</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token punctuation">{</span>
+                path<span class="token operator">:</span> <span class="token string">&quot;/&quot;</span><span class="token punctuation">,</span>
+
+                whitelist<span class="token operator">:</span> <span class="token punctuation">[</span>
+                    <span class="token string">&quot;posts.*&quot;</span><span class="token punctuation">,</span>
+                    <span class="token string">&quot;math.*&quot;</span><span class="token punctuation">,</span>
+                <span class="token punctuation">]</span>
+
+                bodyParsers<span class="token operator">:</span> <span class="token punctuation">{</span>
+                    json<span class="token operator">:</span> <span class="token boolean">true</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><h2 id="response-type-status-code"><a href="#response-type-status-code" class="header-anchor">#</a> Response type &amp; status code</h2> <p>When the response is received from an action handler, the API gateway detects the type of response and set the <code>Content-Type</code> in the <code>res</code> headers. The status code is <code>200</code> by default. Of course you can overwrite these values, moreover, you can define custom response headers, too.</p> <p>To define response headers &amp; status code use <code>ctx.meta</code> fields:</p> <p><strong>Available meta fields:</strong></p> <ul><li><code>ctx.meta.$statusCode</code> - set <code>res.statusCode</code>.</li> <li><code>ctx.meta.$statusMessage</code> - set <code>res.statusMessage</code>.</li> <li><code>ctx.meta.$responseType</code> - set <code>Content-Type</code> in header.</li> <li><code>ctx.meta.$responseHeaders</code> - set all keys in header.</li> <li><code>ctx.meta.$location</code> - set <code>Location</code> key in header for redirects.</li></ul> <p><strong>Example</strong></p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">module</span><span class="token punctuation">.</span><span class="token keyword">exports</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+    name<span class="token operator">:</span> <span class="token string">&quot;export&quot;</span><span class="token punctuation">,</span>
+    actions<span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Download response as a file in the browser</span>
+        <span class="token function">downloadCSV</span><span class="token punctuation">(</span>ctx<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            ctx<span class="token punctuation">.</span>meta<span class="token punctuation">.</span>$responseType <span class="token operator">=</span> <span class="token string">&quot;text/csv&quot;</span><span class="token punctuation">;</span>
+            ctx<span class="token punctuation">.</span>meta<span class="token punctuation">.</span>$responseHeaders <span class="token operator">=</span> <span class="token punctuation">{</span>
+                <span class="token string">&quot;Content-Disposition&quot;</span><span class="token operator">:</span> `attachment<span class="token punctuation">;</span> filename<span class="token operator">=</span><span class="token string">&quot;data-${ctx.params.id}.csv&quot;</span>`
+            <span class="token punctuation">}</span><span class="token punctuation">;</span>
+            
+            <span class="token keyword">return</span> csvFileStream<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment">// Redirect the request</span>
+        <span class="token function">redirectSample</span><span class="token punctuation">(</span>ctx<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            ctx<span class="token punctuation">.</span>meta<span class="token punctuation">.</span>$statusCode <span class="token operator">=</span> <span class="token number">302</span><span class="token punctuation">;</span>
+            ctx<span class="token punctuation">.</span>meta<span class="token punctuation">.</span>$location <span class="token operator">=</span> <span class="token string">&quot;/login&quot;</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">return</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="authorization"><a href="#authorization" class="header-anchor">#</a> Authorization</h2> <p>You can implement authorization. Do 2 things to enable it.</p> <ol><li>Set <code>authorization: true</code> in your routes</li> <li>Define the <code>authorize</code> method in service.</li></ol> <p><strong>Example authorization</strong></p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">const</span> <span class="token class-name">E</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;moleculer-web&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token class-name">Errors</span><span class="token punctuation">;</span>
+
+broker<span class="token punctuation">.</span><span class="token function">createService</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    mixins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token class-name">ApiService</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+        routes<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+            <span class="token comment">// First thing</span>
+            authorization<span class="token operator">:</span> <span class="token boolean">true</span>
+        <span class="token punctuation">}</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+    methods<span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Second thing</span>
+        <span class="token function">authorize</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> route<span class="token punctuation">,</span> req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment">// Read the token from header</span>
+            let auth <span class="token operator">=</span> req<span class="token punctuation">.</span>headers<span class="token punctuation">[</span><span class="token string">&quot;authorization&quot;</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>auth <span class="token operator">&amp;&amp;</span> auth<span class="token punctuation">.</span><span class="token function">startsWith</span><span class="token punctuation">(</span><span class="token string">&quot;Bearer&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                let token <span class="token operator">=</span> auth<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                <span class="token comment">// Check the token</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>token <span class="token operator">==</span> <span class="token string">&quot;123456&quot;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token comment">// Set the authorized user entity to `ctx.meta`</span>
+                    ctx<span class="token punctuation">.</span>meta<span class="token punctuation">.</span>user <span class="token operator">=</span> <span class="token punctuation">{</span> id<span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span> name<span class="token operator">:</span> <span class="token string">&quot;John Doe&quot;</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+                    <span class="token keyword">return</span> <span class="token class-name">Promise</span><span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span>ctx<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                    <span class="token comment">// Invalid token</span>
+                    <span class="token keyword">return</span> <span class="token class-name">Promise</span><span class="token punctuation">.</span><span class="token function">reject</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">E</span><span class="token punctuation">.</span><span class="token class-name">UnAuthorizedError</span><span class="token punctuation">(</span><span class="token class-name">E</span><span class="token punctuation">.</span>ERR_INVALID_TOKEN<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+
+            <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                <span class="token comment">// No token</span>
+                <span class="token keyword">return</span> <span class="token class-name">Promise</span><span class="token punctuation">.</span><span class="token function">reject</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">E</span><span class="token punctuation">.</span><span class="token class-name">UnAuthorizedError</span><span class="token punctuation">(</span><span class="token class-name">E</span><span class="token punctuation">.</span>ERR_NO_TOKEN<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>{% note info %}
+You can find a more detailed role-based JWT authorization example in <a href="https://github.com/moleculerjs/moleculer-web/blob/master/examples/full/index.js#L239" target="_blank" rel="noopener noreferrer">full example<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>.
+:::</p> <h2 id="authentication"><a href="#authentication" class="header-anchor">#</a> Authentication</h2> <p>To enable the support for authentication, you need to do something similar to what is describe in the Authorization paragraph. Also in this case you have to:</p> <ol><li>Set <code>authentication: true</code> in your routes</li> <li>Define your custom <code>authenticate</code> method in your service</li></ol> <p><strong>Example authentication</strong></p> <div class="language-java extra-class"><pre class="language-java"><code>broker<span class="token punctuation">.</span><span class="token function">createService</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    mixins<span class="token operator">:</span> <span class="token class-name">ApiGatewayService</span><span class="token punctuation">,</span>
+
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+        routes<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+            <span class="token comment">// Enable authentication</span>
+            authentication<span class="token operator">:</span> <span class="token boolean">true</span>
+        <span class="token punctuation">}</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+    methods<span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token function">authenticate</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> route<span class="token punctuation">,</span> req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            let accessToken <span class="token operator">=</span> req<span class="token punctuation">.</span>query<span class="token punctuation">[</span><span class="token string">&quot;access_token&quot;</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>accessToken<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>accessToken <span class="token operator">==</span><span class="token operator">=</span> <span class="token string">&quot;12345&quot;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token comment">// valid credentials</span>
+                    <span class="token keyword">return</span> <span class="token class-name">Promise</span><span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span><span class="token punctuation">{</span> id<span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span> username<span class="token operator">:</span> <span class="token string">&quot;john.doe&quot;</span><span class="token punctuation">,</span> name<span class="token operator">:</span> <span class="token string">&quot;John Doe&quot;</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                    <span class="token comment">// invalid credentials</span>
+                    <span class="token keyword">return</span> <span class="token class-name">Promise</span><span class="token punctuation">.</span><span class="token function">reject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                <span class="token comment">// anonymous user</span>
+                <span class="token keyword">return</span> <span class="token class-name">Promise</span><span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><h2 id="route-hooks"><a href="#route-hooks" class="header-anchor">#</a> Route hooks</h2> <p>The <code>route</code> has before &amp; after call hooks. You can use it to set <code>ctx.meta</code>, access <code>req.headers</code> or modify the response <code>data</code>.</p> <div class="language-java extra-class"><pre class="language-java"><code>broker<span class="token punctuation">.</span><span class="token function">createService</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    mixins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token class-name">ApiService</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+        routes<span class="token operator">:</span> <span class="token punctuation">[</span>
+            <span class="token punctuation">{</span>
+                path<span class="token operator">:</span> <span class="token string">&quot;/&quot;</span><span class="token punctuation">,</span>
+
+                <span class="token function">onBeforeCall</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> route<span class="token punctuation">,</span> req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token comment">// Set request headers to context meta</span>
+                    ctx<span class="token punctuation">.</span>meta<span class="token punctuation">.</span>userAgent <span class="token operator">=</span> req<span class="token punctuation">.</span>headers<span class="token punctuation">[</span><span class="token string">&quot;user-agent&quot;</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+                <span class="token function">onAfterCall</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> route<span class="token punctuation">,</span> req<span class="token punctuation">,</span> res<span class="token punctuation">,</span> data<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token comment">// Async function which return with Promise</span>
+                    <span class="token keyword">return</span> <span class="token function">doSomething</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> res<span class="token punctuation">,</span> data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><blockquote><p>In previous versions of Moleculer Web, you couldn't manipulate the <code>data</code> in <code>onAfterCall</code>. Now you can, but you must always return the new or original <code>data</code>.</p></blockquote> <h2 id="error-handlers"><a href="#error-handlers" class="header-anchor">#</a> Error handlers</h2> <p>You can add route-level &amp; global-level custom error handlers.</p> <blockquote><p>In handlers, you must call the <code>res.end</code>. Otherwise, the request is unhandled.</p></blockquote> <div class="language-java extra-class"><pre class="language-java"><code>broker<span class="token punctuation">.</span><span class="token function">createService</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    mixins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token class-name">ApiService</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+
+        routes<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+            path<span class="token operator">:</span> <span class="token string">&quot;/api&quot;</span><span class="token punctuation">,</span>
+
+            <span class="token comment">// Route error handler</span>
+            <span class="token function">onError</span><span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">,</span> err<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                res<span class="token punctuation">.</span><span class="token function">setHeader</span><span class="token punctuation">(</span><span class="token string">&quot;Content-Type&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;application/json; charset=utf-8&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                res<span class="token punctuation">.</span><span class="token function">writeHead</span><span class="token punctuation">(</span><span class="token number">500</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                res<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span>JSON<span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+        <span class="token comment">// Global error handler</span>
+        <span class="token function">onError</span><span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">,</span> err<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            res<span class="token punctuation">.</span><span class="token function">setHeader</span><span class="token punctuation">(</span><span class="token string">&quot;Content-Type&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;text/plain&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            res<span class="token punctuation">.</span><span class="token function">writeHead</span><span class="token punctuation">(</span><span class="token number">501</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            res<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token string">&quot;Global error: &quot;</span> <span class="token operator">+</span> err<span class="token punctuation">.</span>message<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>        
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="cors-headers"><a href="#cors-headers" class="header-anchor">#</a> CORS headers</h2> <p>You can use <a href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing" target="_blank" rel="noopener noreferrer">CORS<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> headers in Moleculer-Web service.</p> <p><strong>Usage</strong></p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">const</span> svc <span class="token operator">=</span> broker<span class="token punctuation">.</span><span class="token function">createService</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    mixins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token class-name">ApiService</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+
+        <span class="token comment">// Global CORS settings for all routes</span>
+        cors<span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token comment">// Configures the Access-Control-Allow-Origin CORS header.</span>
+            origin<span class="token operator">:</span> <span class="token string">&quot;*&quot;</span><span class="token punctuation">,</span>
+            <span class="token comment">// Configures the Access-Control-Allow-Methods CORS header. </span>
+            methods<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">&quot;GET&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;OPTIONS&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;POST&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;PUT&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;DELETE&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token comment">// Configures the Access-Control-Allow-Headers CORS header.</span>
+            allowedHeaders<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token comment">// Configures the Access-Control-Expose-Headers CORS header.</span>
+            exposedHeaders<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token comment">// Configures the Access-Control-Allow-Credentials CORS header.</span>
+            credentials<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+            <span class="token comment">// Configures the Access-Control-Max-Age CORS header.</span>
+            maxAge<span class="token operator">:</span> <span class="token number">3600</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+        routes<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+            path<span class="token operator">:</span> <span class="token string">&quot;/api&quot;</span><span class="token punctuation">,</span>
+
+            <span class="token comment">// Route CORS settings (overwrite global settings)</span>
+            cors<span class="token operator">:</span> <span class="token punctuation">{</span>
+                origin<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">&quot;http://localhost:3000&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;https://localhost:4000&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+                methods<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">&quot;GET&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;OPTIONS&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;POST&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+                credentials<span class="token operator">:</span> <span class="token boolean">true</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">}</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><h2 id="rate-limiter"><a href="#rate-limiter" class="header-anchor">#</a> Rate limiter</h2> <p>The Moleculer-Web has a built-in rate limiter with a memory store.</p> <p><strong>Usage</strong></p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">const</span> svc <span class="token operator">=</span> broker<span class="token punctuation">.</span><span class="token function">createService</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    mixins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token class-name">ApiService</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+        rateLimit<span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token comment">// How long to keep record of requests in memory (in milliseconds). </span>
+            <span class="token comment">// Defaults to 60000 (1 min)</span>
+            window<span class="token operator">:</span> <span class="token number">60</span> <span class="token operator">*</span> <span class="token number">1000</span><span class="token punctuation">,</span>
+
+            <span class="token comment">// Max number of requests during window. Defaults to 30</span>
+            limit<span class="token operator">:</span> <span class="token number">30</span><span class="token punctuation">,</span>
+            
+            <span class="token comment">// Set rate limit headers to response. Defaults to false</span>
+            headers<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+
+            <span class="token comment">// Function used to generate keys. Defaults to: </span>
+            key<span class="token operator">:</span> <span class="token punctuation">(</span>req<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+                <span class="token keyword">return</span> req<span class="token punctuation">.</span>headers<span class="token punctuation">[</span><span class="token string">&quot;x-forwarded-for&quot;</span><span class="token punctuation">]</span> <span class="token operator">||</span>
+                    req<span class="token punctuation">.</span>connection<span class="token punctuation">.</span>remoteAddress <span class="token operator">||</span>
+                    req<span class="token punctuation">.</span>socket<span class="token punctuation">.</span>remoteAddress <span class="token operator">||</span>
+                    req<span class="token punctuation">.</span>connection<span class="token punctuation">.</span>socket<span class="token punctuation">.</span>remoteAddress<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token comment">//StoreFactory: CustomStore</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><h3 id="custom-store-example"><a href="#custom-store-example" class="header-anchor">#</a> Custom Store example</h3> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">class</span> <span class="token class-name">CustomStore</span> <span class="token punctuation">{</span>
+    <span class="token function">constructor</span><span class="token punctuation">(</span>window<span class="token punctuation">,</span> opts<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>hits <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Map</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>resetTime <span class="token operator">=</span> <span class="token class-name">Date</span><span class="token punctuation">.</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> clearPeriod<span class="token punctuation">;</span>
+
+        <span class="token function">setInterval</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>resetTime <span class="token operator">=</span> <span class="token class-name">Date</span><span class="token punctuation">.</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> clearPeriod<span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">reset</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span> clearPeriod<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">/**
+     * Increment the counter by key
+     *
+     * @param {String} key
+     * @returns {Number}
+     */</span>
+    <span class="token function">inc</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        let counter <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>hits<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        counter<span class="token operator">++</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>hits<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> counter<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> counter<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">/**
+     * Reset all counters
+     */</span>
+    <span class="token function">reset</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>hits<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="etag"><a href="#etag" class="header-anchor">#</a> ETag</h2> <p>The <code>etag</code> option value can be <code>false</code>, <code>true</code>, <code>weak</code>, <code>strong</code>, or a custom <code>Function</code>. For full details check the <a href="https://github.com/moleculerjs/moleculer-web/pull/92" target="_blank" rel="noopener noreferrer">code<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>.</p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">const</span> <span class="token class-name">ApiGateway</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;moleculer-web&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">module</span><span class="token punctuation">.</span><span class="token keyword">exports</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+    mixins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token class-name">ApiGateway</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Service-level option</span>
+        etag<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+        routes<span class="token operator">:</span> <span class="token punctuation">[</span>
+            <span class="token punctuation">{</span>
+                path<span class="token operator">:</span> <span class="token string">&quot;/&quot;</span><span class="token punctuation">,</span>
+                <span class="token comment">// Route-level option.</span>
+                etag<span class="token operator">:</span> <span class="token boolean">true</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><strong>Custom <code>etag</code> Function</strong></p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">module</span><span class="token punctuation">.</span><span class="token keyword">exports</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+    mixins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token class-name">ApiGateway</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Service-level option</span>
+        etag<span class="token operator">:</span> <span class="token punctuation">(</span>body<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token function">generateHash</span><span class="token punctuation">(</span>body<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>Please note, it doesn't work with stream responses. In this case, you should generate the <code>etag</code> by yourself.</p> <p><strong>Custom <code>etag</code> for streaming</strong></p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">module</span><span class="token punctuation">.</span><span class="token keyword">exports</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+    name<span class="token operator">:</span> <span class="token string">&quot;export&quot;</span><span class="token punctuation">,</span>
+    actions<span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Download response as a file in the browser</span>
+        <span class="token function">downloadCSV</span><span class="token punctuation">(</span>ctx<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            ctx<span class="token punctuation">.</span>meta<span class="token punctuation">.</span>$responseType <span class="token operator">=</span> <span class="token string">&quot;text/csv&quot;</span><span class="token punctuation">;</span>
+            ctx<span class="token punctuation">.</span>meta<span class="token punctuation">.</span>$responseHeaders <span class="token operator">=</span> <span class="token punctuation">{</span>
+                <span class="token string">&quot;Content-Disposition&quot;</span><span class="token operator">:</span> `attachment<span class="token punctuation">;</span> filename<span class="token operator">=</span><span class="token string">&quot;data-${ctx.params.id}.csv&quot;</span>`<span class="token punctuation">,</span>
+                <span class="token string">&quot;ETag&quot;</span><span class="token operator">:</span> <span class="token string">'&lt;your etag here&gt;'</span>
+            <span class="token punctuation">}</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> csvFileStream<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="http2-server"><a href="#http2-server" class="header-anchor">#</a> HTTP2 Server</h2> <p>API Gateway provides an experimental support for HTTP2. You can turn it on with <code>http2: true</code> in service settings.
+<strong>Example</strong></p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">const</span> <span class="token class-name">ApiGateway</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;moleculer-web&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">module</span><span class="token punctuation">.</span><span class="token keyword">exports</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+    mixins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token class-name">ApiGateway</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+        port<span class="token operator">:</span> <span class="token number">8443</span><span class="token punctuation">,</span>
+
+        <span class="token comment">// HTTPS server with certificate</span>
+        https<span class="token operator">:</span> <span class="token punctuation">{</span>
+            key<span class="token operator">:</span> fs<span class="token punctuation">.</span><span class="token function">readFileSync</span><span class="token punctuation">(</span><span class="token string">&quot;key.pem&quot;</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            cert<span class="token operator">:</span> fs<span class="token punctuation">.</span><span class="token function">readFileSync</span><span class="token punctuation">(</span><span class="token string">&quot;cert.pem&quot;</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+        <span class="token comment">// Use HTTP2 server</span>
+        http2<span class="token operator">:</span> <span class="token boolean">true</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><h2 id="expressjs-middleware-usage"><a href="#expressjs-middleware-usage" class="header-anchor">#</a> ExpressJS middleware usage</h2> <p>You can use Moleculer-Web as a middleware in an <a href="http://expressjs.com/" target="_blank" rel="noopener noreferrer">ExpressJS<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> application.</p> <p><strong>Usage</strong></p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">const</span> svc <span class="token operator">=</span> broker<span class="token punctuation">.</span><span class="token function">createService</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    mixins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token class-name">ApiService</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+    settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+        server<span class="token operator">:</span> <span class="token boolean">false</span> <span class="token comment">// Default is &quot;true&quot;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Create Express application</span>
+<span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token function">express</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Use ApiGateway as middleware</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">&quot;/api&quot;</span><span class="token punctuation">,</span> svc<span class="token punctuation">.</span><span class="token function">express</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Listening</span>
+app<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token number">3000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Start server</span>
+broker<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><h2 id="full-service-settings"><a href="#full-service-settings" class="header-anchor">#</a> Full service settings</h2> <p>List of all settings of Moleculer Web service:</p> <div class="language-java extra-class"><pre class="language-java"><code>settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+
+    <span class="token comment">// Exposed port</span>
+    port<span class="token operator">:</span> <span class="token number">3000</span><span class="token punctuation">,</span>
+
+    <span class="token comment">// Exposed IP</span>
+    ip<span class="token operator">:</span> <span class="token string">&quot;0.0.0.0&quot;</span><span class="token punctuation">,</span>
+
+    <span class="token comment">// HTTPS server with certificate</span>
+    https<span class="token operator">:</span> <span class="token punctuation">{</span>
+        key<span class="token operator">:</span> fs<span class="token punctuation">.</span><span class="token function">readFileSync</span><span class="token punctuation">(</span><span class="token string">&quot;ssl/key.pem&quot;</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        cert<span class="token operator">:</span> fs<span class="token punctuation">.</span><span class="token function">readFileSync</span><span class="token punctuation">(</span><span class="token string">&quot;ssl/cert.pem&quot;</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+    <span class="token comment">// Used server instance. If null, it will create a new HTTP(s)(2) server</span>
+    <span class="token comment">// If false, it will start without server in middleware mode</span>
+    server<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+            
+    <span class="token comment">// Exposed global path prefix</span>
+    path<span class="token operator">:</span> <span class="token string">&quot;/api&quot;</span><span class="token punctuation">,</span>
+    
+    <span class="token comment">// Global-level middlewares</span>
+    use<span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token function">compression</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token function">cookieParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    
+    <span class="token comment">// Logging request parameters with 'info' level</span>
+    logRequestParams<span class="token operator">:</span> <span class="token string">&quot;info&quot;</span><span class="token punctuation">,</span>
+    
+    <span class="token comment">// Logging response data with 'debug' level</span>
+    logResponseData<span class="token operator">:</span> <span class="token string">&quot;debug&quot;</span><span class="token punctuation">,</span>
+
+    <span class="token comment">// Use HTTP2 server (experimental)</span>
+    http2<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+
+    <span class="token comment">// Override HTTP server default timeout</span>
+    httpServerTimeout<span class="token operator">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+
+    <span class="token comment">// Optimize route &amp; alias paths (deeper first).</span>
+    optimizeOrder<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+
+    <span class="token comment">// Routes</span>
+    routes<span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span>
+            <span class="token comment">// Path prefix to this route  (full path: /api/admin )</span>
+            path<span class="token operator">:</span> <span class="token string">&quot;/admin&quot;</span><span class="token punctuation">,</span>
+
+            <span class="token comment">// Whitelist of actions (array of string mask or regex)</span>
+            whitelist<span class="token operator">:</span> <span class="token punctuation">[</span>
+                <span class="token string">&quot;users.get&quot;</span><span class="token punctuation">,</span>
+                <span class="token string">&quot;$node.*&quot;</span>
+            <span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+            <span class="token comment">// Call the `this.authorize` method before call the action</span>
+            authorization<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+
+            <span class="token comment">// Merge parameters from querystring, request params &amp; body </span>
+            mergeParams<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+            
+            <span class="token comment">// Route-level middlewares</span>
+            <span class="token keyword">uses</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+                <span class="token function">helmet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                passport<span class="token punctuation">.</span><span class="token function">initialize</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+            <span class="token comment">// Action aliases</span>
+            aliases<span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token string">&quot;POST users&quot;</span><span class="token operator">:</span> <span class="token string">&quot;users.create&quot;</span><span class="token punctuation">,</span>
+                <span class="token string">&quot;health&quot;</span><span class="token operator">:</span> <span class="token string">&quot;$node.health&quot;</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+            mappingPolicy<span class="token operator">:</span> <span class="token string">&quot;all&quot;</span><span class="token punctuation">,</span>
+
+            <span class="token comment">// Use bodyparser module</span>
+            bodyParsers<span class="token operator">:</span> <span class="token punctuation">{</span>
+                json<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+                urlencoded<span class="token operator">:</span> <span class="token punctuation">{</span> extended<span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">{</span>
+            <span class="token comment">// Path prefix to this route  (full path: /api )</span>
+            path<span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+
+            <span class="token comment">// Whitelist of actions (array of string mask or regex)</span>
+            whitelist<span class="token operator">:</span> <span class="token punctuation">[</span>
+                <span class="token string">&quot;posts.*&quot;</span><span class="token punctuation">,</span>
+                <span class="token string">&quot;file.*&quot;</span><span class="token punctuation">,</span>
+                <span class="token operator">/</span><span class="token operator">^</span>math\<span class="token punctuation">.</span>\w<span class="token operator">+</span>$<span class="token operator">/</span>
+            <span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+            <span class="token comment">// No authorization</span>
+            authorization<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+            
+            <span class="token comment">// Action aliases</span>
+            aliases<span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token string">&quot;add&quot;</span><span class="token operator">:</span> <span class="token string">&quot;math.add&quot;</span><span class="token punctuation">,</span>
+                <span class="token string">&quot;GET sub&quot;</span><span class="token operator">:</span> <span class="token string">&quot;math.sub&quot;</span><span class="token punctuation">,</span>
+                <span class="token string">&quot;POST divide&quot;</span><span class="token operator">:</span> <span class="token string">&quot;math.div&quot;</span><span class="token punctuation">,</span>
+                <span class="token string">&quot;GET greeter/:name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;test.greeter&quot;</span><span class="token punctuation">,</span>
+                <span class="token string">&quot;GET /&quot;</span><span class="token operator">:</span> <span class="token string">&quot;test.hello&quot;</span><span class="token punctuation">,</span>
+                <span class="token string">&quot;POST upload&quot;</span><span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">parseUploadedFile</span><span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+            mappingPolicy<span class="token operator">:</span> <span class="token string">&quot;restrict&quot;</span><span class="token punctuation">,</span>
+            
+            <span class="token comment">// Use bodyparser module</span>
+            bodyParsers<span class="token operator">:</span> <span class="token punctuation">{</span>
+                json<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+                urlencoded<span class="token operator">:</span> <span class="token punctuation">{</span> extended<span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+            <span class="token comment">// Calling options</span>
+            callOptions<span class="token operator">:</span> <span class="token punctuation">{</span>
+                timeout<span class="token operator">:</span> <span class="token number">3000</span><span class="token punctuation">,</span>
+                retries<span class="token operator">:</span> <span class="token number">3</span><span class="token punctuation">,</span>
+                fallbackResponse<span class="token operator">:</span> <span class="token string">&quot;Static fallback response&quot;</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+            <span class="token comment">// Call before `broker.call`</span>
+            <span class="token function">onBeforeCall</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> route<span class="token punctuation">,</span> req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                ctx<span class="token punctuation">.</span>meta<span class="token punctuation">.</span>userAgent <span class="token operator">=</span> req<span class="token punctuation">.</span>headers<span class="token punctuation">[</span><span class="token string">&quot;user-agent&quot;</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+            <span class="token comment">// Call after `broker.call` and before send back the response</span>
+            <span class="token function">onAfterCall</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> route<span class="token punctuation">,</span> req<span class="token punctuation">,</span> res<span class="token punctuation">,</span> data<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                res<span class="token punctuation">.</span><span class="token function">setHeader</span><span class="token punctuation">(</span><span class="token string">&quot;X-Custom-Header&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;123456&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            
+            <span class="token comment">// Route error handler</span>
+            <span class="token function">onError</span><span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">,</span> err<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                res<span class="token punctuation">.</span><span class="token function">setHeader</span><span class="token punctuation">(</span><span class="token string">&quot;Content-Type&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;text/plain&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                res<span class="token punctuation">.</span><span class="token function">writeHead</span><span class="token punctuation">(</span>err<span class="token punctuation">.</span>code <span class="token operator">||</span> <span class="token number">500</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                res<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token string">&quot;Route error: &quot;</span> <span class="token operator">+</span> err<span class="token punctuation">.</span>message<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+    <span class="token comment">// Folder to server assets (static files)</span>
+    assets<span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Root folder of assets</span>
+        folder<span class="token operator">:</span> <span class="token string">&quot;./examples/www/assets&quot;</span><span class="token punctuation">,</span>
+        
+        <span class="token comment">// Options to `server-static` module</span>
+        options<span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+    <span class="token comment">// Global error handler</span>
+    <span class="token function">onError</span><span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">,</span> err<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        res<span class="token punctuation">.</span><span class="token function">setHeader</span><span class="token punctuation">(</span><span class="token string">&quot;Content-Type&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;text/plain&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        res<span class="token punctuation">.</span><span class="token function">writeHead</span><span class="token punctuation">(</span>err<span class="token punctuation">.</span>code <span class="token operator">||</span> <span class="token number">500</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        res<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token string">&quot;Global error: &quot;</span> <span class="token operator">+</span> err<span class="token punctuation">.</span>message<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>    
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="service-methods"><a href="#service-methods" class="header-anchor">#</a> Service Methods</h2> <h3 id="addroute"><a href="#addroute" class="header-anchor">#</a> <code>addRoute</code></h3> <p>This service <a href="/services.html#Methods">method</a> (<code>this.addRoute(opts, toBottom = true)</code>) add/replace a route. For example, you can call it from your mixins to define new routes (e.g. swagger route, graphql route, etc.).</p> <blockquote><p>Please note that if a route already exists this method will replace previous route configuration with a new one.</p></blockquote> <h3 id="removeroute"><a href="#removeroute" class="header-anchor">#</a> <code>removeRoute</code></h3> <p>Service method removes the route by path (<code>this.removeRoute(&quot;/admin&quot;)</code>).</p> <h2 id="examples"><a href="#examples" class="header-anchor">#</a> Examples</h2> <ul><li><p><a href="https://github.com/moleculerjs/moleculer-web/blob/master/examples/simple/index.js" target="_blank" rel="noopener noreferrer">Simple<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <ul><li>simple gateway with default settings.</li></ul></li> <li><p><a href="https://github.com/moleculerjs/moleculer-web/blob/master/examples/ssl/index.js" target="_blank" rel="noopener noreferrer">SSL server<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <ul><li>open HTTPS server</li> <li>whitelist handling</li></ul></li> <li><p><a href="https://github.com/moleculerjs/moleculer-web/blob/master/examples/www/index.js" target="_blank" rel="noopener noreferrer">WWW with assets<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <ul><li>serve static files from the <code>assets</code> folder</li> <li>whitelist</li> <li>aliases</li> <li>multiple body-parsers</li></ul></li> <li><p><a href="https://github.com/moleculerjs/moleculer-web/blob/master/examples/authorization/index.js" target="_blank" rel="noopener noreferrer">Authorization<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <ul><li>simple authorization demo</li> <li>set the authorized user to <code>Context.meta</code></li></ul></li> <li><p><a href="https://github.com/moleculerjs/moleculer-web/blob/master/examples/rest/index.js" target="_blank" rel="noopener noreferrer">REST<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <ul><li>simple server with RESTful aliases</li> <li>example <code>posts</code> service with CRUD actions</li></ul></li> <li><p><a href="https://github.com/moleculerjs/moleculer-web/blob/master/examples/express/index.js" target="_blank" rel="noopener noreferrer">Express<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <ul><li>webserver with Express</li> <li>use moleculer-web as a middleware</li></ul></li> <li><p><a href="https://github.com/moleculerjs/moleculer-web/blob/master/examples/socket.io/index.js" target="_blank" rel="noopener noreferrer">Socket.io<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <ul><li>start socket.io websocket server</li> <li>call action and send back the response via websocket</li> <li>send Moleculer events to the browser via websocket</li></ul></li> <li><p><a href="https://github.com/moleculerjs/moleculer-web/blob/master/examples/full/index.js" target="_blank" rel="noopener noreferrer">Full<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <ul><li>SSL</li> <li>static files</li> <li>middlewares</li> <li>multiple routes with different roles</li> <li>role-based authorization with JWT</li> <li>whitelist</li> <li>aliases with named params</li> <li>multiple body-parsers</li> <li>before &amp; after hooks</li> <li>metrics, statistics &amp; validation from Moleculer</li> <li>custom error handlers</li></ul></li> <li><p><a href="https://github.com/moleculerjs/moleculer-web/blob/master/examples/webpack" target="_blank" rel="noopener noreferrer">Webpack<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <ul><li>Webpack development environment for client-side developing</li> <li>webpack config file</li> <li>compression</li> <li>static file serving</li></ul></li> <li><p><a href="https://github.com/moleculerjs/moleculer-web/blob/master/examples/webpack-vue" target="_blank" rel="noopener noreferrer">Webpack-Vue<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <ul><li>Webpack+Vue development environment for VueJS client developing</li> <li>webpack config file</li> <li>Hot-replacement</li> <li>Babel, SASS, SCSS, Vue SFC</li></ul></li></ul></div> <footer class="page-edit"><!----> <!----></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/runner.html" class="prev">Runner</a></span> <span class="next"><a href="/moleculer-repl.html">Moleculer REPL</a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.65085a66.js" defer></script><script src="/assets/js/2.fcf054ee.js" defer></script><script src="/assets/js/22.9e873365.js" defer></script>
+  </body>
+</html>
