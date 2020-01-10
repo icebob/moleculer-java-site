@@ -22,9 +22,9 @@ method in `started` handler.
 
 ### Stopping logic
 
-When you call `broker.stop` or stop the process, at first broker send a `DISCONNECT` message to remote nodes,
+When you call `broker.stop()` the Service Broker sends a `DISCONNECT` message to remote nodes,
 so they can route the requests to other instances instead of services under stopping.
-Next, the broker starts stopping all local services. After that, the transporter disconnects.
+Then the ServiceBroker stops all local services and the Transporter.
 
 ## Service lifecycle
 
