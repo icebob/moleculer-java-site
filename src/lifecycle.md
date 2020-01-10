@@ -1,22 +1,23 @@
----
-title: Lifecycle
----
-
 ## Broker lifecycle
 
-This section describes what happens when the broker is starting & stopping.
+This section describes what happens when the Service Broker starts or stops.
 
 ### Starting logic
 
-The broker starts transporter connecting but it doesn't publish the local service list to remote nodes.
-When it's done, it starts all services (calls service `started` handler). Once all services start successfully,
-broker publishes the local service list to remote nodes.
+When the broker starts
+[Transporter](transporters.html)
+to connect to other nodes,
+does not yet publish the local service list.
+It starts all the Services first (calls the `started` handler)
+and then publishes the service list to the other nodes.
 Hence remote nodes send requests only after all local service are started properly.
 
-
 ::: warning Avoid deadlocks
-Dead-locks can be made when two services wait for each other. E.g.: `users` service has `dependencies: ["posts"]` and `posts` service has `dependencies: ["users"]`.
-To avoid it, remove the concerned service from `dependencies` and use `waitForServices` method in `started` handler instead.
+Dead-locks can be made when two services wait for each other.
+For example `users` service has `@Dependencies({"posts"})` and `posts` service has `@Dependencies({"users"})`.
+To avoid it, remove the concerned service from `@Dependencies` and use
+[waitForServices](services.html#wait-for-services-via-servicebroker)
+method in `started` handler.
 :::
 
 ### Stopping logic

@@ -1,6 +1,6 @@
-## What is Moleculer Service?
+## About Moleculer Services
 
-The `Service` is a top-level component in the Moleculer Ecosystem.
+The `Service` is a basic component in the Moleculer Ecosystem.
 Services may have Actions that other Services can invoke locally or over the network.
 Services can also define Event Listeners that can react to events created in the Moleculer Cluster.
 Using the Moleculer Framework, Services written in different (Java,
@@ -9,7 +9,8 @@ languages can work effectively with each other.
 
 Moleculer can be integrated with the Spring Framework.
 In the Spring Environment, Moleculer Services and ServiceBroker are Spring Beans.
-This will allow Moleculer Services to access the other Spring Components.
+This will allow Moleculer Services to access the other Spring Components
+(eg. DAO classes for access the backend).
 
 The [WEB API Gateway](moleculer-web.html)
 module enables the Moleculer Services to function as REST/HTML services
@@ -19,8 +20,7 @@ In addition, they can receive / send large files or send WebSocket packets to br
 ## Actions
 
 The actions are the callable/public methods of a Service.
-They are callable with `broker.call` or `ctx.call` methods.  
-[Read more about Actions.](actions.html)
+They are callable with `broker.call` or `ctx.call` methods.
 
 **Example**
 
@@ -76,9 +76,10 @@ broker.call("math.sub", "a", 5, "b", 3).then(rsp -> {
 
 From the caller perspective does not matter the physical location of the Service.
 The "math.add" and "math.sub" Actions can be on other machine,
-written in a different programming language.
+written in a different programming language.  
+[Read more about Actions.](actions.html)
 
-## Services with different versions
+## Versioned Services
 
 ```java
 @Name("math")
@@ -99,90 +100,11 @@ broker.call("v2.math.add", "a", 5, "b", 3);
 Via [WEB API Gateway](moleculer-web.html), make a request to `GET /v2/math/add`.
 :::
 
-## Converting Java Annotations to platform-independent properties
-
-ServiceBroker converts Java Annotations of Actions into JSON format,
-therefore, they can be parsed on remote nodes.
-The programming language doesn't matter, such as those available on JavaScript based nodes.
-These properties are passed on as the service is discovered.
-
-It is advisable to process these properties using (Java or JavaScipt-based)
-[Middlewares](middlewares.html), and based on the values of the properties,
-Middlewares may change the way the services work.
-
-The following example shows three types of Annotation conversions.
-The first one (the `@Deprecated`) is an Annotation without parameters.
-Such Annotations are passed as logical values with a "true" value.
-The second Annotation (the `@SingleValue`) can have only one value.
-Such Annotations are passed as a key-value pair.
-The third Annotation (the `@MultiValue`) contains more values.
-Such Annotations are converted into a JSON structures by the ServiceBroker.
-It is important to note that only Annotations with a `RetentionPolicy` value of `RUNTIME`
-will be available in the Service Descriptor
-(for example, `@SuppressWarnings` is not visible on remote nodes
-because it exists only at the source level).
-
-```java
-@Name("service")
-public class TestService extends Service {
-
-    @Deprecated
-    @SingleValue("test")
-    @MultiValue(key1:"value", key2: 123)
-    Action action = ctx -> {
-        // ...
-    };
-
-}
-```
-
-Generated service description, also available on remote nodes:
-
-```json
-"service.action":{
-    "name": "service.action",
-    "deprecated": true,
-    "singleValue": "test",
-    "multiValue": {
-        "key1": "value",
-        "key2": 123
-    }
-}
-```
-
-The Service Descriptor is received by all remote nodes and can be processed,
-regardless of the programming language.
-Sample Middleware that checks the configuration of a Java (or JavaScript) Action:
-
-```java
-public class DeprecationChecker extends Middleware {
-
-    public Action install(Action action, Tree config) {
-
-        // Get value of the property (false = default value)
-        boolean deprecated = config.get("deprecated", false);
-
-        // Print warning if the Action is deprecated 
-        if (deprecated) {
-            logger.warn(config.get("name", "") + " action is deprecated!");
-        }
-        return null;
-    }
-}
-```
-
-To install the above Middleware, call the ServiceBroker `use` function:
-
-```java
-broker.use(new DeprecationChecker());
-```
-
 ## Events
 
 Services can monitor Events.
 Events can come from local but also from remote nodes.
 The data content of Events, like Action's, is a JSON structure.
-[Read more about event handling.](events.html)
 
 **Example**
 
@@ -196,11 +118,11 @@ public class PaymentService extends Service {
 }
 ```
 
+[Read more about event handling.](events.html)
+
 ## Lifecycle handlers
 
 There are some lifecycle service events, that will be triggered by the ServiceBroker.
-These are called when ServiceBroker starts or stops the Services.  
-[Read more about lifecycle of Services.](lifecycle.html)
 
 ```java
 public class TestService extends Service {
@@ -217,6 +139,9 @@ public class TestService extends Service {
     
 } 
 ```
+
+These are called when ServiceBroker starts or stops the Services.  
+[Read more about lifecycle of Services.](lifecycle.html)
 
 Other system-level events can be handled by Event Listeners
 (eg. another Node joining the cluster or a change in the Service list).  
@@ -239,7 +164,7 @@ is that `@Dependencies` monitors the entire Moleculer Cluster.
 In the example above, "logService" or "backendService" can be a **remote** Service.
 The Spring `@DependsOn` Annotation only monitors the local `ApplicationContext`.
 
-### Wait for services via ServiceBroker
+## Wait for services via ServiceBroker
 
 To wait for services, you can also use the `waitForServices` method of `ServiceBroker`.
 It returns a `Promise` which will be resolved when all defined services are available & started.

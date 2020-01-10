@@ -36,8 +36,10 @@ There are two ways to create a `ServiceBroker`, using either
 - `ServiceBroker.builder`:
 
 ```java
-// Configuration with ServiceBrokerConfig
+// Solution #1
+// Configuration with ServiceBrokerConfig:
 ServiceBrokerConfig config = new ServiceBrokerConfig();
+
 config.setNodeID("node1");
 config.setTransporter(new RedisTransporter("redis://host"));
 config.setStrategyFactory(new CpuUsageStrategyFactory());
@@ -45,7 +47,8 @@ config.setCacher(new MemoryCacher());
 
 ServiceBroker broker = new ServiceBroker(config);
 
-// Configuration with ServiceBroker.builder()
+// Solution #2
+// Configuration with ServiceBroker.builder:
 ServiceBroker broker = ServiceBroker.builder()
                                     .nodeID("node1")
                                     .transporter(...)

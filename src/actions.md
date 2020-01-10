@@ -1,12 +1,10 @@
----
-title: Actions
----
+## About Actions
 
-The actions are the callable/public methods of the service.
+Actions are the callable/public methods of the Services.
 The action calling represents a remote-procedure-call (RPC).
 It has request parameters and returns a response like an HTTP service.
 
-If there are multiple instances of services, the broker
+If there are multiple instances of Services, the Service Broker
 invokes instances according to the specified call strategy.
 [Read more about balancing](balancing.html).
 
@@ -14,12 +12,12 @@ invokes instances according to the specified call strategy.
     <img src="action-balancing.gif" alt="Action balancing diagram" />
 </div>
 
-## Call services
-To call a service, use the `broker.call` method.
-The broker looks for the service (and the node) that has the operation and calls it.
-The function returns a [Promise](https://berkesa.github.io/datatree-promise/).
+## Calling Actions
 
-### Syntax
+To call an Action, use the `broker.call` method.
+The broker looks for the Service (and the node) that has the Action and calls it.
+The Action returns a [Promise](https://berkesa.github.io/datatree-promise/).
+
 ```java
 Promise res = broker.call(actionName, params, opts);
 ```
@@ -388,4 +386,82 @@ and passes it to the action handler as a single argument.
 | `ctx.startTime` | `long` | Timestamp of the context creation |
 | `ctx.call()` | `Method` | Make nested-calls (same arguments like in `broker.call`) |
 | `ctx.emit()` | `Method` | Emit an event (same as `broker.emit`) |
-| `ctx.broadcast()` | `Method` | Broadcast an event (same as `broker.broadcast`) |
+| `ctx.broadcast()` | `Method` | Broadcast an event (same as `broker.broadcast`) 
+
+## Converting Java Annotations to platform-independent properties
+
+ServiceBroker converts Java Annotations of Actions into JSON format,
+therefore, they can be parsed on remote nodes.
+The programming language doesn't matter, such as those available on JavaScript based nodes.
+These properties are passed on as the service is discovered.
+
+It is advisable to process these properties using (Java or JavaScipt-based)
+[Middlewares](middlewares.html), and based on the values of the properties,
+Middlewares may change the way the services work.
+
+The following example shows three types of Annotation conversions.
+The first one (the `@Deprecated`) is an Annotation without parameters.
+Such Annotations are passed as logical values with a "true" value.
+The second Annotation (the `@SingleValue`) can have only one value.
+Such Annotations are passed as a key-value pair.
+The third Annotation (the `@MultiValue`) contains more values.
+Such Annotations are converted into a JSON structures by the ServiceBroker.
+It is important to note that only Annotations with a `RetentionPolicy` value of `RUNTIME`
+will be available in the Service Descriptor
+(for example, `@SuppressWarnings` is not visible on remote nodes
+because it exists only at the source level).
+
+```java
+@Name("service")
+public class TestService extends Service {
+
+    @Deprecated
+    @SingleValue("test")
+    @MultiValue(key1:"value", key2: 123)
+    Action action = ctx -> {
+        // ...
+    };
+
+}
+```
+
+Generated service description, also available on remote nodes:
+
+```json
+"service.action":{
+    "name": "service.action",
+    "deprecated": true,
+    "singleValue": "test",
+    "multiValue": {
+        "key1": "value",
+        "key2": 123
+    }
+}
+```
+
+The Service Descriptor is received by all remote nodes and can be processed,
+regardless of the programming language.
+Sample Middleware that checks the configuration of a Java (or JavaScript) Action:
+
+```java
+public class DeprecationChecker extends Middleware {
+
+    public Action install(Action action, Tree config) {
+
+        // Get value of the property (false = default value)
+        boolean deprecated = config.get("deprecated", false);
+
+        // Print warning if the Action is deprecated 
+        if (deprecated) {
+            logger.warn(config.get("name", "") + " action is deprecated!");
+        }
+        return null;
+    }
+}
+```
+
+To install the above Middleware, call the ServiceBroker `use` function:
+
+```java
+broker.use(new DeprecationChecker());
+```
