@@ -1,6 +1,4 @@
----
-title: Caching
----
+## Caching Action calls
 
 Moleculer has a built-in caching solution to accelerate responses of service actions.
 There are two types of caches:
@@ -9,18 +7,20 @@ There are two types of caches:
 - Distributed cache (eg. Redis Cacher, some implementations of JCache are distributed)
 
 Local caches store data per node locally.
-These are the fastest caches, but the programmer must implement the delete operations on multiple nodes.
+These are the fastest caches, but the programmer
+[must implement](#using-local-caches-in-clustered-environment)
+the delete operations on multiple nodes.
 Distributed caches store data on one (or more) central cache server(s).
 Distributed caches are easier to use, but they are a bit slower due to network traffic.
 
 **Cached action example**
 
-```java
+```java{5}
 @Name("users")
 public class UserService extends Service {
 
-    // Enable caching to this action
-    @Cache() // <<<======HERE=======
+    // Enable caching for this Action
+    @Cache()
     public Action list = ctx -> {
         logger.info("Handler called!");
             
@@ -73,7 +73,7 @@ Promise.resolve()
 
 The `Handler called` message appears only once because the response of the second call came from the cache.
 
-## Cache keys
+### Cache keys
 
 The cacher generates key from service name, action name and the params of context.
 The syntax of key is:
@@ -100,12 +100,12 @@ contains a list of essential parameter names:
 
 **Strict the list of `params` & `meta` properties for key generation**
 
-```java
+```java{6}
 @Name("posts")
 public class PostService extends Service {
 
     // Generate cache key from "limit", "offset" params and "user.id" meta
-    // To use meta keys in cache "keys"" use the "#" prefix.	
+    // To use meta keys in cache "keys"" use the "#" prefix.    
     @Cache(keys = { "limit", "offset", "#user.id" })
     public Action list = ctx -> {
         logger.info("Handler called!");
@@ -131,9 +131,8 @@ To avoid it, maximize the length of concatenated params in the key with `maxPara
 When the key is longer than this configured limitvalue,
 the cacher calculates a hash (SHA256) from the full key and adds it to the end of the key.
 
-> The minimum of `maxParamsLength` is `44` (SHA 256 hash length in Base64).
-> 
-> To disable this feature, set it to `0`.
+> The minimum of `maxParamsLength` is 44 (SHA 256 hash length in Base64).  
+> To disable key shortening, set `maxParamsLength` to zero.
 
 **Generate a full key from the whole params without limit**
 
@@ -164,12 +163,12 @@ cacher.getCacheKey("posts.find", params);
 // Key: 'posts.find:id|2|title|New pL4ozUU24FATnNpDt1B0t1T5KP/T5/Y+JTIznKDspjT0='
 ```
 
-## TTL
+### Time to Live
 
 The TTL is the default time-to-live of cached entries in seconds.
 TTL setting can be overriden in action definition.
 
-```java
+```java{7}
 MemoryCacher cacher = new MemoryCacher();
 cacher.setTtl(10);
 ServiceBroker broker = ServiceBroker.builder().cacher(cacher).build();
@@ -185,14 +184,7 @@ broker.createService(new Service("posts") {
 });
 ```
 
-## Custom key-generator and Cacher
-
-The easiest way to build your own Cacher implementation is to inherit your own from an existing cacher class.
-To overwrite the built-in cache key generator,
-override the `getCacheKey` function with your implementation.
-The implementations of the cachers can be found in the `services.moleculer.cacher` package.
-
-## Manual caching
+### Manual caching
 
 The cacher module can be used manually. Just call the `get`, `set`, `del` methods of the ServiceBroker's `Cacher`.
 
@@ -222,12 +214,9 @@ cacher.clean("mykey.**");
 cacher.clean();
 ```
 
-## Clear cache
-
 Sometimes you have to clear the old cached entries
 (for example, when you change the records in a database).
-
-**Example to clean the cache inside actions**
+Example to clean the cache inside actions:
 
 ```java
 // Clear all entries
@@ -242,13 +231,13 @@ cacher.del("users.model:5");
 cacher.del("users.model:8|true|2");
 ```
 
-### Clear cache among multiple service instances
+### Using local caches in clustered environment
 
 The best practice to clear cache entries among multiple service instances is that use broadcast events.
 This solution is only required when using local caches.
 It is enough to delete shared (eg. Redis) caches with one `clean` command,
 because the data is stored on a central server.
-When using local caches, each node can store a separate copy of the data.
+When using local caches, each node store a local copy of the cached data.
 
 **Example**
 
@@ -262,11 +251,12 @@ public class UserService extends Service {
 
     public Action create = ctx -> {
 
-        // Create new user entity
+        // Create new user entity, so
+        // cached content will be obsolete
         Promise res = userDAO.createNewUser(ctx.params);
 
-        // Clear cache
-        cleanCache();
+        // Clear cache on ALL nodes
+        cleanCacheOnAllNodes();
 
         // Return a response
         return res;
@@ -275,13 +265,13 @@ public class UserService extends Service {
     @Subscribe("cache.clean.users")
     public Listener userListener = payload -> {
     
-        // Remove all cached entries from the "users" cache region
+        // Remove all local entries from the "users" cache region
         broker.getConfig().getCacher().clean("users.**");
     };
     
-    public void cleanCache() {
+    public void cleanCacheOnAllNodes() {
 
-        // Broadcast the event, so all service instances
+        // Broadcast the event, so ALL Service instances
         // receive it (including this instance). 
         broker.broadcast("cache.clean.users");
     }
@@ -289,7 +279,7 @@ public class UserService extends Service {
 }
 ```
 
-## Built-in cachers
+## Local cachers
 
 ### Memory cacher
 
@@ -303,13 +293,15 @@ ServiceBroker uses `MemoryCacher` by default.
 
 **Configure memory cacher**
 
-```java
+```java{1}
 MemoryCacher cacher = new MemoryCacher();
 cacher.setAccessOrder(true); // true = LRU cache
 cacher.setTtl(60);           // default TTL
 cacher.setCleanup(10);       // period time of cleanup process
 cacher.setCapacity(2048);    // max cached entries per region
-ServiceBroker broker = ServiceBroker.builder().cacher(cacher).build();
+ServiceBroker broker = ServiceBroker.builder()
+                                    .cacher(cacher)
+                                    .build();
 ```
 
 **Options**
@@ -320,6 +312,7 @@ ServiceBroker broker = ServiceBroker.builder().cacher(cacher).build();
 | `capacity` | `int` | `2048` | Maximum number of entries per cache region |
 | `useCloning` | `boolean` | `true` | Make clone from the returned values |
 | `cleanup` | `int` | `5` | Cleanup period time in SECONDS |
+| `accessOrder` | `boolean` | `true` | The ordering mode - `true` for access-order (LRU cache), `false` for insertion-order |
 
 ### Off-heap memory cacher
 
@@ -336,12 +329,14 @@ Off-heap cacher requires [OHC dependencies](https://mvnrepository.com/artifact/o
 
 **Configure off-heap cacher**
 
-```java
+```java{1}
 OHCacher cacher = new OHCacher();
 cacher.setTtl(60);
 cacher.setCleanup(10);
 cacher.setCapacity(2048);
-ServiceBroker broker = ServiceBroker.builder().cacher(cacher).build();
+ServiceBroker broker = ServiceBroker.builder()
+                                    .cacher(cacher)
+                                    .build();
 ```
 
 **Options**
@@ -354,6 +349,71 @@ ServiceBroker broker = ServiceBroker.builder().cacher(cacher).build();
 | `hashTableSize` | `int` | `8192` | HashTable size (must be a power of 2) |
 | `compressAbove` | `int` | `1024` | Compress key and/or value above this size (BYTES) |
 | `compressionLevel` | `int` | `1` | Compression level (best speed = 1, best compression = 9) |
+
+## Distributed cachers
+
+### Redis cacher
+
+Redis-based distributed cache.
+Supports SSL, clustering and password authentication.
+It's the one of the fastest distributed cache for Moleculer.
+`RedisCacher` is implemented for both Java and Node.js based Moleculer frameworks.
+Supports global and entry-level TTL configuration.
+
+**Required dependency**
+
+Redis cacher requires [Letuce API](https://mvnrepository.com/artifact/biz.paluch.redis/lettuce).
+
+**Configure Redis cacher**
+
+```java{1}
+RedisCacher cacher = new RedisCacher();
+cacher.setUrls("localhost");
+cacher.setTtl(60);
+ServiceBroker broker = ServiceBroker.builder()
+                                    .cacher(cacher)
+                                    .build();
+```
+
+**With MessagePack serializer**
+
+```java{2}
+RedisCacher cacher = new RedisCacher();
+cacher.setSerializer(new MsgPackSerializer())
+cacher.setUrls("redis://host1:6380", "redis://host2:6381");
+ServiceBroker broker = ServiceBroker.builder()
+                                    .cacher(cacher)
+                                    .build();
+```
+
+**Options**
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `urls` | `String[]` | `localhost` | Array of URLs of the Redis servers |
+| `ttl` | `int` | `0` | Time-to-live in SECONDS (0 = disabled) |
+| `maxParamsLength` | `int` | `0` | Maximum length of params in generated keys |
+| `serializer` | `Serializer` | `JsonSerializer` | Implementation of the serializer/deserializer |
+| `password` | `String` | `null` | Configures authentication (URI may contain the password) |
+| `secure` | `boolean` | `false` | Sets SSL connection on/off (URI may contain the SSL info) |
+
+**Redis URI syntax**
+
+Redis Standalone:
+
+_redis_ : // [*:* _password_@] _host_ [*:* _port_] [*/* _database_][*?* [_timeout=timeout_[_d|h|m|s|ms|us|ns_]] [&_database=database_]]
+
+Redis Standalone with SSL:
+
+_rediss_ : // [*:* _password_@] _host_ [*:* _port_] [*/* _database_][*?* [_timeout=timeout_[_d|h|m|s|ms|us|ns_]] [&_database=database_]]
+
+Redis Standalone with Unix Domain Sockets:
+
+_redis-socket_ : // [*:* _password_@]_path_ [*?*[_timeout=timeout_[_d|h|m|s|ms|us|ns_]][&_database=database_]]
+
+Redis Sentinel:
+
+_redis-sentinel_ : // [*:* _password_@] _host1_[*:* _port1_] [, _host2_[*:* _port2_]] [, _hostN_[*:* _portN_]] [*/* _database_][*?*[_timeout=timeout_[_d|h|m|s|ms|us|ns_]] [&_sentinelMasterId=sentinelMasterId_] [&_database=database_]]
 
 ### JCache cacher
 
@@ -383,7 +443,7 @@ and it is also necessary to put the dependencies of the JCache implementation in
 
 Using the JVM's default JCache implementation:
 
-```java
+```java{2}
 ServiceBroker broker = ServiceBroker.builder()
                                     .cacher(new JCacheCacher())
                                     .build();
@@ -391,9 +451,9 @@ ServiceBroker broker = ServiceBroker.builder()
 
 Create Cacher using the specified CacheProvider implementation:
 
-```java
+```java{5}
 // "RICachingProvider" is part of a JCache implementation,
-// it could be Ignite, Hazelcast or EHcache based.
+// but it can be arbitrary (eg. Hazelcast or EHcache based)
 CachingProvider provider = new RICachingProvider();
 CacheManager manager = provider.getCacheManager();
 JCacheCacher cacher = new JCacheCacher(manager);
@@ -410,75 +470,20 @@ ServiceBroker broker = ServiceBroker.builder()
 | `maxParamsLength` | `int` | `0` | Maximum length of params in generated keys |
 | `closeEmptyPartitions` | `boolean` | `true` | Close and dispose empty caches |
 
-### Redis cacher
-
-Redis-based distributed cache.
-Supports SSL, clustering and password authentication.
-It's the one of the fastest distributed cache for Moleculer.
-`RedisCacher` is implemented for both Java and Node.js based Moleculer frameworks.
-Supports global and entry-level TTL configuration.
-
-**Required dependency**
-
-Redis cacher requires [Letuce API](https://mvnrepository.com/artifact/biz.paluch.redis/lettuce).
-
-**Configure Redis cacher**
-
-```java
-RedisCacher cacher = new RedisCacher();
-cacher.setUrls("localhost");
-cacher.setTtl(60);
-ServiceBroker broker = ServiceBroker.builder().cacher(cacher).build();
-```
-
-**With MessagePack serializer**
-
-```java
-RedisCacher cacher = new RedisCacher();
-cacher.setSerializer(new MsgPackSerializer())
-cacher.setUrls("redis://host1:6380", "redis://host2:6381");
-ServiceBroker broker = ServiceBroker.builder().cacher(cacher).build();
-```
-
-**Options**
-
-| Name | Type | Default | Description |
-| ---- | ---- | ------- | ----------- |
-| `urls` | `String[]` | `localhost` | Array of URLs of the Redis servers |
-| `ttl` | `int` | `0` | Time-to-live in SECONDS (0 = disabled) |
-| `maxParamsLength` | `int` | `0` | Maximum length of params in generated keys |
-| `serializer` | `Serializer` | `JsonSerializer` | Implementation of the serializer/deserializer |
-| `password` | `String` | `null` | Configures authentication (URI may contain the password) |
-| `secure` | `boolean` | `false` | Sets SSL connection on/off (URI may contain the SSL info) |
-
-**Redis URI syntax**
-
-*Redis Standalone*
-
-_redis_ *://* [*:* _password_@] _host_ [*:* _port_] [*/* _database_][*?* [_timeout=timeout_[_d|h|m|s|ms|us|ns_]] [&_database=database_]]
-
-*Redis Standalone (SSL)*
-
-_rediss_ *://* [*:* _password_@] _host_ [*:* _port_] [*/* _database_][*?* [_timeout=timeout_[_d|h|m|s|ms|us|ns_]] [&_database=database_]]
-
-*Redis Standalone (Unix Domain Sockets)*
-
-_redis-socket_ *://* [*:* _password_@]_path_ [*?*[_timeout=timeout_[_d|h|m|s|ms|us|ns_]][&_database=database_]]
-
-*Redis Sentinel*
-
-_redis-sentinel_ *://* [*:* _password_@] _host1_[*:* _port1_] [, _host2_[*:* _port2_]] [, _hostN_[*:* _portN_]] [*/* _database_][*?*[_timeout=timeout_[_d|h|m|s|ms|us|ns_]] [&_sentinelMasterId=sentinelMasterId_] [&_database=database_]]
-
 ## Custom cacher
 
 When you create your own Cacher, the new Cacher class must be inherited from `services.moleculer.cacher.Cacher`.
 The get(), set(), del(), clean() functions must be implemented.
 You can get ideas for implementation from the contents of the `services.moleculer.cacher` package,
 which contains the Cachers already made.
+The easiest way to build your own Cacher implementation is to inherit your own from an existing cacher class.
+To overwrite the built-in cache key generator,
+override the `getCacheKey` function with your implementation.
+The implementations of the cachers can be found in the `services.moleculer.cacher` package.
 
-### Use custom cacher
-
-```java
+```java{1}
 Cacher cacher = new MyCustomCacher();
-ServiceBroker broker = ServiceBroker.builder().cacher(cacher).build();
+ServiceBroker broker = ServiceBroker.builder()
+                                    .cacher(cacher)
+                                    .build();
 ```

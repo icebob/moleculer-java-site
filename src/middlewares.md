@@ -471,5 +471,5 @@ If you want to use the built-in middlewares use their names in `middlewares[]` o
 
 ## Global view
 <div align="center">
-    <img src="assets/middlewares.svg" alt="Middlewares diagram" />
+    <img src="middlewares.svg" alt="Middlewares diagram" />
 </div>

@@ -24,7 +24,7 @@ It means that only one listener is triggered in every group.
 > If the `user.created` event is emitted, only one `users` and one `payments` service will receive this event.
 
 <div align="center">
-    <img src="assets/balanced-events.gif" alt="Balanced events diagram" />
+    <img src="balanced-events.gif" alt="Balanced events diagram" />
 </div>
 
 The group name comes from the service name, but it can be overwritten in event definition in services
@@ -144,7 +144,7 @@ The broadcast event is sent to all available local & remote services.
 It is not balanced, all event listener instances receive this event.
 
 <div align="center">
-    <img src="assets/broadcast-events.gif" alt="Broadcast events diagram" />
+    <img src="broadcast-events.gif" alt="Broadcast events diagram" />
 </div>
 
 Send broadcast events with `broker.broadcast` method.

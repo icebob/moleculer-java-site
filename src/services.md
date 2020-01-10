@@ -1,8 +1,6 @@
----
-title: Services
----
+## What is Moleculer Service?
 
-The `Service` is the top-level component in the Moleculer Ecosystem.
+The `Service` is a top-level component in the Moleculer Ecosystem.
 Services may have Actions that other Services can invoke locally or over the network.
 Services can also define Event Listeners that can react to events created in the Moleculer Cluster.
 Using the Moleculer Framework, Services written in different (Java,

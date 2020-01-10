@@ -20,7 +20,7 @@ Centralized Transporters connect to a central message broker that provide a reli
 These brokers use publish/subscribe messaging pattern to deliver data packets.
 
 <div align="center">
-    <img src="assets/networking.svg" alt="Networking diagram" />
+    <img src="networking.svg" alt="Networking diagram" />
 </div>
 
 ### NATS Transporter

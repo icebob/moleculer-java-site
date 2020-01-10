@@ -11,7 +11,7 @@ invokes instances according to the specified call strategy.
 [Read more about balancing](balancing.html).
 
 <div align="center">
-    <img src="assets/action-balancing.gif" alt="Action balancing diagram" />
+    <img src="action-balancing.gif" alt="Action balancing diagram" />
 </div>
 
 ## Call services

@@ -5,24 +5,29 @@ module.exports = {
 	description: 'Progressive microservices framework for Java',
 	base: '/site/',
 	dest: '../docs',
- 
+
+	head: [
+		['link', { rel: 'icon', href: 'favicon.ico'}]
+	],
 	themeConfig: {
+		logo: 'logo.png',
+		repo: 'https://github.com/moleculer-java/moleculer-java',
+		repoLabel: 'GitHub',
 		nav: [
 			{ text: 'Home', link: '/' },
 			{ text: 'Documentation', link: 'introduction' },
-			{ text: 'GitHub', link: 'https://github.com/moleculer-java/moleculer-java', target:'github' }
 		],
 		sidebar: [
 			{
 				title: 'Getting Started',
-				sidebarDepth: 1,
+				sidebarDepth: 2,
 				children: [
 					['introduction', 'Introduction']
 				]
 			},
 			{
 				title: 'Core',
-				sidebarDepth: 1,
+				sidebarDepth: 2,
 				children: [
 					['broker', 'Service Broker'],
 					['services', 'Services'],
@@ -36,7 +41,7 @@ module.exports = {
 			},
 			{
 				title: 'Clustering',
-				sidebarDepth: 1,
+				sidebarDepth: 2,
 				children: [
 					['transporters', 'Transporters'],
 					['serializers', 'Serializers'],
@@ -48,7 +53,7 @@ module.exports = {
 			},
 			{
 				title: 'Modules',
-				sidebarDepth: 1,
+				sidebarDepth: 2,
 				children: [				
 					['moleculer-web', 'API Gateway'],
 					['moleculer-repl', 'Moleculer REPL']

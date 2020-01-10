@@ -1,7 +1,3 @@
----
-title: Introduction
----
-
 ## What is Moleculer Java?
 
 Java implementation of the [Moleculer microservices framework](http://moleculer.services/).

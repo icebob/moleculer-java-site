@@ -1,21 +1,21 @@
----
-title: Service Broker
----
-The `ServiceBroker` is the main component of Moleculer.
+## Introduction to Service Broker
+
+The `ServiceBroker` is the main component of the Moleculer Framework.
 Each Node connected to a Moleculer Cluster has a `ServiceBroker` instance.
 It registers Services, handles Action calls, and forwards Events between the Nodes.
 The Java-based `ServiceBroker` can run as standalone back-end (Windows or Linux) service
-or can be built into a J2EE application server as a standard web module.
-Another key feature of `ServiceBroker` is that it is essentially designed to be non-blocking.
+or can be built into a J2EE application server as a standard Web Module.
+Another important feature of `ServiceBroker` is that it is basically designed to not block Threads,
+and can handle a large volume of requests in parallel.
 
-## Create Service Broker
+## Create a Service Broker
 
 **Create Broker with default settings:**
 
 ```java
 ServiceBroker broker = new ServiceBroker();
 
-// Create a service
+// Create a Service
 broker.createService(new Service("test") {
     public Action action = ctx -> {
         return ctx.params.get("a", 0) +
@@ -23,7 +23,7 @@ broker.createService(new Service("test") {
     };
 });
 
-// Call the service
+// Invoke the Action of the Service
 broker.call("test.action", "a", 3, "b", 4).then(rsp -> {
     System.out.println(rsp);
 });
@@ -31,11 +31,12 @@ broker.call("test.action", "a", 3, "b", 4).then(rsp -> {
 
 **Create Broker with custom settings:**
 
-There are two ways to create a `ServiceBroker`;
-using either `ServiceBrokerConfig` or `ServiceBroker.builder()`.
+There are two ways to create a `ServiceBroker`, using either
+- `ServiceBrokerConfig` instance or
+- `ServiceBroker.builder`:
 
 ```java
-// Using ServiceBrokerConfig
+// Configuration with ServiceBrokerConfig
 ServiceBrokerConfig config = new ServiceBrokerConfig();
 config.setNodeID("node1");
 config.setTransporter(new RedisTransporter("redis://host"));
@@ -44,7 +45,7 @@ config.setCacher(new MemoryCacher());
 
 ServiceBroker broker = new ServiceBroker(config);
 
-// Using ServiceBroker.builder()
+// Configuration with ServiceBroker.builder()
 ServiceBroker broker = ServiceBroker.builder()
                                     .nodeID("node1")
                                     .transporter(...)
@@ -75,12 +76,15 @@ ServiceBroker broker = ServiceBroker.builder()
 
     <!-- SPRING REGISTRATOR FOR MOLECULER SERVICES -->
 
-    <bean id="registrator" class="services.moleculer.config.SpringRegistrator" depends-on="broker" />
+    <bean id="registrator"
+          class="services.moleculer.config.SpringRegistrator"
+          depends-on="broker" />
 
     <!-- SERVICE BROKER INSTANCE -->
 
     <bean id="broker" class="services.moleculer.ServiceBroker"
-        init-method="start" destroy-method="stop">
+        init-method="start"
+        destroy-method="stop">
         <constructor-arg ref="brokerConfig" />
     </bean>
 
@@ -106,7 +110,7 @@ and at the end of the creation process,
 `SpringRegistrator` will register the Service instances into the `ServiceBroker`.
 A simple, Spring-compatible Moleculer Service looks like this:
 
-```java
+```java{7}
 package my.services;
 
 import org.springframework.stereotype.Controller;
@@ -157,7 +161,7 @@ public class MoleculerApplication {
         return new ServiceBroker(config);
     }
 
-    // --- SPRING REGISTRATOR (REQUIRED) ---
+    // --- SPRING REGISTRATOR FOR MOLECULER SERVICES ---
 
     @Bean
     public SpringRegistrator getSpringRegistrator() {
@@ -177,9 +181,9 @@ uses Moleculer runner to run the application
 [Read more about Moleculer Runner](runner.html).  
 :::
 
-## ServiceBrokerConfig options
+## Configuration options
 
-List of all available broker options:
+List of all available `ServiceBrokerConfig` options:
 
 | Name | Type | Default | Description |
 | ------- | ----- | ------- | ------- |
@@ -195,7 +199,7 @@ List of all available broker options:
 | `cacher` | `Cacher` | `MemoryCacher` | Implementation of the [service-level Cache](caching.html) |
 | `serviceInvoker` | `ServiceInvoker` | `DefaultServiceInvoker` | Implementation of the [Service Invoker](fault-tolerance.html). |
 | `transporter` | `Transporter` | `null` | Implementation of the [Transporter](transporters.html). |
-| `monitor` | `Monitor` | `SigarMonitor` | Implementation of the [CPU monitor](balancing.html). |
+| `monitor` | `Monitor` | `SigarMonitor` | Implementation of the [CPU monitor](balancing.html#cpu-usage-based-strategy). |
 | `shutDownThreadPools` | `boolean` | `true` | Shut down thread pools during the shutdown stage. |
 
 This
@@ -207,7 +211,7 @@ The demo also shows you how to set the above parameters.
 
 | Name | Response |  Description |
 | ------- | ----- | ------- |
-| `broker.getConfig()` | `ServiceBrokerConfig` | Returns the Broker's configuration and module container |
+| `broker.getConfig()` | `ServiceBrokerConfig` | Returns the Broker's configuration and module container. |
 | `broker.getNodeID()` | `String` | Returns the Broker's unique identifier. |
 | `broker.start()` | `ServiceBroker` | Starts broker. Blocks until the end of the boot. |
 | `broker.stop()` | `ServiceBroker` | Stops broker. Blocks until the end of the shutdown process. |
@@ -225,7 +229,7 @@ The demo also shows you how to set the above parameters.
 | `broker.waitForServices(timeout, services)` | `Promise` | Wait for the specified services to be created within the specified time. |
 | `broker.ping(nodeID)` | `Promise` | Sends a PING message to the specified node. The ping timeout is 3 seconds. |
 | `broker.ping(timeout, nodeID)` | `Promise` | Sends a PING message to the specified node with the specified timeout. |
-| `createStream()` | `PacketStream` | Creates a stream what is suitable for transferring large files between the nodes |
+| `createStream()` | `PacketStream` | Creates a stream what is suitable for transferring large files between the nodes. |
 | `broker.repl()` | boolean | Start Interactive Developer Console. |
 | `broker.emit(name, params)` | - | Emit a balanced event. |
 | `broker.broadcast(name, params)` | - | Broadcast an event. |
