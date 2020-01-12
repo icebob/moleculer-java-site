@@ -6,6 +6,11 @@ module.exports = {
 	base: '/site/',
 	dest: '../docs',
 
+    plugins: [
+        [
+            '@vuepress/google-analytics', {'ga': 'UA-156080046-1'}
+        ]
+    ],
 	head: [
 		['link', { rel: 'icon', href: 'favicon.ico'}]
 	],
