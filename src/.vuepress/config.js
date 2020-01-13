@@ -7,9 +7,26 @@ module.exports = {
 	dest: '../docs',
 
     plugins: [
+		[
+			'@vuepress/back-to-top'
+		],
+		[
+			'vuepress-plugin-smooth-scroll'
+		],
         [
             '@vuepress/google-analytics', {'ga': 'UA-156080046-1'}
-        ]
+        ],
+		[
+			'vuepress-plugin-medium-zoom',
+			{
+				selector: '.zoom',
+				delay: 1000,
+				options: {
+					margin: 24,
+					scrollOffset: 0,
+				}
+			}
+		]        
     ],
 	head: [
 		['link', { rel: 'icon', href: 'favicon.ico'}]

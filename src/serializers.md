@@ -89,7 +89,7 @@ Like JSON, BSON supports the embedding of documents and arrays within other docu
 transporter.setSerializer(new BsonSerializer());
 ```
 
-::: details Dependencies
+::: tip Dependencies
 To use BSON Serializer, add the following dependency to the build script:  
 group: 'de.undercouch', name: 'bson4jackson', version: '2.9.2'
 :::
