@@ -26,7 +26,7 @@ They are callable with `broker.call` or `ctx.call` methods.
 
 A Service schema of adding and subtracting two numbers (the example defines two Actions):
 
-```java
+```java{4,9}
 @Name("math")
 public class MathService extends Service {
 
@@ -53,7 +53,7 @@ you can specify the name with the "@Name" attribute;
 if missing, the Java field name will be the action name (eg. `add` Action registers as "add").
 To register the `MathService` in a MessageBroker, use the `createService` method:
 
-```java
+```java{2}
 MessageBroker broker = MessageBroker.builder().build();
 broker.createService(new MathService());
 broker.start();
@@ -61,7 +61,7 @@ broker.start();
 
 To call the Service, use the `call` method:
 
-```java
+```java{3,8}
 // in thread-blocking style:
 
 Tree rsp = broker.call("math.add", "a", 5, "b", 3).waitFor();
@@ -81,7 +81,7 @@ written in a different programming language.
 
 ## Versioned Services
 
-```java
+```java{2}
 @Name("math")
 @Version("2")
 public class MathV2Service extends Service {
@@ -108,7 +108,7 @@ The data content of Events, like Action's, is a JSON structure.
 
 **Example**
 
-```java
+```java{3,4}
 public class PaymentService extends Service {
 
     @Subscribe("order.created")
@@ -124,7 +124,7 @@ public class PaymentService extends Service {
 
 There are some lifecycle service events, that will be triggered by the ServiceBroker.
 
-```java
+```java{3,9}
 public class TestService extends Service {
 
     public void started(ServiceBroker broker) throws Exception {
@@ -152,7 +152,7 @@ Other system-level events can be handled by Event Listeners
 If a Service depends on other Services, use the `@Dependencies` Annotation to denote dependencies.
 The service waits for dependent services before calls the `started` lifecycle event handler. 
 
-```java
+```java{1}
 @Dependencies({"logService", "backendService"})
 public class RestService extends Service {
     // ...

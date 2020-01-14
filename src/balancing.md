@@ -1,11 +1,13 @@
----
-title: Load Balancing
----
+## About load balancing
 
-Moleculer has several built-in load Balancing Strategies.
-If services have multiple running instances,
+Moleculer has several built-in load balancing Strategies.
+If a Service has **multiple running instances**,
 ServiceRegistry uses these Strategies to select a node from all available nodes.
 The default (pre-set) invocation mode is the Round-Robin Strategy.
+
+<div align="center">
+    <img src="action-balancing.gif" alt="Action balancing diagram" />
+</div>
 
 ## Built-in Strategies
 
@@ -14,7 +16,7 @@ Alternatively, set up the Strategy of the ServiceBrokerConfig using the `setStra
 
 **Configure a balancing Strategy**
 
-```java
+```java{6}
 // Create a "StrategyFactory"
 StrategyFactory strategy = new XorShiftRandomStrategyFactory();
 
@@ -31,6 +33,7 @@ ServiceBroker broker = ServiceBroker.builder()
 
 ### Round-Robin Strategy
 
+![](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)  
 This Strategy selects a node based on [round-robin](https://en.wikipedia.org/wiki/Round-robin_DNS) algorithm.
 This is the default invocation Strategy.
 You can use the `setPreferLocal` function to configure ServiceRegistry
@@ -48,6 +51,7 @@ ServiceBroker broker = ServiceBroker.builder().strategy(strategy).build();
 
 ### Random Strategies
 
+![](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)  
 These Strategies randomly select the node.
 The load on each node (as in round-robin) will be roughly the same.
 
@@ -62,6 +66,7 @@ SecureRandomStrategyFactory strategy = new SecureRandomStrategyFactory();
 ```
 ### CPU usage-based Strategy
 
+![](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)  
 This Strategy selects a node which has the lowest CPU usage.
 Due to the node list can be very long,
 it gets samples and selects the node with the lowest CPU usage from only samples instead of the whole node list.
@@ -100,6 +105,7 @@ Using the Sigar API is optional; if it not found on the classpath, ServiceBroker
 
 ### Latency-based Strategy
 
+![](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)  
 This Strategy selects a node which has the lowest latency, measured by periodic ping commands.
 Strategy will ping each node one by one.
 Due to slow sampling, it may take a few minutes for the Services to select optimal Nodes.
@@ -129,6 +135,7 @@ ServiceBroker broker = ServiceBroker.builder().strategy(strategy).build();
 
 ### Sharding Strategy
 
+![](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)  
 Shard invocation Strategy is based on [consistent-hashing](https://www.toptal.com/big-data/consistent-hashing) algorithm.
 It uses a key value from context `params` or `meta` to route the request to nodes.
 It means that requests with same key value will be routed to the same node.

@@ -1,6 +1,4 @@
----
-title: Events
----
+## Types of event broadcasts
 
 Molculer Service Broker has a built-in event bus for sending events to local and remote services.
 Events can be used to create event-driven,
@@ -13,15 +11,17 @@ Events can be grouped; events can be sent to
 - to a group of listeners
 - or to one member from all groups
 
-# Balanced events
+## Emit balanced events
 
 The event listeners are arranged to logical groups.
 It means that only one listener is triggered in every group.
 
-> **Example:** An application contains 2 main services: `users` & `payments`.
-> Both subscribe to the `user.created` event.
-> 3 instances of `users` service and 2 instances of `payments` service run.
-> If the `user.created` event is emitted, only one `users` and one `payments` service will receive this event.
+**Example:**
+
+An application contains 2 main services: `users` & `payments`.
+Both subscribe to the `user.created` event.
+3 instances of `users` service and 2 instances of `payments` service run.
+If the `user.created` event is emitted, only one `users` and one `payments` service will receive this event.
 
 <div align="center">
     <img src="balanced-events.gif" alt="Balanced events diagram" />
@@ -31,7 +31,11 @@ The group name comes from the service name, but it can be overwritten in event d
 (by the `@Group` Annotation).
 
 **Example:**
+
 ```java
+import services.moleculer.eventbus.*;
+import services.moleculer.service.*;
+
 @Name("payment")
 public class PaymentService extends Service {
 
@@ -51,9 +55,7 @@ public class PaymentService extends Service {
 }
 ```
 
-## Emit balanced events
-
-Send balanced events with `broker.emit` function.
+Balanced events can be sent using `broker.emit` function.
 The first parameter is the name of the event, the second parameter is the payload. 
 _To send multiple/hierarchical values, wrap them into a `Tree` object._
 
@@ -61,17 +63,18 @@ Moleculer does not require a recommended JSON API, it uses an
 [abstract API](https://berkesa.github.io/datatree/)
 instead of a certain implementation.
 The `Tree` object is an **abstract layer** that uses an arbitrary JSON implementation.
-Tree API supports 18 popular JSON implementations (eg. Jackson, Gson, Boon, Jodd, FastJson),
+Tree API supports 18 popular
+[JSON implementations](serializers.html#json-serializer) (eg. Jackson, Gson, Boon, Jodd, FastJson),
 and 10 non-JSON data formats (YAML, ION, BSON, MessagePack, etc.).
-Besides that Tree API adds manipulation capabilities to the underlaying JSON API,
-such as sorting, filtering, merging, cloning, or changing data types.
-The specific JSON (or non-JSON) implementation can be configured
-in the Moleculer configuration (see in section "Serializer").
 Regardless of implementation, sending events looks like this:
 
-```java
-// The "user" is a "Tree" object (~=JSON structure)
-// that will be serialized for transport.
+```java{12}
+// The payload is a "Tree" object (~=JSON structure)
+// that will be serialized for transport:
+// {
+//   "firstName": "John",
+//   "lastName": "Doe"
+// }
 Tree user = new Tree();
 user.put("firstName", "John");
 user.put("lastName", "Doe");
@@ -91,9 +94,10 @@ broker.emit("user.created", user, Groups.of("mail", "payments"));
 
 If the data structure to be sent consists only of key-value pairs,
 it is not necessary to create a `Tree` object.
-It is enough to list the key-value pairs after the event name:
+It is enough to list the key-value pairs after the event name
+(the same syntax can be used for the `ctx.broadcast` and `broker.broadcast` methods):
 
-```java
+```java{2,3}
 ctx.emit("user.created",
          "firstName", "John",
          "lastName", "Doe",
@@ -134,11 +138,11 @@ stream.sendData("packet1".getBytes());
 stream.sendData("packet2".getBytes());
 stream.sendData("packet3".getBytes());
 
-// Streams must be closed!
+// Always close streams!
 stream.sendClose();
 ```
 
-# Broadcast event
+## Broadcast event
 
 The broadcast event is sent to all available local & remote services.
 It is not balanced, all event listener instances receive this event.
@@ -149,8 +153,16 @@ It is not balanced, all event listener instances receive this event.
 
 Send broadcast events with `broker.broadcast` method.
 
-```java
-// The "config" is a hierarchical (~=JSON) structure
+```java{16}
+// The payload is a hierarchical (~=JSON) structure:
+// {
+//   "key": "value",
+//   "anArray": [1, 2, 3],
+//   "anObject": {
+//     "port": 1234,
+//     "host": "server1"
+//   }
+// }
 Tree config = new Tree();
 config.put("key", "value");
 config.putList("anArray").add(1).add(2).add(3);
@@ -183,14 +195,14 @@ Send broadcast events only to all local services with `broker.broadcastLocal` me
 broker.broadcastLocal("config.changed", config);
 ```
 
-# Subscribe to events
+## Subscribe to events
 
 The contents of the events are wrapped in an object called Event Context to receive the message.
 The Event Context is very similar to Action Context.
 
 **Context-based event handler & emit a nested event**
 
-```java
+```java{14}
 @Name("accounts")
 public class AccountService extends Service {
 
@@ -282,7 +294,7 @@ ctx.stream.onPacket((bytes, error, closed) -> {
 });
 ```
 
-# Context
+## Context
 
 When you emit an event, the broker creates a `Context` instance which contains all
 request information and passes it to the event handler as a single argument.
@@ -304,12 +316,12 @@ request information and passes it to the event handler as a single argument.
 | `ctx.emit()` | `Method` | Emit an event, same as `broker.emit` |
 | `ctx.broadcast()` | `Method` | Broadcast an event, same as `broker.broadcast` |
 
-# Internal events
+## Internal events
 
 The broker broadcasts some internal events.
 Internal events always starts with `$` prefix.
 
-## `$services.changed`
+### `$services.changed`
 
 The broker sends this event if the local node or a remote node loads or destroys services.
 
@@ -319,7 +331,7 @@ The broker sends this event if the local node or a remote node loads or destroys
 | ---- | ---- | ----------- |
 | `localService ` | `boolean` | True if a local service changed. |
 
-## `$node.connected`
+### `$node.connected`
 
 The broker sends this event when a node connected or reconnected.
 
@@ -330,7 +342,7 @@ The broker sends this event when a node connected or reconnected.
 | `node` | `Tree` | Node info object |
 | `reconnected` | `boolean` | Is reconnected? |
 
-## `$node.updated`
+### `$node.updated`
 
 The broker sends this event when it has received an INFO message from a node
 (ie. a service is loaded or destroyed).
@@ -341,7 +353,7 @@ The broker sends this event when it has received an INFO message from a node
 | ---- | ---- | ----------- |
 | `node` | `Tree` | Node info object |
 
-## `$node.disconnected`
+### `$node.disconnected`
 
 The broker sends this event when a node disconnected (gracefully or unexpectedly).
 
@@ -352,18 +364,18 @@ The broker sends this event when a node disconnected (gracefully or unexpectedly
 | `node` | `Tree` | Node info object |
 | `unexpected` | `boolean` | `true` - Not received heartbeat, `false` - Received `DISCONNECT` message from node. |
 
-## `$broker.started`
+### `$broker.started`
 
 The broker sends this event once `broker.start()` is called and all local services are started.
 
-## `$broker.stopped`
+### `$broker.stopped`
 
 The broker sends this event once `broker.stop()` is called and all local services are stopped.
 
-## `$transporter.connected`
+### `$transporter.connected`
 
 The transporter sends this event once the transporter is connected.
 
-## `$transporter.disconnected`
+### `$transporter.disconnected`
 
 The transporter sends this event once the transporter is disconnected.

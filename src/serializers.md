@@ -1,6 +1,4 @@
----
-title: Data Serializers
----
+## About data serialization
 
 Transporter needs a Serializer Module which serializes & deserializes the transferable data.
 The default Serializer is the `JsonSerializer` but there are several built-in Serializers
@@ -8,6 +6,7 @@ can convert messages into MessagePack, BSON, CBOR, SMILE, Amazon ION or other bi
 
 ## JSON Serializer
 
+![](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)  
 This is the built-in default Serializer.
 It serializes the packets to JSON string and deserializes the received JSON bytes to `Tree` objects.
 The performance of JSON Serializers in Java and JavaScript is very good,
@@ -63,6 +62,7 @@ The "info" command will display the current Moleculer configuration, including t
 
 ## MessagePack Serializer
 
+![](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)  
 Built-in [MsgPack](https://msgpack.org) Serializer.
 MessagePack is an efficient binary serialization format. It lets you exchange
 data among multiple languages like JSON. But it's smaller. Small
@@ -74,9 +74,9 @@ compatible with the JavaScript version of Moleculer.
 transporter.setSerializer(new MsgPackSerializer());
 ```
 
-::: details Dependencies
+::: warning MessagePack dependencies
 To use MessagePack Serializer, add the following dependency to the build script:  
-group: 'org.msgpack', name: 'msgpack', version: '0.6.12'
+[group: 'org.msgpack', name: 'msgpack', version: '0.6.12'](https://mvnrepository.com/artifact/org.msgpack/msgpack)  
 :::
 
 ## BSON Serializer
@@ -89,9 +89,9 @@ Like JSON, BSON supports the embedding of documents and arrays within other docu
 transporter.setSerializer(new BsonSerializer());
 ```
 
-::: tip Dependencies
+::: warning BSON dependencies
 To use BSON Serializer, add the following dependency to the build script:  
-group: 'de.undercouch', name: 'bson4jackson', version: '2.9.2'
+[group: 'de.undercouch', name: 'bson4jackson', version: '2.9.2'](https://mvnrepository.com/artifact/de.undercouch/bson4jackson)
 :::
 
 ## CBOR Serializer
@@ -105,9 +105,9 @@ and null.
 transporter.setSerializer(new CborSerializer());
 ```
 
-::: details Dependencies
+::: warning CBOR dependencies
 To use CBOR Serializer, add the following dependency to the build script:  
-group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-cbor', version: '2.10.0'
+[group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-cbor', version: '2.10.0'](https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-cbor)
 :::
 
 ## Amazon ION Serializer
@@ -122,9 +122,9 @@ and skip-scan parse.
 transporter.setSerializer(new IonSerializer());
 ```
 
-::: details Dependencies
+::: warning Amazon ION dependencies
 To use ION Serializer, add the following dependency to the build script:  
-group: 'software.amazon.ion', name: 'ion-java', version: '1.5.1'
+[group: 'software.amazon.ion', name: 'ion-java', version: '1.5.1'](https://mvnrepository.com/artifact/software.amazon.ion/ion-java)
 :::
 
 ## SMILE Serializer
@@ -140,9 +140,9 @@ both more compact and more efficient to process.
 transporter.setSerializer(new SmileSerializer());
 ```
 
-::: details Dependencies
+::: warning SMILE dependencies
 To use SMILE Serializer, add the following dependency to the build script:  
-group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-smile', version: '2.10.0'
+[group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-smile', version: '2.10.0'](https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-smile)
 :::
 
 ## Custom Serializer

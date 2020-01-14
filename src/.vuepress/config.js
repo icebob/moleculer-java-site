@@ -58,7 +58,9 @@ module.exports = {
 					['middlewares', 'Middlewares'],
 					['caching', 'Caching'],
 					['events', 'Events'],
-					['internal-services', 'Internal Services']
+					['internal-services', 'Internal Services'],
+					['logging', 'Logging'],
+					['runner', 'Runner']
 				]
 			},
 			{
@@ -68,9 +70,7 @@ module.exports = {
 					['transporters', 'Transporters'],
 					['serializers', 'Serializers'],
 					['balancing', 'Load Balancing'],
-					['fault-tolerance', 'Fault Tolerance'],
-					['logging', 'Logging'],
-					['runner', 'Runner']
+					['fault-tolerance', 'Fault Tolerance']
 				]
 			},
 			{

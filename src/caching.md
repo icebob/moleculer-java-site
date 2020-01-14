@@ -8,7 +8,7 @@ There are two types of caches:
 
 Local caches store data per node locally.
 These are the fastest caches, but the programmer
-[must implement](#using-local-caches-in-clustered-environment)
+[must implement](caching.html#using-local-caches-in-clustered-environment)
 the delete operations on multiple nodes.
 Distributed caches store data on one (or more) central cache server(s).
 Distributed caches are easier to use, but they are a bit slower due to network traffic.
@@ -237,52 +237,61 @@ The best practice to clear cache entries among multiple service instances is tha
 This solution is only required when using local caches.
 It is enough to delete shared (eg. Redis) caches with one `clean` command,
 because the data is stored on a central server.
-When using local caches, each node store a local copy of the cached data.
+When using local caches, each node store a *local copy* of the cached data.
 
 **Example**
 
-```java
+```java{17,32}
 @Name("users")
 @Controller
 public class UserService extends Service {
 
     @Autowired
-    UserDAO userDAO;
+    UserDAO userDAO; // Some kind of database API
 
-    public Action create = ctx -> {
+	// This Action modifies the DB (update)
+    public Action update = ctx -> {
 
-        // Create new user entity, so
+        // Update user entity, so
         // cached content will be obsolete
-        Promise res = userDAO.createNewUser(ctx.params);
+        Promise res = userDAO.updateUser(ctx.params);
 
-        // Clear cache on ALL nodes
-        cleanCacheOnAllNodes();
+        // Broadcast the event, so ALL Service instances
+        // receive it (including this instance).
+        ctx.broadcast("cache.clean.users");
 
         // Return a response
         return res;
     };
 
+    // This Action is cached (it's just a query)
+    @Cache(keys = { "userID" })
+    public Action find = ctx -> {
+        String userID = ctx.params.get("userID", "");
+        return userDAO.findUserByID(userID);
+    };
+	
+	// This section monitors whether
+	// any of the nodes have changed the user DB
     @Subscribe("cache.clean.users")
     public Listener userListener = payload -> {
     
-        // Remove all local entries from the "users" cache region
+        // Remove all local entries from the "users" cache region,
+		// the next "find" Action will NOT be cached
         broker.getConfig().getCacher().clean("users.**");
     };
     
-    public void cleanCacheOnAllNodes() {
-
-        // Broadcast the event, so ALL Service instances
-        // receive it (including this instance). 
-        broker.broadcast("cache.clean.users");
-    }
-    
 }
 ```
+
+The above code could be optimized to not delete the entire cache region but just one record
+(by the "userID" - because "userID" is the Cache Key at the `find` Action).
 
 ## Local cachers
 
 ### Memory cacher
 
+![](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)  
 The `MemoryCacher` works with each node having its own local heap-based cache.
 This is **the fastest** cache, but the programmer has to take care of emptying the cache with event broadcasting.
 Memory cache is not a distributed cache, it works like a local Map in the VM's memory.
@@ -316,6 +325,7 @@ ServiceBroker broker = ServiceBroker.builder()
 
 ### Off-heap memory cacher
 
+![](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)  
 The `OHCacher` is similar to `MemoryCacher`, but stores entries in the off-heap RAM.
 This cache is a bit slower than `MemoryCacher` because it stores entries in a serialized and compressed form.
 `OHCacher` is the solution to store huge amount of data in memory;
@@ -354,6 +364,7 @@ ServiceBroker broker = ServiceBroker.builder()
 
 ### Redis cacher
 
+![](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)  
 Redis-based distributed cache.
 Supports SSL, clustering and password authentication.
 It's the one of the fastest distributed cache for Moleculer.

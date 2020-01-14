@@ -7,9 +7,8 @@ title: Logging
 Moleculer uses SLF4J (https://www.slf4j.org) for logging.
 Here is a short example showcasing how you can access the logger:
 
-```java
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+```java{11}
+import org.slf4j.*;
 import org.springframework.stereotype.Controller;
 import services.moleculer.service.*;
 
@@ -64,7 +63,7 @@ by setting the "org.springframework.boot.logging.LoggingSystem" property to "fal
 Thus, the Moleculer Application will use the J2EE server's default logging mechanism.
 It looks like this in "web.xml":
 
-```xml
+```xml{11}
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" ...>
     

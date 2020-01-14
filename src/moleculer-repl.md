@@ -1,8 +1,5 @@
----
-title: REPL console
----
+## About the Developer Console
 
-Java REPL (Interactive Developer Console) for [Moleculer microservices framework](https://moleculer-java.github.io/moleculer-java/).
 The REPL console is a special Moleculer service that executes console commands.
 Console commands can be used to **test** Moleculer actions and event listeners or measure the **response time** of a service.
 It is also possible to create **custom commands**. The console can be used via standard input / output and telnet.
@@ -32,7 +29,7 @@ dependencies {
 
 ## Usage from code
 
-```java
+```java{6}
 // Create Service Broker
 ServiceBroker broker = new ServiceBroker();
 broker.start();
@@ -43,10 +40,11 @@ broker.repl();
 
 ## Usage with Spring Framework
 
-```xml
+```xml{42}
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
        http://www.springframework.org/schema/context
@@ -62,17 +60,23 @@ broker.repl();
 
     <!-- SPRING REGISTRATOR FOR MOLECULER SERVICES -->
 
-    <bean id="registrator" class="services.moleculer.config.SpringRegistrator" depends-on="broker" />
+    <bean id="registrator"
+          class="services.moleculer.config.SpringRegistrator"
+          depends-on="broker" />
 
     <!-- SERVICE BROKER INSTANCE -->
 
-    <bean id="broker" class="services.moleculer.ServiceBroker" init-method="start" destroy-method="stop">
+    <bean id="broker"
+          class="services.moleculer.ServiceBroker"
+          init-method="start"
+          destroy-method="stop">
         <constructor-arg ref="brokerConfig" />
     </bean>
 
     <!-- SERVICE BROKER SETTINGS -->
 
-    <bean id="brokerConfig" class="services.moleculer.config.ServiceBrokerConfig">
+    <bean id="brokerConfig"
+          class="services.moleculer.config.ServiceBrokerConfig">
         <property name="nodeID" value="node-1" />
     </bean>
 
@@ -85,8 +89,7 @@ broker.repl();
 
 ## Screenshot
 
-![image](assets/repl/console-java.png)
-
+![image](repl/console-java.png)
 
 ## REPL Commands
 
@@ -132,11 +135,11 @@ mol $ nodes
 
 **Output**
 
-![image](assets/repl/nodes.png)
+![image](repl/nodes.png)
 
 **Detailed output**
 
-![image](assets/repl/nodes-detailed.png)
+![image](repl/nodes-detailed.png)
 
 ### List services
 
@@ -155,11 +158,11 @@ mol $ services
 
 **Output**
 
-![image](assets/repl/services.png)
+![image](repl/services.png)
 
 **Detailed output**
 
-![image](assets/repl/services-detailed.png)
+![image](repl/services-detailed.png)
 
 
 ### List actions
@@ -178,11 +181,11 @@ mol $ actions
 
 **Output**
 
-![image](assets/repl/actions.png)
+![image](repl/actions.png)
 
 **Detailed output**
 
-![image](assets/repl/actions-detailed.png)
+![image](repl/actions-detailed.png)
 
 ### List events
 
@@ -201,11 +204,11 @@ mol $ events
 
 **Output**
 
-![image](assets/repl/events.png)
+![image](repl/events.png)
 
 **Detailed output**
 
-![image](assets/repl/events-detailed.png)
+![image](repl/events-detailed.png)
 
 ### Show common information
 
@@ -215,7 +218,7 @@ mol $ info
 
 **Output**
 
-![image](assets/repl/info.png)
+![image](repl/info.png)
 
 ### List environment variables
 
@@ -237,7 +240,7 @@ mol $ call math.add {"a":3,"b":4}
 
 **Output**
 
-![image](assets/repl/call.png)
+![image](repl/call.png)
 
 #### Call an action with parameters
 
@@ -255,7 +258,7 @@ Params will be `{"a":5, "b":"Bob", "c":"--no-d", "e":{ "f":"hello" }}`
 
 **Output**
 
-![image](assets/repl/call2.png)
+![image](repl/call2.png)
 
 ### Direct call
 
@@ -292,7 +295,7 @@ mol $ bench $node.list
 
 **Output**
 
-![image](assets/repl/bench.png)
+![image](repl/bench.png)
 
 ```bash
 # Call service until 30 seconds
@@ -301,7 +304,7 @@ mol $ bench $node.list --time 30
 
 **Output**
 
-![image](assets/repl/bench2.png)
+![image](repl/bench2.png)
 
 ```bash
 # Call service 5000 times
@@ -310,7 +313,7 @@ mol $ bench $node.list --num 5000
 
 **Output**
 
-![image](assets/repl/bench3.png)
+![image](repl/bench3.png)
 
 #### Parameters
 
@@ -322,7 +325,7 @@ mol $ bench math.add --time 10 {"a":3,"b":6}
 
 **Output**
 
-![image](assets/repl/bench4.png)
+![image](repl/bench4.png)
 
 ### Dump hierarchy of threads
 
@@ -332,7 +335,7 @@ mol $ threads
 
 **Output**
 
-![image](assets/repl/threads.png)
+![image](repl/threads.png)
 
 ### Show JVM's heap usage
 
@@ -342,7 +345,7 @@ mol $ memory
 
 **Output**
 
-![image](assets/repl/memory.png)
+![image](repl/memory.png)
 
 ### Invoke Garbage Collector
 
@@ -352,9 +355,9 @@ mol $ gc
 
 **Output**
 
-![image](assets/repl/gc.png)
+![image](repl/gc.png)
 
-### Runs a script file
+### Run a script file
 
 ```bash
 mol $ run /temp/commands.txt
@@ -364,7 +367,7 @@ Loads a "script" file and executes all non-empty lines as command. Skips rows
 that begin with a "comment marker" characters (hashmark, double slash or star).
 The script file must be in UTF-8.
 
-## User-defined commands
+### User-defined commands
 
 You can define your custom REPL commands in broker options to extend Moleculer REPL commands.
 
@@ -407,13 +410,13 @@ public class HelloCommand extends Command {
 
     @Override
     public void onCommand(ServiceBroker broker,
-	                      PrintWriter out,
-	                      String[] parameters) throws Exception {
+                          PrintWriter out,
+                          String[] parameters) throws Exception {
         
         // Parse parameters
         List<String> params = Arrays.asList(parameters);
         boolean uppercase = params.contains("--uppercase") ||
-	                        params.contains("-u");
+                            params.contains("-u");
         
         // Last parameter is the name
         String name = parameters[parameters.length - 1];
@@ -476,7 +479,7 @@ broker.createService("$repl", repl);
 
 **Output of "help" command**
 
-![image](assets/repl/custom.png)
+![image](repl/custom.png)
 
 **Invoke the "hello" command**
 

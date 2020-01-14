@@ -1,18 +1,40 @@
----
-title: Internal Services
----
-
-## Internal Services
+## About Internal Services
 
 The `ServiceBroker` contains some internal services to check the node health or get some registry information.
-You can disable them by setting `internalServices: false` in broker options.
+These services can be disabled by setting `internalServices` parameter to `false` in
+[ServiceBrokerConfig](broker.html#create-a-service-broker).
 
-### List of nodes
+## List of nodes
 
 It lists all known nodes (including local node).
 
 ```java
-broker.call("$node.list").then(res => console.log(res));
+broker.call("$node.list").then(rsp -> {
+    logger.info(rsp);
+});
+```
+
+**Sample response**
+
+```json
+[
+  {
+    "id":"tsmith-pc-7700",
+    "available":true,
+    "lastHeartbeatTime":1579023883101,
+    "cpu":8,
+    "port":0,
+    "hostname":"tsmith-pc",
+    "ipList":[
+      "192.168.12.13"
+    ],
+    "client":{
+      "type":"java",
+      "version":"1.2.5",
+      "langVersion":"1.8.0_162-ea"
+    }
+  }
+]
 ```
 
 **Parameters**
@@ -20,14 +42,46 @@ broker.call("$node.list").then(res => console.log(res));
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
 | `withServices` | `Boolean` | `false` | List with services. |
-| `onlyAvailable` | `Boolean` | `false`| List only available nodes. |
 
-### List of services
+## List of services
 
 It lists all registered services (local & remote).
 
 ```java
-broker.call("$node.services").then(res => console.log(res));
+broker.call("$node.services").then(rsp -> {
+    logger.info(rsp);
+});
+```
+
+**Sample response**
+
+```json
+[
+  {
+    "name":"api-gw",
+    "nodes":[
+      "tsmith-pc-7700"
+    ],
+    "settings":null,
+    "metadata":null
+  },
+  {
+    "name":"chatService",
+    "nodes":[
+      "tsmith-pc-7700"
+    ],
+    "settings":null,
+    "metadata":null
+  },
+  {
+    "name":"upload",
+    "nodes":[
+      "tsmith-pc-7700"
+    ],
+    "settings":null,
+    "metadata":null
+  }
+]
 ```
 
 **Parameters**
@@ -37,17 +91,50 @@ broker.call("$node.services").then(res => console.log(res));
 | `onlyLocal` | `Boolean` | `false` | List only local services. |
 | `skipInternal` | `Boolean` | `false` | Skip the internal services (`$node`). |
 | `withActions` | `Boolean` | `false` | List with actions. |
-| `onlyAvailable` | `Boolean` | `false`| List only available services. |
 
-### List of local actions
+## List of local actions
 
 It lists all registered actions (local & remote).
 
 ```java
-broker.call("$node.actions").then(res => console.log(res));
+broker.call("$node.actions").then(rsp -> {
+    logger.info(rsp);
+});
 ```
 
-It has some options which you can declare within `params`.
+**Sample response**
+
+```json
+[
+  {
+    "name":"$node.actions",
+    "count":1,
+    "hasLocal":true,
+    "available":true,
+    "action":{
+      "name":"$node.actions"
+    }
+  },
+  {
+    "name":"blog.clear",
+    "count":1,
+    "hasLocal":true,
+    "available":true,
+    "action":{
+      "name":"blog.clear"
+    }
+  },
+  {
+    "name":"jmx.findObjects",
+    "count":1,
+    "hasLocal":true,
+    "available":true,
+    "action":{
+      "name":"jmx.findObjects"
+    }
+  }
+]
+```
 
 **Options**
 
@@ -56,17 +143,45 @@ It has some options which you can declare within `params`.
 | `onlyLocal` | `Boolean` | `false` | List only local actions. |
 | `skipInternal` | `Boolean` | `false` | Skip the internal actions (`$node`). |
 | `withEndpoints` | `Boolean` | `false` | List with endpoints _(nodes)_. |
-| `onlyAvailable` | `Boolean` | `false`| List only available actions. |
 
-### List of local events
+## List of local events
 
 It lists all event subscriptions.
 
 ```java
-broker.call("$node.events").then(res => console.log(res));
+broker.call("$node.events").then(rsp -> {
+    logger.info(rsp);
+});
 ```
 
-It has some options which you can declare within `params`.
+**Sample response**
+
+```json
+[
+  {
+    "name":"$services.changed",
+    "group":"nettyServer",
+    "count":1,
+    "hasLocal":true,
+    "available":true,
+    "event":{
+      "name":"$services.changed",
+      "group":"nettyServer"
+    }
+  },
+  {
+    "name":"websocket.send",
+    "group":"api-gw",
+    "count":1,
+    "hasLocal":true,
+    "available":true,
+    "event":{
+      "name":"websocket.send",
+      "group":"api-gw"
+    }
+  }
+]
+```
 
 **Options**
 
@@ -75,73 +190,58 @@ It has some options which you can declare within `params`.
 | `onlyLocal` | `Boolean` | `false` | List only local subscriptions. |
 | `skipInternal` | `Boolean` | `false` | Skip the internal event subscriptions `$`. |
 | `withEndpoints` | `Boolean` | `false` | List with endpoints _(nodes)_. |
-| `onlyAvailable` | `Boolean` | `false`| List only available subscriptions. |
 
-### Health of node
+## Health of node
 
 It returns the health info of local node (including process & OS information).
 
 ```java
-broker.call("$node.health").then(res => console.log(res));
+broker.call("$node.health").then(rsp -> {
+    logger.info(rsp);
+});
 ```
 
-Example health info:
-```java
+**Sample response**
+
+```json
 {
-    "cpu": {
-        "load1": 0,
-        "load5": 0,
-        "load15": 0,
-        "cores": 4,
-        "utilization": 0
-    },
-    "mem": {
-        "free": 1217519616,
-        "total": 17161699328,
-        "percent": 7.094400109979598
-    },
-    "os": {
-        "uptime": 366733.2786046,
-        "type": "Windows_NT",
-        "release": "6.1.7601",
-        "hostname": "Developer-PC",
-        "arch": "x64",
-        "platform": "win32",
-        "user": {
-            "uid": -1,
-            "gid": -1,
-            "username": "Developer",
-            "homedir": "C:\\Users\\Developer",
-            "shell": null
-        }
-    },
-    "process": {
-        "pid": 13096,
-        "memory": {
-            "rss": 47173632,
-            "heapTotal": 31006720,
-            "heapUsed": 22112024
-        },
-        "uptime": 25.447
-    },
-    "client": {
-        "type": "nodejs",
-        "version": "0.12.0",
-        "langVersion": "v8.9.4"
-    },
-    "net": {
-        "ip": [
-            "192.168.2.100",
-            "192.168.232.1",
-            "192.168.130.1",
-            "192.168.56.1",
-            "192.168.99.1"
-        ]
-    },
-    "time": {
-        "now": 1487338958409,
-        "iso": "2018-02-17T13:42:38.409Z",
-        "utc": "Fri, 17 Feb 2018 13:42:38 GMT"
+  "cpu":{
+    "cores":8,
+    "utilization":16
+  },
+  "os":{
+    "type":"Windows 10",
+    "release":"1.2",
+    "hostname":"tsmith-pc",
+    "arch":"amd64",
+    "user":{
+      "username":"Tom Smith",
+      "homedir":"C:\\Users\\TSmith",
+      "shell":""
     }
+  },
+  "process":{
+    "pid":7700,
+    "memory":{
+      "heapTotal":189792256,
+      "heapUsed":57524232
+    },
+    "uptime":6021
+  },
+  "client":{
+    "type":"java",
+    "version":"1.2.5",
+    "langVersion":"1.8.0_162-ea"
+  },
+  "net":{
+    "ip":[
+      "192.168.12.13"
+    ]
+  },
+  "time":{
+    "now":1579023307986,
+    "iso":"2020-01-14T17:35:07.986Z",
+    "utc":"Tue, 14 Jan 2020 17:35:07 GMT"
+  }
 }
 ```

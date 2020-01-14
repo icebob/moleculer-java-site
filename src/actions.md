@@ -25,7 +25,7 @@ The `actionName` is a dot-separated string.
 The first part of it is the service name, while the second part of it represents the action name.
 So if you have a `posts` service with a `create` action, you can call it as `posts.create`.
 
-The `params` is an object which is passed to the action as a part of the [Context](#Context).
+The `params` is an object which is passed to the action as a part of the [Context](actions.html#context).
 The service can access it via `ctx.params`.
 In the Node.js-based Moleculer implementation, the 'params' is a JavaScript Object.
 A JavaScript Object is a collection of named values:
@@ -44,13 +44,9 @@ Because of this, Moleculer uses an
 [abstract API](https://berkesa.github.io/datatree/)
 instead of a certain JSON implementation.
 The `Tree` object is an **abstract layer** that uses an arbitrary JSON implementation.
-Tree API supports 18 popular JSON implementations (eg. Jackson, Gson, Boon, Jodd, FastJson),
+Tree API supports 18 popular
+[JSON implementations](serializers.html#json-serializer) (eg. Jackson, Gson, Boon, Jodd, FastJson),
 and 10 non-JSON data formats (YAML, ION, BSON, MessagePack, etc.).
-Besides that Tree API adds manipulation capabilities to the underlaying JSON API,
-such as sorting, filtering, merging, cloning, or changing data types.
-The specific JSON (or non-JSON) implementation can be configured
-in the Moleculer configuration (see in section "Serializer").
-
 The following Java code snippet builds similar JSON structure like the previous JavaScript code:
 
 ```java
@@ -80,7 +76,7 @@ The `opts` is an CallOptions to set/override some request parameters,
 for example `timeout`, `retryCount` or `nodeID`.
 CallOptions can be produced using method chainig:
 
-```java
+```java{9}
 CallOptions opts = CallOptions.nodeID("node-2").timeout(1500).retryCount(3);
 
 Tree params = new Tree()
@@ -107,7 +103,7 @@ promise.then(rsp -> {
 If the request consists of simple name-value pairs, you do not need to create a Tree object as above.
 The name-value pairs can be listed after the "service.action" parameter:
 
-```java
+```java{2,3,4,5}
 broker.call("service.action",
             "param1", "value1",
             "param2", "value2",
@@ -177,7 +173,7 @@ broker.call("user.recommendation",
 The request structure may contain metadata. It can be name-value pairs or any structure.
 Unlike the Node.js version, the Java version stores the metadata in `params`:
 
-```java
+```java{5}
 Tree params = new Tree();
 params.put("param1", "value1");
 params.put("param2", "value2");
@@ -289,7 +285,7 @@ public class ReceiverService extends Service {
                 // Stream closed
             }
         });
-        // ...
+        return null;
     };
 }
 ```
@@ -388,6 +384,29 @@ and passes it to the action handler as a single argument.
 | `ctx.emit()` | `Method` | Emit an event (same as `broker.emit`) |
 | `ctx.broadcast()` | `Method` | Broadcast an event (same as `broker.broadcast`) 
 
+## Publishing Actions as REST services
+
+The WEB API Gateway module enables the Moleculer Services to function as REST services.
+There are several ways to publish an Action as a REST service.
+The simplest method is to use the `@HttpAlias` Annotation.  
+[Read more about WEB API Gateway.](moleculer-web.html)
+
+```java{6}
+import services.moleculer.web.router.HttpAlias; //...
+
+@Name("user")
+public class UserService extends Service {
+
+    @HttpAlias(method = "POST", path = "api/saveUser")
+    Action saveUser = ctx -> {
+        return userDAO.saveUser(ctx.params);
+    }
+}
+```
+
+In the example above, `saveUser` Action will be available with a POST method at the following URL:  
+*<http(s): //server:host/path>*/api/saveUser
+
 ## Converting Java Annotations to platform-independent properties
 
 ServiceBroker converts Java Annotations of Actions into JSON format,
@@ -441,7 +460,7 @@ Generated service description, also available on remote nodes:
 
 The Service Descriptor is received by all remote nodes and can be processed,
 regardless of the programming language.
-Sample Middleware that checks the configuration of a Java (or JavaScript) Action:
+Sample [Middleware](middlewares.html) that checks the configuration of a Java (or JavaScript) Action:
 
 ```java
 public class DeprecationChecker extends Middleware {
@@ -460,7 +479,7 @@ public class DeprecationChecker extends Middleware {
 }
 ```
 
-To install the above Middleware, call the ServiceBroker `use` function:
+To install the above [Middleware](middlewares.html), call the ServiceBroker `use` function:
 
 ```java
 broker.use(new DeprecationChecker());

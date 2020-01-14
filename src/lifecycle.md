@@ -35,7 +35,7 @@ This section describes what happens when a service is starting & stopping and ho
 It is triggered when the `broker.start` is called and the broker starts all local services.
 Use it to connect to database, listen servers...etc.
 
-```java
+```java{17}
 import services.moleculer.ServiceBroker;
 import services.moleculer.cacher.Cacher;
 import services.moleculer.service.*;
@@ -77,7 +77,7 @@ broker.start();
 It is triggered when the `broker.stop` is called and the broker starts stopping all local services.
 Use it to close database connections, stop Executors and Timers, close sockets...etc.
 
-```java
+```java{7}
 import services.moleculer.service.*;
 
 @Name("test")

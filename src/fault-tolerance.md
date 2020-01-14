@@ -1,6 +1,4 @@
----
-title: Fault tolerance
----
+## Handling errors
 
 ServiceBroker protects against circular function calls.
 It also manages call-level timeout and has a retry logic handler.
@@ -38,7 +36,11 @@ ServiceBroker broker = ServiceBroker.builder().invoker(invoker).build();
 The Default Service Invoker handles retry and timeout parameters for function calls.
 
 ```java
-// Create JSON request
+// Create JSON request:
+// {
+//   "key": "value",
+//   "array": [1, 2, 3]
+// }
 Tree req = new Tree();
 req.put("key", "value");
 req.putList("array").add(1).add(2).add(3);
