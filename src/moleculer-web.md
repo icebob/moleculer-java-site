@@ -54,8 +54,8 @@ The simplest way to create a REST service using Moleculer is the following:
 
 ```java
 new ServiceBroker()
-    .createService(new NettyServer(8080))
-    .createService(new ApiGateway("*"))
+    .createService(new NettyServer())
+    .createService(new ApiGateway("**"))
     .createService(new Service("math") {
        Action add = ctx -> {
          return ctx.params.get("a", 0) +
@@ -64,11 +64,22 @@ new ServiceBroker()
        }).start();
 ```
 After starting the program, enter the following URL into your browser:  
-`http://localhost:8080/math/add?a=3&b=6`
+`http://localhost:3000/math/add?a=3&b=6`
 
 The response will be "9". The above service can also be invoked using a POST method.  
 To do this, submit the `{"a":3,"b":5}` JSON (as POST body) to this URL:  
-`http://localhost:8080/math/add`
+`http://localhost:300/math/add`
+
+You can access all services, including [internal "$node" Service](internal-services.html).
+
+**Example URLs**	
+
+- Call `test.hello` action: `http://localhost:3000/test/hello`
+- Get health info of node:  `http://localhost:3000/~node/health`
+- List of nodes in cluster: `http://localhost:3000/~node/list`
+- List of Event listeners:  `http://localhost:3000/~node/events`
+- List of Services: `http://localhost:3000/~node/services`
+- List of Actions:  `http://localhost:3000/~node/actions`
 
 ### Detailed Example
 
@@ -90,147 +101,12 @@ The brief examples illustrate the following:
 
 ## Routes
 
-## Whitelist
-
-If you don't want to publish all actions, you can filter them with whitelist option.
-Use match strings or regexp in list. _To enable all actions, use `"**"` item._
-
-```java
-broker.createService({
-    mixins: [ApiService],
-
-    settings: {
-        routes: [{
-            path: "/api",
-
-            whitelist: [
-                // Access any actions in 'posts' service
-                "posts.*",
-                // Access call only the `users.list` action
-                "users.list",
-                // Access any actions in 'math' service
-                /^math\.\w+$/
-            ]
-        }]
-    }
-});
-```
-
-## Aliases
-
-You can use alias names instead of action names. You can also specify the method. Otherwise it will handle every method types. 
-Using named parameters in aliases is possible. Named parameters are defined by prefixing a colon to the parameter name (`:name`).
-
-```java
-broker.createService({
-    mixins: [ApiService],
-
-    settings: {
-        routes: [{
-            aliases: {
-                // Call `auth.login` action with `GET /login` or `POST /login`
-                "login": "auth.login",
-
-                // Restrict the request method
-                "POST users": "users.create",
-
-                // The `name` comes from named param. 
-                // You can access it with `ctx.params.name` in action
-                "GET greeter/:name": "test.greeter",
-            }
-        }]
-    }
-});
-```
-
-::: tip
-The named parameter is handled with [path-to-regexp](https://github.com/pillarjs/path-to-regexp) module. Therefore you can use [optional](https://github.com/pillarjs/path-to-regexp#optional) and [repeated](https://github.com/pillarjs/path-to-regexp#zero-or-more) parameters, as well.
-:::
-
-
-You can also create RESTful APIs.
-```java
-broker.createService({
-    mixins: [ApiService],
-
-    settings: {
-        routes: [{
-            aliases: {
-                "GET users": "users.list",
-                "GET users/:id": "users.get",
-                "POST users": "users.create",
-                "PUT users/:id": "users.update",
-                "DELETE users/:id": "users.remove"
-            }
-        }]
-    }
-});
-```
-
-For REST routes you can also use this simple shorthand alias:
-
-```java
-broker.createService({
-    mixins: [ApiService],
-
-    settings: {
-        routes: [{
-            aliases: {
-                "REST users": "users"
-            }
-        }]
-    }
-});
-```
-
-::: warning
-To use this shorthand alias, create a service which has `list`, `get`, `create`, `update` and `remove` actions.
-:::
-
-You can make use of custom functions within the declaration of aliases. In this case, the handler's signature is `function (req, res) {...}`.
-
-::: tip
-Please note that Moleculer uses native Node.js [HTTP server](https://nodejs.org/api/http.html)
-:::
-
-```java
-broker.createService({
-    mixins: [ApiService],
-
-    settings: {
-        routes: [{
-            aliases: {
-                "POST upload"(req, res) {
-                    this.parseUploadedFile(req, res);
-                },
-                "GET custom"(req, res) {
-                    res.end('hello from custom handler')
-                }
-            }
-        }]
-    }
-});
-```
-
-::: tip
-There are some internal pointer in `req` & `res` objects:
-* `req.$ctx` are pointed to request context.
-* `req.$service` & `res.$service` are pointed to this service instance.
-* `req.$route` & `res.$route` are pointed to the resolved route definition.
-* `req.$params` is pointed to the resolved parameters (from query string & post body)
-* `req.$alias` is pointed to the resolved alias definition.
-* `req.$action` is pointed to the resolved action.
-* `req.$endpoint` is pointed to the resolved action endpoint.
-* `req.$next` is pointed to the `next()` handler if the request comes from ExpressJS.
-
-E.g.: To access the broker, use `req.$service.broker`.
-:::
-
 ### Mapping policy
 
-The `route` has a `mappingPolicy` property to handle routes without aliases.
+Routes have a `mappingPolicy` property to handle routes without aliases.
 
 **Available options:**
+
 - `all` - enable to request all routes with or without aliases (default)
 - `restrict` - enable to request only the routes with aliases.
 
@@ -250,6 +126,90 @@ broker.createService({
 ```
 
 You can't request the `/math.add` or `/math/add` URLs, only `POST /add`.
+
+## Whitelist
+
+If you don't want to publish all actions, you can filter them with whitelist option.
+Use match strings or regexp in list. _To enable all actions, use `"**"` item._
+
+```java
+ServiceBroker broker = new ServiceBroker();
+ApiGateway apiGateway = new ApiGateway();
+Route route = apiGateway.addRoute(new Route("/api"));
+
+/**
+ * Access any actions in "posts" Service, eg:
+ * http://localhost:3000/api/posts/action
+ */
+route.addToWhiteList("posts/*");
+
+/**
+ * Allow access to "users/list" Action, eg:
+ * http://localhost:3000/api/users/list
+ */
+route.addToWhiteList("users/list");
+
+/**
+ * Access any actions in "math" service using regex, eg:
+ * http://localhost:3000/api/math/add?a=1&b2
+ */
+route.addToWhiteList("^/math/\\S+$");
+
+//  Install Netty web server and ApiGateway  
+broker.createService(new NettyServer());
+broker.createService(apiGateway)
+broker.start();
+```
+
+## Aliases
+
+You can use alias names instead of action names.
+You can also specify the method. Otherwise it will handle every method types. 
+Using named parameters in aliases is possible.
+Named parameters are defined by prefixing a colon to the parameter name (`:name`).
+
+```java
+ServiceBroker broker = new ServiceBroker();
+ApiGateway apiGateway = new ApiGateway();
+Route route = apiGateway.addRoute(new Route());
+
+// Call "auth.login" action with "GET /login" or "POST /login"
+route.addAlias("login", "auth.login");
+
+// Restrict the request method
+route.addAlias("POST", "users", "users.create");
+
+// The "name" comes from the URL, eg:
+// http://localhost:3000/greeter/Jessica
+route.addAlias("GET", "greeter/:name", "test.greeter");
+
+// Cover "view.render" Action with a "virtual" HTML page:
+// http://localhost:3000/pages/table.html
+route.addAlias("GET", "pages/table.html", "view.render");
+
+//  Install Netty web server and ApiGateway  
+broker.createService(new NettyServer()).createService(apiGateway).start();
+```
+
+You can also create RESTful APIs:
+
+```java
+route.addAlias("GET", "users", "users.list");
+route.addAlias("GET", "users/:id", "users.get");
+route.addAlias("POST", "users", "users.create");
+route.addAlias("PUT", "users/:id", "users.update");
+route.addAlias("DELETE", "users/:id", "users.remove");
+```
+
+For REST routes you can also use this simple shorthand alias:
+
+```java
+route.addAlias("REST", "users", "users");
+```
+
+::: warning
+To use this shorthand alias, create a Service which has `list`, `get`, `create`, `update` and `remove` actions.
+:::
 
 ## Middlewares
 
