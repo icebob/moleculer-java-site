@@ -387,14 +387,23 @@ Now you can, but you must always return the new or original `data`.
 
 ### ServeStatic Middleware
 
-Service to serve files from within a given root directory. When a file is not
+Middleware to serve files from within a given root directory. When a file is not
 found, instead of sending a 404 response. Supports content compression,
 automatic "Content-Type" detection, and ETAGs.
- 
+The specified directory (the "/www" in the example below)
+can be in the file system or on the classpath.
+
 ```java
+// Simple usage
 ServeStatic staticHandler = new ServeStatic("/", "/www");
 staticHandler.setEnableReloading(true) // Turn off in production mode
 route.use(staticHandler);
+
+// Middlewares of a typical web server (in the correct order)
+route.use(new NotFound()); // To be executed last (404 Not Found)
+route.use(new ServeStatic("/", "/www")); // Static files (html, css, etc.)
+route.use(new Favicon("/www/img/favicon.ico")); // Favicon (file or classpath)
+route.use(new Redirector("/", "index.html", 307)); // Jump to default page
 ```
 
 ### Redirector Middleware
@@ -405,6 +414,11 @@ Redirects requests from a specified location to an another location.
 // Any requests to the root path "/"
 // will cause the "index.html" page to be served.
 route.use(new Redirector("/", "index.html", 307));
+
+// Jump from multiple path to default page
+route.use(new Redirector("/", "index.html"));
+route.use(new Redirector("/index.htm", "index.html"));
+route.use(new Redirector("/default.html", "index.html"));
 ```
 
 ### NotFound Middleware
@@ -438,7 +452,23 @@ If that is successful then the routing of the request is allowed to continue to 
 otherwise a 403 response is returned to signify that access is denied.
 
 ```java
+// Allow only one user
 route.use(new BasicAuthenticator("user", "password"));
+
+// Allow multiple users
+BasicAuthenticator	authenticator = new BasicAuthenticator();
+authenticator.addUser("user1", "password1");
+authenticator.addUser("user2", "password2");
+route.use(authenticator);
+
+// Use custom authenticator
+BasicAuthenticator	authenticator = new BasicAuthenticator();
+authenticator.setProvider((broker, username, password) -> {
+
+    // Allow usernames starting with "xyz"
+    return username.startsWith("xyz");
+});
+route.use(authenticator);
 ```
 
 ### CorsHeaders Middleware
@@ -447,15 +477,47 @@ Implements server side [CORS](https://www.w3.org/wiki/CORS) support for Molecule
 Cross Origin Resource Sharing is a mechanism for allowing resources to be requested from one host and served from another.
 
 ```java
+// Allow all
 route.use(new CorsHeaders());
+
+// With custom CORS parameters
+CorsHeaders cors = new CorsHeaders();
+cors.setOrigin("*");
+cors.setMethods("GET");
+cors.setMaxAge(60);
+route.use(cors);
 ```
 
 ### ErrorPage Middleware
 
 Custom error page (Error 404, 500, etc.) handler.
+Error templates can contain the following variables:
+
+| Variable  | Content          |
+|-----------|------------------|
+| {status}  | HTTP status code |
+| {message} | Error message    |
+| {stack}   | Stack trace      |
+
+**Sample error template**
+
+```html
+<html>
+    <body>
+        <h1>{message}</h1>
+		<p>{status}</p>
+		<pre>{stack}</pre>
+    </body>
+</html>
+```
+
+**Defining status-specific error templates**
 
 ```java
+// Default error template
 ErrorPage errorPages = new ErrorPage("error-default.html");
+
+// Status-specific templates
 errorPages.setTemplate(404, "error-404.html");
 errorPages.setTemplate(500, "error-500.html");
 route.use(errorPages);
@@ -467,7 +529,8 @@ The `HostNameFilter` adds the ability to allow or block requests based on the ho
  
 ```java
 HostNameFilter filter = new HostNameFilter();
-filter.allow("domain.server**");
+filter.allow("domain.server**"); // Allow all with this prefix
+filter.deny("domain.server22"); // Except this
 route.use(filter);
 ```
 
@@ -477,7 +540,8 @@ The `IpFilter` Middleware adds the ability to allow or block requests based on t
 
 ```java
 IpFilter filter = new IpFilter();
-filter.allow("150.10.**");
+filter.allow("150.10.**", "255.12.34.*"); // Let's enable them
+filter.deny("150.10.0.0"); // Except this
 route.use(filter);
 ```
 
@@ -486,7 +550,28 @@ route.use(filter);
 Rate Limiter limits concurrent constant requests to the HTTP calls in the application.
 
 ```java
-route.use(new RateLimiter(100, true));
+// Allow up to 50 requests / second (default)
+route.use(new RateLimiter());
+
+// Allow up to 100 requests / 2 minutes
+RateLimiter limiter = new RateLimiter();
+limiter.setRateLimit(100);
+limiter.setWindow(2);
+limiter.setUnit(TimeUnit.MINUTES);
+route.use(limiter);
+```
+
+**Annotation-driven rate limiting**
+
+```java
+// Restrict to annotated Actions only
+route.use(new RateLimiter(false));
+
+// ...and in the Service
+@RateLimit(value = 100, window = 2, unit = "MINUTES")
+Action render = ctx -> {
+    return null;
+};
 ```
 
 ### RequestLogger Middleware
@@ -497,7 +582,7 @@ reduces the performance (nevertheless, it may be useful during development).
 Be sure to turn it off in production mode.
 
 ```java
-route.use(new RequestLogger(2048));
+route.use(new RequestLogger());
 ```
 
 ### ResponseDeflater Middleware
@@ -513,19 +598,33 @@ route.use(new ResponseDeflater(Deflater.BEST_SPEED));
 
 ### ResponseHeaders Middleware
 
-Adds static HTTP-headers to the response message.
+This Middleware unconditionally adds the specified headers to any HTTP response within the Route.
 
 ```java
+// Add single header to HTTP responses
 route.use(new ResponseHeaders("X-Robots-Tag", "noindex"));
+
+// Add multiple headers to HTTP responses
+ResponseHeaders securityHeaders = new ResponseHeaders();
+securityHeaders.set("X-Download-Options", "noopen");
+securityHeaders.set("X-Content-Type-Options", "nosniff");
+securityHeaders.set("X-XSS-Protection", "1; mode=block");
+securityHeaders.set("X-FRAME-OPTIONS", "DENY");
+securityHeaders.set("Strict-Transport-Security", "max-age=12345000");
+route.use(securityHeaders);
 ```
 
 ### ResponseTime Middleware
 
-Adds a header "X-Response-Time" to the response, containing the time taken in
-MILLISECONDS to process the request.
+Adds "X-Response-Time" header to the response,
+containing the time taken in MILLISECONDS to process the request.
  
 ```java
+// With "X-Response-Time" header
 route.use(new ResponseTime());
+
+// With custom header name
+route.use(new ResponseTime("X-Custom"));
 ```
 
 ### ResponseTimeout Middleware
@@ -542,6 +641,10 @@ route.use(new ResponseTimeout(1000L * 30));
 Generates Session Cookies, and sets the cookie header.
 
 ```java
+// With "JSESSIONID" cookie
+route.use(new SessionCookie());
+
+// With custom cookie name
 route.use(new SessionCookie("SID"));
 ```
 
@@ -555,7 +658,13 @@ URL but also on the content of the request. `TopLevelCache` speeds up querying
 of various reports (tables, charts) and dynamically generated images.
  
 ```java
-route.use(new TopLevelCache("/blog/posts/**"));
+// User default cacher of MessageBroker
+Cacher cacher = broker.getConfig().getCacher();
+route.use(new TopLevelCache(cacher, "/blog/posts/**"));
+
+// User custom Cacher
+Cacher cacher = new MemoryCacher();
+route.use(new TopLevelCache(cacher, "/blog/posts/**"));
 ```
 
 ### XSRFToken Middleware
@@ -570,6 +679,43 @@ route.use(new XSRFToken());
 
 Moleculer ApiGateway includes dynamic page generation capabilities by
 including out of the box support for several popular template engines.
+Action's basically return data in JSON format.
+To convert the JSON data structure to HTML,
+you must specify the template name in the **"$template" meta property**.
+If there is a "$template" meta property in the Action's response,
+ApiGateway calls the Template Engine and converts the response to HTML.
+Example code that puts three values ("a", "b", and "c") in the response JSON,
+then creates a table and then converts this data with "test.html" template:
+
+```java
+Action html = ctx -> {
+
+    // Add some value to "raw" JSON data
+    Tree data = new Tree();
+    data.put("a", 1);
+    data.put("b", true);
+    data.put("c", "xyz");
+
+    // Create table (10 rows, 3 columns)
+    Tree table = data.putList("table");
+    for (int i = 0; i < 10; i++) {
+        Tree row = table.addMap();
+        row.put("first", "some text");
+        row.put("second", false);
+        row.put("third", i);
+    }
+	
+    // Put template name ("test.html") into the "meta"
+    Tree meta = rsp.getMeta();
+    meta.put("$template", "test");
+	
+	// Return data (and the "meta" in it)
+	return data;
+}
+```
+
+The Template Engine used by ApiGateway can be specified by the `setTemplateEngine` function of ApiGateway.
+The following chapters describe how to configure the built-in Template Engines.
 
 ### Mustache Template Engine
 
@@ -590,6 +736,9 @@ MustacheEngine templateEngine = new MustacheEngine();
 templateEngine.setTemplatePath("/www"); // Root path of templates
 apiGateway.setTemplateEngine(templateEngine);
 ```
+
+The `setTemplatePath` function defines the root directory of the templates.
+This can be in the file system or on the classpath.
 
 **Advanced example**
 
@@ -621,6 +770,9 @@ apiGateway.setTemplateEngine(templateEngine);
 ```
 
 **Sample template syntax**
+
+The "header" inserts a page snippet named "header.html" into the HTML page.
+This "header" block will be included in every template example.
 
 ```html
 <html>
