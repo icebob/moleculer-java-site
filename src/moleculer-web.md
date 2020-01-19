@@ -72,7 +72,7 @@ To do this, submit the `{"a":3,"b":5}` JSON (as POST body) to this URL:
 
 You can access all services, including [internal "$node" Service](internal-services.html).
 
-**Example URLs**	
+**Example URLs**    
 
 - Call `test.hello` action: `http://localhost:3000/test/hello`
 - Get health info of node:  `http://localhost:3000/~node/health`
@@ -103,39 +103,30 @@ The brief examples illustrate the following:
 
 ### Mapping policy
 
-Routes have a `mappingPolicy` property to handle routes without aliases.
+Routes have a `mappingPolicy` property to handle Routes without Aliases.
 
 **Available options:**
 
-- `all` - enable to request all routes with or without aliases (default)
-- `restrict` - enable to request only the routes with aliases.
+- RESTRICT - enable to request only the Routes with Aliases (default)
+- ALL - enable to request all Routes with or without Aliases
 
 ```java
-broker.createService({
-    mixins: [ApiService],
-
-    settings: {
-        routes: [{
-            mappingPolicy: "restrict",
-            aliases: {
-                "POST add": "math.add"
-            }
-        }]
-    }
-});
+Route route = gateway.addRoute(new Route(MappingPolicy.RESTRICT));
+route.addAlias("POST", "add", "math.add");
 ```
 
-You can't request the `/math.add` or `/math/add` URLs, only `POST /add`.
+In this case, you can't call Action at URLs "/math.add" or "/math/add",
+just at "/add" via "POST" method.
 
 ## Whitelist
 
-If you don't want to publish all actions, you can filter them with whitelist option.
+If you don't want to publish all Actions, you can filter them with whitelist option.
 Use match strings or regexp in list. _To enable all actions, use `"**"` item._
 
 ```java
 ServiceBroker broker = new ServiceBroker();
-ApiGateway apiGateway = new ApiGateway();
-Route route = apiGateway.addRoute(new Route("/api"));
+ApiGateway gateway = new ApiGateway();
+Route route = gateway.addRoute(new Route("/api"));
 
 /**
  * Access any actions in "posts" Service, eg:
@@ -157,7 +148,7 @@ route.addToWhiteList("^/math/\\S+$");
 
 //  Install Netty web server and ApiGateway  
 broker.createService(new NettyServer());
-broker.createService(apiGateway)
+broker.createService(gateway)
 broker.start();
 ```
 
@@ -170,8 +161,8 @@ Named parameters are defined by prefixing a colon to the parameter name (`:name`
 
 ```java
 ServiceBroker broker = new ServiceBroker();
-ApiGateway apiGateway = new ApiGateway();
-Route route = apiGateway.addRoute(new Route());
+ApiGateway gateway = new ApiGateway();
+Route route = gateway.addRoute(new Route());
 
 // Call "auth.login" action with "GET /login" or "POST /login"
 route.addAlias("login", "auth.login");
@@ -188,7 +179,7 @@ route.addAlias("GET", "greeter/:name", "test.greeter");
 route.addAlias("GET", "pages/table.html", "view.render");
 
 //  Install Netty web server and ApiGateway  
-broker.createService(new NettyServer()).createService(apiGateway).start();
+broker.createService(new NettyServer()).createService(gateway).start();
 ```
 
 You can also create RESTful APIs:
@@ -211,184 +202,209 @@ route.addAlias("REST", "users", "users");
 To use this shorthand alias, create a Service which has `list`, `get`, `create`, `update` and `remove` actions.
 :::
 
-## Middlewares
+## HTTP Middlewares
 
-It supports Connect-like middlewares in global-level,
-route-level & alias-level. Signature: `function(req, res, next) {...}`.
-For more info check [express middleware](https://expressjs.com/en/guide/using-middleware.html)
+HTTP Middleware is used to intercept the client request and do some pre-processing.
+It can also intercept the response and do post-processing before sending to the client in web application.
+Some common tasks that we can do with HTTP Middlewares are:
 
-**Example**
+- Formatting of request body or header before sending it to Action.
+- Authentication and autherization of request for resources.
+- Logging request parameters.
+- Alter response by adding some cookies or header information.
+- End the request-response cycle.
+
+You can extend the `HttpMiddleware` abstract class to create an HTTP Middleware.
+HTTP Middlewares can be added globally or at Route-level to the ApiGateway.
+Bind Middleware to an instance of the API Gateway object by using the `gateway.use(middleware)` function.
+Route-level Middleware works in the same way as global Middleware,
+except it is bound to an instance of Route.
+
+Middlewares is executed in **reverse order** as they are added to routes (or to the API Gateway):
 
 ```java
-broker.createService({
-    mixins: [ApiService],
-    settings: {
-        // Global middlewares. Applied to all routes.
-        use: [
-            cookieParser(),
-            helmet()
-        ],
-
-        routes: [
-            {
-                path: "/",
-
-                // Route-level middlewares.
-                use: [
-                    compression(),
-                    
-                    passport.initialize(),
-                    passport.session(),
-
-                    serveStatic(path.join(__dirname, "public"))
-                ],
-                
-                aliases: {
-                    "GET /secret": [
-                        // Alias-level middlewares.
-                        auth.isAuthenticated(),
-                        auth.hasRole("admin"),
-                        "top.secret" // Call the `top.secret` action
-                    ]
-                }
-            }
-        ]
-    }
-});
+route.use(new LastMiddleware()); // Executed LAST
+route.use(new ThirdMiddleware());
+route.use(new SecondMiddleware());
+route.use(new FirstMiddleware()); // Executed FIRST
 ```
 
-## Multiple routes
-
-You can create multiple routes with different prefix,
-whitelist, alias, calling options & authorization.
-
-::: tip
-When using multiple routes you should explicitly set the body parser(s) for each route.
-:::
+Moleculer's HTTP Middlewares use very similar logic to
+[Middlewares of **Express.js**](https://expressjs.com/en/guide/using-middleware.html).
+The following example implements an "empty" Middleware that passes the request without modification:
 
 ```java
-broker.createService({
-    mixins: [ApiService],
+public class MyMiddleware extends HttpMiddleware {
 
-    settings: {
-        routes: [
-            {
-                path: "/admin",
+    public RequestProcessor install(RequestProcessor next, Tree config) {
 
-                authorization: true,
-
-                whitelist: [
-                    "$node.*",
-                    "users.*",
-                ]
-
-                bodyParsers: {
-                    json: true
-                }
-            },
-            {
-                path: "/",
-
-                whitelist: [
-                    "posts.*",
-                    "math.*",
-                ]
-
-                bodyParsers: {
-                    json: true
-                }
+        // Create new AbstractRequestProcessor or return "null", this is
+        // decided by the "config" which contains the Action parameters.
+    
+        return new AbstractRequestProcessor(next) {
+            public void service(WebRequest req, WebResponse rsp) throws Exception {
+            
+                // Do nothig, just invoke next Middleware or Action
+                next.service(req, rsp);
             }
-        ]
+        };    
+    }
+}
+```
+
+The
+[GitHub page](https://github.com/moleculer-java/moleculer-java-web/tree/master/src/main/java/services/moleculer/web/middleware)
+of the API Gateway project has many examples of various HTTP Middlewares.
+
+## Multiple Routes
+
+Complex web applications require multiple Routes.
+Usually one Route is required for REST services and one for static content
+(HTML pages, CSS files, images, etc.).
+The policy for REST Route "RESTRICT" (this is the default policy)
+because only the REST services that are configured can be called.
+The policy for static Route is "ALL" because it accepts all requests
+and returns a "404 Not Found" message if the requested file is not exists:
+
+```java
+// Create Route for REST services:
+Route restRoute = gateway.addRoute(new Route());
+restRoute.use(new CorsHeaders());
+restRoute.addAlias("GET", // Allowed HTTP method
+                   "api/hello/:name", // Path alias
+                   "greeter.hello");  // Action
+
+// Create Route for static files:
+Route staticRoute = gateway.addRoute(new Route());
+staticRoute.setMappingPolicy(MappingPolicy.ALL);
+staticRoute.use(new NotFound());
+staticRoute.use(new ServeStatic("/", "/www"));
+staticRoute.use(new Favicon("/www/img/favicon.ico"));
+staticRoute.use(new Redirector("/", "index.html", 307));
+```
+
+## Route hooks
+
+API Gateway has before & after call hooks.
+The `setBeforeCall` and `setAfterCall` functions provide
+low-level access to the HTTP request or response:
+
+```java
+gateway.setBeforeCall((currentRoute, req, rsp, data) -> {
+    if (req.getPath().startsWith("/api/upload")) {
+
+        // Copy remote address into the "meta" block,
+        // so this value will be visible to the Action
+        Tree meta = data.getMeta();
+        meta.put("address", req.getAddress());
+    }
+});            
+```
+
+The `getInternalObject` function can be used to access the actual `HttpServletRequest`,
+`HttpServletResponse` or Netty's `ChannelHandlerContext` object:
+
+```java
+gateway.setBeforeCall((currentRoute, req, rsp, data) -> {
+    Object internal = req.getInternalObject();
+    if (internal instanceof ChannelHandlerContext) {
+
+        // Moleculer is running under Netty
+        ChannelHandlerContext nettyRequest =
+                        (ChannelHandlerContext) internal;
+    } else {
+
+        // Moleculer is running under J2EE Server
+        HttpServletRequest servletRequest =
+                        (HttpServletRequest) internal;
     }
 });
 ```
 
 ## Response type & status code
 
-When the response is received from an action handler,
-the API gateway detects the type of response and set the `Content-Type` in the `res` headers.
-The status code is `200` by default.
-Of course you can overwrite these values, moreover, you can define custom response headers, too.
+When the response is received from an Action,
+the API Gateway checks the "meta" block to see if it contains certain special fields.
+With these meta fields, you can change the "Content-Type" header,
+the status code of the response and add any HTTP header to the response.
 
-To define response headers & status code use `ctx.meta` fields:
+**Special meta fields:**
 
-**Available meta fields:**
-* `ctx.meta.$statusCode` - set `res.statusCode`.
-* `ctx.meta.$statusMessage` - set `res.statusMessage`.
-* `ctx.meta.$responseType` - set `Content-Type` in header.
-* `ctx.meta.$responseHeaders` - set all keys in header.
-* `ctx.meta.$location` - set `Location` key in header for redirects.
-
+* `ctx.meta.$statusCode` - Status code (eg. 200, 404) of the HTTP response message.
+* `ctx.meta.$responseType` - Content-Type header's value of the HTTP response message.
+* `ctx.meta.$responseHeaders` - Set of response headers (it's a Map, not a single value).
+* `ctx.meta.$location` - Location in header for redirects (relative URL).
+* `ctx.meta.$template` - Name of the HTML template (eg. "test" means "test.html").
+* `ctx.meta.$locale` - Locale (~= language) of the generated HTML page (eg. "de", "fr", "en_uk").
+    
 **Example**
 
 ```java
-module.exports = {
-    name: "export",
-    actions: {
-        // Download response as a file in the browser
-        downloadCSV(ctx) {
-            ctx.meta.$responseType = "text/csv";
-            ctx.meta.$responseHeaders = {
-                "Content-Disposition": `attachment; filename="data-${ctx.params.id}.csv"`
-            };
-            
-            return csvFileStream;
-        }
+ Action list = ctx -> {
 
-        // Redirect the request
-        redirectSample(ctx) {
-            ctx.meta.$statusCode = 302;
-            ctx.meta.$location = "/login";
+    // Create response "JSON"
+    Tree rsp = new Tree();
 
-            return;
-        }
-    }
-}
+    // Get the hidden meta block of the response
+    Tree meta = rsp.getMeta();
+
+    // Set status code and Content-Type
+    meta.put("$statusCode", 200);
+    meta.put("$responseType", "text/html");
+    
+    // Add extra HTTP headers
+    Tree headers = meta.putMap("$responseHeaders");
+    headers.put("X-Header-Name1", "Header-Value1");
+    headers.put("X-Header-Name2", "Header-Value2");
+    headers.put("X-Header-Name3", "Header-Value3");
+
+    // Convert response by using
+    // server-side Template Engine
+    meta.put("$template", "test"); // test.html
+    meta.put("$locale", "en_us"); // Locale
+    
+    // Return response
+    return rsp;
+};
 ```
 
-## Route hooks
-
-The `route` has before & after call hooks.
-You can use it to set `ctx.meta`, access `req.headers` or modify the response `data`.
+The "Content-Type" value, status code and other HTTP headers
+can be changed even if the answer is a **Moleculer Stream**.
+Since Stream has no "meta", it needs to be wrapped in a Tree object:
 
 ```java
-broker.createService({
-    mixins: [ApiService],
+ Action list = ctx -> {
 
-    settings: {
-        routes: [
-            {
-                path: "/",
+    // Open Stream
+    PacketStream stream = ctx.createStream();
+ 
+    // Trasfer data from file
+    stream.transferFrom(new File("/image.png"));
+ 
+    // Stream is wrapped in a Tree object,
+    // it's just for the meta (Stream has no meta)
+    Tree rsp =  new CheckedTree(stream);
 
-                onBeforeCall(ctx, route, req, res) {
-                    // Set request headers to context meta
-                    ctx.meta.userAgent = req.headers["user-agent"];
-                },
+    // Get the meta block
+    Tree meta = rsp.getMeta();
 
-                onAfterCall(ctx, route, req, res, data) {
-                    // Async function which return with Promise
-                    return doSomething(ctx, res, data);
-                }
-            }
-        ]
-    }
-});
+    // Set the Content-Type of the response
+    meta.put("$responseType", "image/png");
+
+    // Return response (and the Stream in it)
+    return rsp;
+};
 ```
-
-> In previous versions of Moleculer Web, you couldn't manipulate the `data` in `onAfterCall`.
-Now you can, but you must always return the new or original `data`.
-
-## HTTP Middlewares
-
-- HttpMiddleware
-- By default Middlewares are matched in **reversed** order they are added to the Route.
 
 ## Built-in Middlewares
 
+Moleculer API Gateway contains many pre-built HTTP Middlewares.
+These Middleware's can be integrated into web applications to speed up application development.
+
 ### ServeStatic Middleware
 
-Middleware to serve files from within a given root directory. When a file is not
-found, instead of sending a 404 response. Supports content compression,
+Middleware to serve files from a specified root directory. If the file is not
+found, it sends a 404 response. ServeStatic supports content compression,
 automatic "Content-Type" detection, and ETAGs.
 The specified directory (the "/www" in the example below)
 can be in the file system or on the classpath.
@@ -456,13 +472,13 @@ otherwise a 403 response is returned to signify that access is denied.
 route.use(new BasicAuthenticator("user", "password"));
 
 // Allow multiple users
-BasicAuthenticator	authenticator = new BasicAuthenticator();
+BasicAuthenticator    authenticator = new BasicAuthenticator();
 authenticator.addUser("user1", "password1");
 authenticator.addUser("user2", "password2");
 route.use(authenticator);
 
 // Use custom authenticator
-BasicAuthenticator	authenticator = new BasicAuthenticator();
+BasicAuthenticator    authenticator = new BasicAuthenticator();
 authenticator.setProvider((broker, username, password) -> {
 
     // Allow usernames starting with "xyz"
@@ -505,8 +521,8 @@ Error templates can contain the following variables:
 <html>
     <body>
         <h1>{message}</h1>
-		<p>{status}</p>
-		<pre>{stack}</pre>
+        <p>{status}</p>
+        <pre>{stack}</pre>
     </body>
 </html>
 ```
@@ -704,13 +720,13 @@ Action html = ctx -> {
         row.put("second", false);
         row.put("third", i);
     }
-	
+    
     // Put template name ("test.html") into the "meta"
     Tree meta = rsp.getMeta();
     meta.put("$template", "test");
-	
-	// Return data (and the "meta" in it)
-	return data;
+    
+    // Return data (and the "meta" in it)
+    return data;
 }
 ```
 
@@ -734,7 +750,7 @@ To use Mustache Template Engine, add the following dependency to the build scrip
 ```java
 MustacheEngine templateEngine = new MustacheEngine();
 templateEngine.setTemplatePath("/www"); // Root path of templates
-apiGateway.setTemplateEngine(templateEngine);
+gateway.setTemplateEngine(templateEngine);
 ```
 
 The `setTemplatePath` function defines the root directory of the templates.
@@ -766,7 +782,7 @@ templateEngine.setMessageLoader(new DefaultMessageLoader(
                                 developmentMode); // Autoreload on/off
 
 // Set the Template Engine of ApiGateway
-apiGateway.setTemplateEngine(templateEngine);
+gateway.setTemplateEngine(templateEngine);
 ```
 
 **Sample template syntax**
@@ -778,18 +794,18 @@ This "header" block will be included in every template example.
 <html>
     <body>
         {{> header}}
-		<p>A: {{a}}</p>
-		<p>B: {{b}}</p>
-		<p>C: {{c}}</p>
-		<table>
-		{{#table}}
-			<tr>
-				<td>{{first}}</td>
-				<td>{{second}}</td>
-				<td>{{third}}</td>
-			</tr>
-		{{/table}}
-		</table>
+        <p>A: {{a}}</p>
+        <p>B: {{b}}</p>
+        <p>C: {{c}}</p>
+        <table>
+        {{#table}}
+            <tr>
+                <td>{{first}}</td>
+                <td>{{second}}</td>
+                <td>{{third}}</td>
+            </tr>
+        {{/table}}
+        </table>
     </body>
 </html>
 ```
@@ -810,7 +826,7 @@ To use Handlebars Template Engine, add the following dependency to the build scr
 ```java
 HandlebarsEngine templateEngine = new HandlebarsEngine();
 templateEngine.setTemplatePath("/www"); // Root path of templates
-apiGateway.setTemplateEngine(templateEngine);
+gateway.setTemplateEngine(templateEngine);
 ```
 
 **Advanced example**
@@ -840,7 +856,7 @@ templateEngine.setMessageLoader(new DefaultMessageLoader(
                                 developmentMode); // Autoreload on/off
 
 // Set the Template Engine of ApiGateway
-apiGateway.setTemplateEngine(templateEngine);
+gateway.setTemplateEngine(templateEngine);
 ```
 
 **Sample template syntax**
@@ -851,18 +867,18 @@ The templates have the same syntax as the Mustache syntax.
 <html>
     <body>
         {{> header}}
-		<p>A: {{a}}</p>
-		<p>B: {{b}}</p>
-		<p>C: {{c}}</p>
-		<table>
-		{{#table}}
-			<tr>
-				<td>{{first}}</td>
-				<td>{{second}}</td>
-				<td>{{third}}</td>
-			</tr>
-		{{/table}}
-		</table>
+        <p>A: {{a}}</p>
+        <p>B: {{b}}</p>
+        <p>C: {{c}}</p>
+        <table>
+        {{#table}}
+            <tr>
+                <td>{{first}}</td>
+                <td>{{second}}</td>
+                <td>{{third}}</td>
+            </tr>
+        {{/table}}
+        </table>
     </body>
 </html>
 ```
@@ -883,7 +899,7 @@ To use DataTree Template Engine, add the following dependency to the build scrip
 ```java
 DataTreeEngine templateEngine = new DataTreeEngine();
 templateEngine.setTemplatePath("/www"); // Root path of templates
-apiGateway.setTemplateEngine(templateEngine);
+gateway.setTemplateEngine(templateEngine);
 ```
 
 **Advanced example**
@@ -903,7 +919,7 @@ templateEngine.setDefaultExtension("html"); // Default extension
 // Set DataTree-specific properties
 TemplateEngine engine = templateEngine.getEngine();
 engine.setTemplatePreProcessor(new SimpleHtmlMinifier());
-		
+        
 // Enable multilingualism, and language file reloading in development
 // mode (language files can be in YAML or Java Properties format)
 templateEngine.setMessageLoader(new DefaultMessageLoader(
@@ -912,7 +928,7 @@ templateEngine.setMessageLoader(new DefaultMessageLoader(
                                 developmentMode); // Autoreload on/off
 
 // Set the Template Engine of ApiGateway
-apiGateway.setTemplateEngine(templateEngine);
+gateway.setTemplateEngine(templateEngine);
 ```
 
 **Sample template syntax**
@@ -923,18 +939,18 @@ apiGateway.setTemplateEngine(templateEngine);
 <html>
     <body>
         #{include header}
-		<p>A: #{a}</p>
-		<p>B: #{b}</p>
-		<p>C: #{c}</p>
-		<table>
-			#{for row : table}
-			<tr>
-				<td>#{row.first}</td>
-				<td>#{row.second}</td>
-				<td>#{row.third}</td>
-			</tr>		
-			#{end}
-		</table>
+        <p>A: #{a}</p>
+        <p>B: #{b}</p>
+        <p>C: #{c}</p>
+        <table>
+            #{for row : table}
+            <tr>
+                <td>#{row.first}</td>
+                <td>#{row.second}</td>
+                <td>#{row.third}</td>
+            </tr>        
+            #{end}
+        </table>
     </body>
 </html>
 ```
@@ -957,7 +973,7 @@ To use FreeMarker Template Engine, add the following dependency to the build scr
 ```java
 FreeMarkerEngine templateEngine = new FreeMarkerEngine();
 templateEngine.setTemplatePath("/www"); // Root path of templates
-apiGateway.setTemplateEngine(templateEngine);
+gateway.setTemplateEngine(templateEngine);
 ```
 
 **Advanced example**
@@ -978,7 +994,7 @@ templateEngine.setDefaultExtension("html"); // Default extension
 Configuration config = templateEngine.getConfiguration();
 config.setAutoFlush(true);
 config.setLogTemplateExceptions(true);
-		
+        
 // Enable multilingualism, and language file reloading in development
 // mode (language files can be in YAML or Java Properties format)
 templateEngine.setMessageLoader(new DefaultMessageLoader(
@@ -987,7 +1003,7 @@ templateEngine.setMessageLoader(new DefaultMessageLoader(
                                 developmentMode); // Autoreload on/off
 
 // Set the Template Engine of ApiGateway
-apiGateway.setTemplateEngine(templateEngine);
+gateway.setTemplateEngine(templateEngine);
 ```
 
 **Sample template syntax**
@@ -995,19 +1011,19 @@ apiGateway.setTemplateEngine(templateEngine);
 ```html
 <html>
     <body>
-    	<#include "header">
-		<p>A: ${a}</p>
-		<p>B: ${b?string('true', 'false')}</p>
-		<p>C: ${c}</p>
-		<table>
-			<#list table as row>
-			<tr>
-				<td>${row.first}</td>
-				<td>${row.second?string('true', 'false')}</td>
-				<td>${row.third}</td>
-			</tr>		
-			</#list>
-		</table>
+        <#include "header">
+        <p>A: ${a}</p>
+        <p>B: ${b?string('true', 'false')}</p>
+        <p>C: ${c}</p>
+        <table>
+            <#list table as row>
+            <tr>
+                <td>${row.first}</td>
+                <td>${row.second?string('true', 'false')}</td>
+                <td>${row.third}</td>
+            </tr>        
+            </#list>
+        </table>
     </body>
 </html>
 ```
@@ -1028,7 +1044,7 @@ To use Jade Template Engine, add the following dependency to the build script:
 ```java
 JadeEngine templateEngine = new JadeEngine();
 templateEngine.setTemplatePath("/www"); // Root path of templates
-apiGateway.setTemplateEngine(templateEngine);
+gateway.setTemplateEngine(templateEngine);
 ```
 
 **Advanced example**
@@ -1058,7 +1074,7 @@ templateEngine.setMessageLoader(new DefaultMessageLoader(
                                 developmentMode); // Autoreload on/off
 
 // Set the Template Engine of ApiGateway
-apiGateway.setTemplateEngine(templateEngine);
+gateway.setTemplateEngine(templateEngine);
 ```
 
 **Sample template syntax**
@@ -1095,7 +1111,7 @@ To use Pebble Template Engine, add the following dependency to the build script:
 ```java
 PebbleEngine templateEngine = new PebbleEngine();
 templateEngine.setTemplatePath("/www"); // Root path of templates
-apiGateway.setTemplateEngine(templateEngine);
+gateway.setTemplateEngine(templateEngine);
 ```
 
 **Advanced example**
@@ -1120,7 +1136,7 @@ templateEngine.setMessageLoader(new DefaultMessageLoader(
                                 developmentMode); // Autoreload on/off
 
 // Set the Template Engine of ApiGateway
-apiGateway.setTemplateEngine(templateEngine);
+gateway.setTemplateEngine(templateEngine);
 ```
 
 **Sample template syntax**
@@ -1128,19 +1144,19 @@ apiGateway.setTemplateEngine(templateEngine);
 ```html
 <html>
     <body>
-    	{% include "header" %}
-		<p>A: {{a}}</p>
-		<p>B: {{b}}</p>
-		<p>C: {{c}}</p>
-		<table>
-		{% for row in table %}
-			<tr>
-				<td>{{row.first}}</td>
-				<td>{{row.second}}</td>
-				<td>{{row.third}}</td>
-			</tr>
-		{% endfor %}
-		</table>
+        {% include "header" %}
+        <p>A: {{a}}</p>
+        <p>B: {{b}}</p>
+        <p>C: {{c}}</p>
+        <table>
+        {% for row in table %}
+            <tr>
+                <td>{{row.first}}</td>
+                <td>{{row.second}}</td>
+                <td>{{row.third}}</td>
+            </tr>
+        {% endfor %}
+        </table>
     </body>
 </html>
 ```
@@ -1162,7 +1178,7 @@ To use Thymeleaf Template Engine, add the following dependency to the build scri
 ```java
 ThymeleafEngine templateEngine = new ThymeleafEngine();
 templateEngine.setTemplatePath("/www"); // Root path of templates
-apiGateway.setTemplateEngine(templateEngine);
+gateway.setTemplateEngine(templateEngine);
 ```
 
 **Advanced example**
@@ -1191,7 +1207,7 @@ templateEngine.setMessageLoader(new DefaultMessageLoader(
                                 developmentMode); // Autoreload on/off
 
 // Set the Template Engine of ApiGateway
-apiGateway.setTemplateEngine(templateEngine);
+gateway.setTemplateEngine(templateEngine);
 ```
 
 **Sample template syntax**
@@ -1199,17 +1215,17 @@ apiGateway.setTemplateEngine(templateEngine);
 ```html
 <html>
     <body>
-		<div th:replace="header"></div>
-		<p th:text="${a}">-</p>
-		<p th:text="${b}">-</p>
-		<p th:text="${c}">-</p>
-		<table>
-			<tr th:each="row : ${table}">
-				<td th:text="${row.first}">-</td>
-				<td th:text="${row.second}">-</td>
-				<td th:text="${row.third}">-</td>
-			</tr>
-		</table>
+        <div th:replace="header"></div>
+        <p th:text="${a}">-</p>
+        <p th:text="${b}">-</p>
+        <p th:text="${c}">-</p>
+        <table>
+            <tr th:each="row : ${table}">
+                <td th:text="${row.first}">-</td>
+                <td th:text="${row.second}">-</td>
+                <td th:text="${row.third}">-</td>
+            </tr>
+        </table>
     </body>
 </html>
 ```
