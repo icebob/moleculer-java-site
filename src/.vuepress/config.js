@@ -44,7 +44,8 @@ module.exports = {
 				title: 'Getting Started',
 				sidebarDepth: 2,
 				children: [
-					['introduction', 'Introduction']
+					['introduction', 'Introduction'],
+					['concepts', 'Moleculer Concepts']
 				]
 			},
 			{
