@@ -254,7 +254,7 @@ public class MyMiddleware extends HttpMiddleware {
 
 The
 [GitHub page](https://github.com/moleculer-java/moleculer-java-web/tree/master/src/main/java/services/moleculer/web/middleware)
-of the API Gateway project has many examples of various HTTP Middlewares.
+of the API Gateway project has many examples of HTTP Middlewares.
 
 ## Multiple Routes
 
@@ -408,6 +408,7 @@ found, it sends a 404 response. ServeStatic supports content compression,
 automatic "Content-Type" detection, and ETAGs.
 The specified directory (the "/www" in the example below)
 can be in the file system or on the classpath.
+[[source](https://github.com/moleculer-java/moleculer-java-web/blob/master/src/main/java/services/moleculer/web/middleware/ServeStatic.java)]
 
 ```java
 // Simple usage
@@ -425,6 +426,7 @@ route.use(new Redirector("/", "index.html", 307)); // Jump to default page
 ### Redirector Middleware
 
 Redirects requests from a specified location to an another location.
+[[source](https://github.com/moleculer-java/moleculer-java-web/blob/master/src/main/java/services/moleculer/web/middleware/Redirector.java)]
 
 ```java
 // Any requests to the root path "/"
@@ -440,6 +442,7 @@ route.use(new Redirector("/default.html", "index.html"));
 ### NotFound Middleware
 
 Refuses all HTTP requests with "Error 400 Not Found" message.
+[[source](https://github.com/moleculer-java/moleculer-java-web/blob/master/src/main/java/services/moleculer/web/middleware/NotFound.java)]
 
 ```java
 // Usage with "ServeStatic" and "Favicon" middlewares:
@@ -453,6 +456,7 @@ route.use(new Favicon("/www/images/custom.ico")); // Executed first
 Handles "/favicon.ico" HTTP requests.
 Favicons can be specified using a path to the filesystem,
 or by default this Middleware will look for a file on the classpath with the name "favicon.ico".
+[[source](https://github.com/moleculer-java/moleculer-java-web/blob/master/src/main/java/services/moleculer/web/middleware/Favicon.java)]
 
 ```java
 route.use(new Favicon("custom.ico"));
@@ -466,6 +470,7 @@ it calls the configured `BasicAuthProvider` with the username and password to au
 If the authentication is successful the handler attempts to authorise the user.
 If that is successful then the routing of the request is allowed to continue to the application handlers,
 otherwise a 403 response is returned to signify that access is denied.
+[[source](https://github.com/moleculer-java/moleculer-java-web/blob/master/src/main/java/services/moleculer/web/middleware/BasicAuthenticator.java)]
 
 ```java
 // Allow only one user
@@ -491,6 +496,7 @@ route.use(authenticator);
 
 Implements server side [CORS](https://www.w3.org/wiki/CORS) support for Moleculer.
 Cross Origin Resource Sharing is a mechanism for allowing resources to be requested from one host and served from another.
+[[source](https://github.com/moleculer-java/moleculer-java-web/blob/master/src/main/java/services/moleculer/web/middleware/CorsHeaders.java)]
 
 ```java
 // Allow all
@@ -508,6 +514,7 @@ route.use(cors);
 
 Custom error page (Error 404, 500, etc.) handler.
 Error templates can contain the following variables:
+[[source](https://github.com/moleculer-java/moleculer-java-web/blob/master/src/main/java/services/moleculer/web/middleware/ErrorPage.java)]
 
 | Variable  | Content          |
 |-----------|------------------|
@@ -542,7 +549,8 @@ route.use(errorPages);
 ### HostNameFilter Middleware
 
 The `HostNameFilter` adds the ability to allow or block requests based on the host name of the client.
- 
+[[source](https://github.com/moleculer-java/moleculer-java-web/blob/master/src/main/java/services/moleculer/web/middleware/HostNameFilter.java)]
+
 ```java
 HostNameFilter filter = new HostNameFilter();
 filter.allow("domain.server**"); // Allow all with this prefix
@@ -553,6 +561,7 @@ route.use(filter);
 ### IpFilter Middleware
 
 The `IpFilter` Middleware adds the ability to allow or block requests based on the IP address of the client.
+[[source](https://github.com/moleculer-java/moleculer-java-web/blob/master/src/main/java/services/moleculer/web/middleware/IpFilter.java)]
 
 ```java
 IpFilter filter = new IpFilter();
@@ -564,6 +573,7 @@ route.use(filter);
 ### RateLimiter Middleware
 
 Rate Limiter limits concurrent constant requests to the HTTP calls in the application.
+[[source](https://github.com/moleculer-java/moleculer-java-web/blob/master/src/main/java/services/moleculer/web/middleware/RateLimiter.java)]
 
 ```java
 // Allow up to 50 requests / second (default)
@@ -596,6 +606,7 @@ Writes request headers and response headers + response body into the log.
 Request body not logged in this version. WARNING: Using this middleware
 reduces the performance (nevertheless, it may be useful during development).
 Be sure to turn it off in production mode.
+[[source](https://github.com/moleculer-java/moleculer-java-web/blob/master/src/main/java/services/moleculer/web/middleware/RequestLogger.java)]
 
 ```java
 route.use(new RequestLogger());
@@ -605,9 +616,9 @@ route.use(new RequestLogger());
 
 Compresses body of REST responses. Do not use it with `ServeStatic` Middleware;
 `ServeStatic` also compresses the data. Use it to compress the response of REST
-services. Using this Middleware reduces the performance, so use it only on
-slow networks.
- 
+services. Using this Middleware reduces the performance, so use it only on slow networks.
+[[source](https://github.com/moleculer-java/moleculer-java-web/blob/master/src/main/java/services/moleculer/web/middleware/ResponseDeflater.java)]
+
 ```java
 route.use(new ResponseDeflater(Deflater.BEST_SPEED));
 ```
@@ -615,6 +626,7 @@ route.use(new ResponseDeflater(Deflater.BEST_SPEED));
 ### ResponseHeaders Middleware
 
 This Middleware unconditionally adds the specified headers to any HTTP response within the Route.
+[[source](https://github.com/moleculer-java/moleculer-java-web/blob/master/src/main/java/services/moleculer/web/middleware/ResponseHeaders.java)]
 
 ```java
 // Add single header to HTTP responses
@@ -634,7 +646,8 @@ route.use(securityHeaders);
 
 Adds "X-Response-Time" header to the response,
 containing the time taken in MILLISECONDS to process the request.
- 
+[[source](https://github.com/moleculer-java/moleculer-java-web/blob/master/src/main/java/services/moleculer/web/middleware/ResponseTime.java)]
+
 ```java
 // With "X-Response-Time" header
 route.use(new ResponseTime());
@@ -647,7 +660,8 @@ route.use(new ResponseTime("X-Custom"));
 
 Middleware that will timeout requests if the response has not been written
 after the specified time. HTTP response code will be "408".
- 
+[[source](https://github.com/moleculer-java/moleculer-java-web/blob/master/src/main/java/services/moleculer/web/middleware/ResponseTimeout.java)]
+
 ```java
 route.use(new ResponseTimeout(1000L * 30));
 ```
@@ -655,6 +669,7 @@ route.use(new ResponseTimeout(1000L * 30));
 ### SessionCookie Middleware
 
 Generates Session Cookies, and sets the cookie header.
+[[source](https://github.com/moleculer-java/moleculer-java-web/blob/master/src/main/java/services/moleculer/web/middleware/session/SessionCookie.java)]
 
 ```java
 // With "JSESSIONID" cookie
@@ -672,7 +687,8 @@ service generates blog/wiki content using a HTML Template Egine. It is not
 advisable to cache POST requests and/or requests that depend not only on the
 URL but also on the content of the request. `TopLevelCache` speeds up querying
 of various reports (tables, charts) and dynamically generated images.
- 
+[[source](https://github.com/moleculer-java/moleculer-java-web/blob/master/src/main/java/services/moleculer/web/middleware/TopLevelCache.java)]
+
 ```java
 // User default cacher of MessageBroker
 Cacher cacher = broker.getConfig().getCacher();
@@ -686,6 +702,7 @@ route.use(new TopLevelCache(cacher, "/blog/posts/**"));
 ### XSRFToken Middleware
 
 This middleware adds "X-XSRF-TOKEN" header to responses.
+[[source](https://github.com/moleculer-java/moleculer-java-web/blob/master/src/main/java/services/moleculer/web/middleware/XSRFToken.java)]
 
 ```java
 route.use(new XSRFToken());
