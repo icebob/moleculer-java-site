@@ -13,7 +13,7 @@ This is the default call logic when you create a ServiceBroker instance.
 ```java
 // Create a Default Service Invoker
 DefaultServiceInvoker invoker = new DefaultServiceInvoker();
-		
+
 // Max call level to avoid circular calls
 invoker.setMaxCallLevel(100);
 
@@ -44,16 +44,16 @@ The Default Service Invoker handles retry and timeout parameters for function ca
 Tree req = new Tree();
 req.put("key", "value");
 req.putList("array").add(1).add(2).add(3);
-		
+
 // Invoke service with retry and timeout parameters
 broker.call("service.action",
             req,
             CallOptions
               .retryCount(3)
               .timeout(5000)).then(rsp -> {
-			
+
               // Process JSON response
-			
+
             }).catchError(err -> {
 
               // Error handler
@@ -93,16 +93,16 @@ CircuitBreaker invoker = new CircuitBreaker();
 
 // Max call level to avoid circular calls
 invoker.setMaxCallLevel(100);
-		
+
 // Length of time-window in MILLISECONDS
 invoker.setWindowLength(5000);
-		
+
 // Maximum number of errors in time-window
 invoker.setMaxErrors(20);
-		
+
 // Half-open timeout in MILLISECONDS
 invoker.setLockTimeout(10000);
-		
+
 // Create Service Broker
 ServiceBroker broker = ServiceBroker.builder().invoker(invoker).build();
 ```

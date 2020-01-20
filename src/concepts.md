@@ -23,6 +23,7 @@ JSON data corresponds to a JavaScript Object inside the `Services`.
 A JavaScript Object is a collection of named values, eg.:
 
 ```js
+// JavaScript code
 var params = {param1: "value1",
               param2: "value2",
               param3: 12345678,
@@ -42,6 +43,7 @@ so no specific implementation is forced on developers.
 The following Java code snippet builds similar JSON structure like the previous JavaScript code:
 
 ```java
+// Java code
 Tree params = new Tree();
 params.put("param1", "value1");
 params.put("param2", "value2");
@@ -89,7 +91,13 @@ Because of this, Moleculer uses the reflection API in very few cases.
 `Actions` and `Event` listeners are not methods but `Functional Interfaces`.
 Calling them is much faster than calling methods using the Reflection API.
 
-## No Object Mappers
+```java
+// Actions and Listeners are Functional Interfaces
+Action action = ctx -> { ... };
+Listener listener = ctx -> { ... };
+```
+
+## No Object Mapping
 
 For similar performance reasons, Moleculer `Services` do not use Java Object Mappers.
 The data is received, processed and returned in "raw" JSON format.
@@ -97,6 +105,40 @@ Object Mapper's are useful when starting the system,
 and we process configuration files using the Spring Framework, for example.
 However, it is faster at runtime if the incoming data packet is received immediately
 after parsing it from the binary (JSON, MessagePack, etc.) format.
+
+```java
+// Input and output data are in "raw" JSON format
+Action action = ctx -> {
+
+    // Process input
+    String value1 = ctx.params.get("key1", "default");
+    double value2 = ctx.params.get("key2", 0d);
+
+    // Generate output
+    Tree out = new Tree();
+    out.put("result", "ok");
+    return out;
+};
+```
+
+The input for Action and Event Listener is always a
+[Context](actions.html#context)
+(which has metadata besides input JSON, such as who sent the message).
+The returned value cannot be a POJO (Plain Old Java Object),
+such values must be converted to a `Tree` object.
+The output can be one of the following:
+
+- *null*
+- String
+- *Numbers:* byte, short, int, long, float, double, BigDecimal, BigInteger
+- boolean
+- byte array
+- java.util.Date
+- java.util.UUID
+- java.net.InetAddress
+- `Tree` object (hierarchical data structure from the above types)
+- `Promise` object (it's like an asynchronous `Tree`)
+- `PacketStream` object (when transferring large, binary files)
 
 ## Non-blocking JSON processing
 
@@ -114,3 +156,33 @@ The value of a Moleculer Promise, which you get after the asynchronous processin
 is always a `Tree` object.
 This `Tree` structure may come from other Services (including, for example, Node.js-based Services)
 or from asynchronous APIs (such as REST client or MongoDB APIs).
+
+```java
+// Sequential "waterfall" processing of Promises
+Action createNewUser = ctx -> {
+
+    // Validate user name
+    return httpClient.get("http://acl/check").then(rsp -> {
+
+        // Save new user
+        return userDAO.createNewUser(rsp);
+
+    }).then(rsp -> {
+
+        // Log info
+        String id = rsp.get("_id", "");
+        logger.info("New user record: " + rsp);
+
+    }).then(rsp -> {
+
+        // Find email address
+        return ctx.call("email.findByID", rsp);
+
+    }).then(rsp -> {
+
+        // Send email to user
+        return ctx.call("email.sendVerification", rsp);
+
+    });
+}
+```

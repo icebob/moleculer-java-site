@@ -10,7 +10,7 @@ and can handle a large volume of requests in parallel.
 
 ## Create a Service Broker
 
-**Create Broker with default settings:**
+**Create Broker with default settings**
 
 ```java
 ServiceBroker broker = new ServiceBroker();
@@ -29,7 +29,7 @@ broker.call("test.action", "a", 3, "b", 4).then(rsp -> {
 });
 ```
 
-**Create Broker with custom settings:**
+**Create Broker with custom settings**
 
 There are two ways to create a `ServiceBroker`, using either
 - `ServiceBrokerConfig` instance or
@@ -57,7 +57,7 @@ ServiceBroker broker = ServiceBroker.builder()
                                     .build();
 ```
 
-**Create Broker using Spring XML config:**
+**Create Broker using Spring XML config**
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -137,7 +137,7 @@ There is a extended
 on the project's GitHub page.
 The example shows how to create internal Moleculer Modules using the XML configuration.
 
-**Create broker with Spring Boot:**
+**Create broker with Spring Boot**
 
 The following example code shows Spring Boot-based initialization without XML configuration:
 
@@ -160,7 +160,6 @@ public class MoleculerApplication {
         config.setTransporter(...);
         config.setStrategyFactory(...);
         config.setCacher(...);
-
         return new ServiceBroker(config);
     }
 
@@ -178,7 +177,7 @@ public class MoleculerApplication {
 The Moleculer Runner is a utility API that helps the application run as a background service.
 Use the Moleculer Runner to create, start, stop the ServiceBroker simply and reliably.
 This
-[demo project](https://github.com/moleculer-java/moleculer-spring-boot-demo)
+[demo project](https://moleculer-java.github.io/moleculer-spring-boot-demo/)
 uses Moleculer runner to run the application
 (in standalone mode or integrated into a J2EE server).  
 [Read more about Moleculer Runner](runner.html).  
@@ -196,12 +195,12 @@ List of all available `ServiceBrokerConfig` options:
 | `jsonReaders` | `String` | `null` | Comma-separated list of the preferred JSON deserializer APIs ("jackson", "boon", "fastjson", "genson", etc.). |
 | `jsonWriters` | `String` | `null` | Comma-separated list of the preferred JSON serializer APIs ("jackson", "boon", "fastjson", "genson", etc.). |
 | `uidGenerator` | `UidGenerator` | `IncrementalUidGenerator` | Implementation of the UID generator. |
-| `strategyFactory` | `StrategyFactory` | `RoundRobinStrategyFactory` | Implementation of the [Invocation Strategy](balancing.html). |
-| `eventbus` | `Eventbus` | `DefaultEventbus` | Implementation of the [Event Bus](events.html). |
-| `serviceRegistry` | `ServiceRegistry` | `DefaultServiceRegistry` | Implementation of the [Service Registry](services.html). |
-| `cacher` | `Cacher` | `MemoryCacher` | Implementation of the [service-level Cache](caching.html) |
-| `serviceInvoker` | `ServiceInvoker` | `DefaultServiceInvoker` | Implementation of the [Service Invoker](fault-tolerance.html). |
-| `transporter` | `Transporter` | `null` | Implementation of the [Transporter](transporters.html). |
+| `strategyFactory` | `StrategyFactory` | `RoundRobinStrategyFactory` | Implementation of the [Invocation Strategy](balancing.html#about-load-balancing). |
+| `eventbus` | `Eventbus` | `DefaultEventbus` | Implementation of the [Event Bus](services.html#events). |
+| `serviceRegistry` | `ServiceRegistry` | `DefaultServiceRegistry` | Implementation of the [Service Registry](services.html#actions). |
+| `cacher` | `Cacher` | `MemoryCacher` | Implementation of the [service-level Cache](caching.html#caching-action-calls) |
+| `serviceInvoker` | `ServiceInvoker` | `DefaultServiceInvoker` | Implementation of the [Service Invoker](fault-tolerance.html#default-service-invoker). |
+| `transporter` | `Transporter` | `null` | Implementation of the [Transporter](transporters.html#types-of-transporters). |
 | `monitor` | `Monitor` | `SigarMonitor` | Implementation of the [CPU monitor](balancing.html#cpu-usage-based-strategy). |
 | `shutDownThreadPools` | `boolean` | `true` | Shut down thread pools during the shutdown stage. |
 

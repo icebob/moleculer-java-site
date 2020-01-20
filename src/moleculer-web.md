@@ -105,7 +105,7 @@ The brief examples illustrate the following:
 
 Routes have a `mappingPolicy` property to handle Routes without Aliases.
 
-**Available options:**
+**Available options**
 
 - RESTRICT - enable to request only the Routes with Aliases (default)
 - ALL - enable to request all Routes with or without Aliases
@@ -328,7 +328,7 @@ the API Gateway checks the "meta" block to see if it contains certain special fi
 With these meta fields, you can change the "Content-Type" header,
 the status code of the response and add any HTTP header to the response.
 
-**Special meta fields:**
+**Special meta fields**
 
 * `ctx.meta.$statusCode` - Status code (eg. 200, 404) of the HTTP response message.
 * `ctx.meta.$responseType` - Content-Type header's value of the HTTP response message.

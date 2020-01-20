@@ -1,6 +1,6 @@
 ## Caching Action calls
 
-Moleculer has a built-in caching solution to accelerate responses of service actions.
+Moleculer has a built-in caching solution to accelerate **responses of service actions**.
 There are two types of caches:
 
 - Local cache (eg. MemoryCacher, Off-Heap Cacher, some JCache implementations)
@@ -62,7 +62,7 @@ Promise.resolve()
     });
 ```
 
-**Console messages:**
+**Console messages**
 
 ```
 [2017-08-18T13:04:33.845Z] INFO  Broker started.
@@ -249,7 +249,7 @@ public class UserService extends Service {
     @Autowired
     UserDAO userDAO; // Some kind of database API
 
-	// This Action modifies the DB (update)
+    // This Action modifies the DB (update)
     public Action update = ctx -> {
 
         // Update user entity, so
@@ -270,14 +270,14 @@ public class UserService extends Service {
         String userID = ctx.params.get("userID", "");
         return userDAO.findUserByID(userID);
     };
-	
-	// This section monitors whether
-	// any of the nodes have changed the user DB
+    
+    // This section monitors whether
+    // any of the nodes have changed the user DB
     @Subscribe("cache.clean.users")
     public Listener userListener = payload -> {
     
         // Remove all local entries from the "users" cache region,
-		// the next "find" Action will NOT be cached
+        // the next "find" Action will NOT be cached
         broker.getConfig().getCacher().clean("users.**");
     };
     

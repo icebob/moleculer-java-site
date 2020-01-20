@@ -3,7 +3,6 @@
 Actions are the callable/public methods of the Services.
 The action calling represents a remote-procedure-call (RPC).
 It has request parameters and returns a response like an HTTP service.
-
 If there are multiple instances of Services, the Service Broker
 invokes instances according to the specified call strategy.
 [Read more about balancing](balancing.html).
@@ -23,61 +22,17 @@ Promise res = broker.call(actionName, params, opts);
 ```
 The `actionName` is a dot-separated string.
 The first part of it is the service name, while the second part of it represents the action name.
-So if you have a `posts` service with a `create` action, you can call it as `posts.create`.
+So if you have a "posts" service with a "create" action, you can call it as "posts.create".
 
 The `params` is an object which is passed to the action as a part of the [Context](actions.html#context).
 The service can access it via `ctx.params`.
-In the Node.js-based Moleculer implementation, the 'params' is a JavaScript Object.
-A JavaScript Object is a collection of named values:
-
-Sample JavaScript Object:
-
-```js
-var params = {param1: "value1",
-              param2: "value2",
-              param3: 12345678,
-              param3: true};
-```
-
-There is no similar native support for dynamic creation of JSON objects in Java language.
-Because of this, Moleculer uses an
-[abstract API](https://berkesa.github.io/datatree/)
-instead of a certain JSON implementation.
-The `Tree` object is an **abstract layer** that uses an arbitrary JSON implementation.
-Tree API supports 18 popular
-[JSON implementations](serializers.html#json-serializer) (eg. Jackson, Gson, Boon, Jodd, FastJson),
-and 10 non-JSON data formats (YAML, ION, BSON, MessagePack, etc.).
-The following Java code snippet builds similar JSON structure like the previous JavaScript code:
-
-```java
-Tree params = new Tree();
-params.put("param1", "value1");
-params.put("param2", "value2");
-params.put("param3", 12345678);
-params.put("param4", true);
-```
-
-The following Java statement...
-```java
-System.out.println(params);
-```
-... will print this:
-```json
-{
-  "param1" : "value1",
-  "param2" : "value2",
-  "param3" : 12345678,
-  "param4" : true
-}
-```
-
 The last parameter is the `opts`.
-The `opts` is an CallOptions to set/override some request parameters,
+The `opts` is an `Options` to set/override some request parameters,
 for example `timeout`, `retryCount` or `nodeID`.
 CallOptions can be produced using method chainig:
 
 ```java{9}
-CallOptions opts = CallOptions.nodeID("node-2").timeout(1500).retryCount(3);
+Options opts = CallOptions.nodeID("node-2").timeout(1500).retryCount(3);
 
 Tree params = new Tree()
     .put("param1", "value1")
@@ -117,7 +72,7 @@ broker.call("service.action",
             });
 ```
 
-**Available calling options:**
+**Available calling options**
 
 | Name | Type | Default | Description |
 | ------- | ----- | ------- | ------- |
@@ -161,11 +116,20 @@ Asynchronous operations can be organized into a Waterfall Sequence using these m
 **Call with options**
 
 ```java
+// Simple non-blocking invocation
 broker.call("user.recommendation",
             "limit", 5,
             CallOptions.retryCount(3)).then(rsp -> {
                logger.info("User: ", rsp));
             });
+
+// Invocation in a Waterfall Sequence
+return Promise.resolve().then(rsp -> {
+    Options opts = CallOptions.retryCount(3);
+    return broker.call("user.recommendation", "limit", 5, opts);
+}).then(rsp -> {
+    logger.info("User: ", rsp));
+});
 ```
 
 ### Metadata
@@ -257,14 +221,10 @@ This also allows you to transfer media files between services.
 
 ```java
 PacketStream stream = broker.createStream();
-try {
-    broker.call("service.action", stream);
-    stream.sendData("some bytes".getBytes());
-    stream.sendData("more bytes".getBytes());
-} finally {
-    // Streams must be closed in any case
-    stream.sendClose();
-}
+broker.call("service.action", stream);
+stream.sendData("some bytes".getBytes());
+stream.sendData("more bytes".getBytes());
+stream.sendClose(); // Streams must be closed
 ```
 
 The receiving Service can handle incoming data in an event-driven manner:
@@ -277,8 +237,7 @@ public class ReceiverService extends Service {
         ctx.stream.onPacket((bytes, err, close) -> {
             if (bytes != null) {
                 // Byte-array received 
-            }
-            if (err != null) {
+            } else if (err != null) {
                 // An error occurred
             }
             if (close) {
@@ -305,12 +264,12 @@ Tree meta = req.getMeta();
 meta.put("filename", "avatar-123.jpg");
 
 // Open connection
-broker.call("storage.save", req).then(rsp -> {
-    // Response received - transfer finished
-});
+broker.call("storage.save", req);
 
 // Start sending data in smaller packages
-stream.transferFrom(new File("avatar-123.jpg"));
+stream.transferFrom(new File("avatar-123.jpg")).then(rsp -> {
+    // Transfer finished
+});
 ```
 
 **Receiving the file at the service's side**
@@ -319,8 +278,14 @@ stream.transferFrom(new File("avatar-123.jpg"));
 @Name("storage")
 public class StorageService extends Service {
     public Action save = ctx -> {
-        String filename = ctx.params.getMeta().get("filename", "");
-        return ctx.stream.transferTo(new File(filename));
+
+        // Waterfall Sequence
+        Promise.resolve().then(rsp -> {
+            String filename = ctx.params.getMeta().get("filename", "");
+            return ctx.stream.transferTo(new File(filename));
+        }).then(rsp -> {
+            // File saved
+        });
     };
 }
 ```
@@ -368,7 +333,7 @@ broker.call("storage.get", "filename", filename).then(rsp -> {
 When you call an action, the broker creates a `Context` instance which contains all request information
 and passes it to the action handler as a single argument.
 
-**Available properties & methods of the `Context`:**
+**Available properties & methods of the `Context`**
 
 | Name | Type |  Description |
 | ------- | ----- | ------- |

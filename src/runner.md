@@ -1,9 +1,11 @@
----
-title: Moleculer Runner
----
+## Moleculer Runner
 
-Moleculer Runner is a helper script that helps you running Moleculer projects. With it you don't need to create a ServiceBroker instance with options. Instead you can create a `moleculer.config.js` or `moleculer.config.json` file in the root of repo with broker options. Then simply call the `moleculer-runner` in NPM script and it will automatically load the configuration file, create the broker and load the services. Alternatively, you can declare your configuration as environment variables.
-
+Moleculer Runner is a helper script that helps you running Moleculer projects.
+With it you don't need to create a ServiceBroker instance with options.
+Instead you can create a `moleculer.config.js` or `moleculer.config.json` file in the root of repo with broker options.
+Then simply call the `moleculer-runner` in NPM script and it will automatically load the configuration file,
+create the broker and load the services. Alternatively,
+you can declare your configuration as environment variables.
 
 {% note info Production-ready %}
 In production, we recommend putting options into the environment variables! Use the `moleculer.config.js` only during development or store only common options.
@@ -94,7 +96,7 @@ METRICS=true
 ## Services loading logic
 The runner loads service files or folders defined in CLI arguments. If you define folder(s), the runner loads all services `**/*.service.js` from specified one(s) (including sub-folders too). Services & service folder can be loaded with `SERVICES` and `SERVICEDIR` environment variables.
 
-**Loading steps:**
+**Loading steps**
 1. If `SERVICEDIR` env found, but no `SERVICES` env, it loads all services from the `SERVICEDIR` directory.
 2. If `SERVICEDIR` & `SERVICES` env found, it loads the specified services from the `SERVICEDIR` directory.
 3. If no `SERVICEDIR`, but `SERVICES` env found, it loads the specified services from the current directory.
@@ -121,7 +123,7 @@ If you want to be more specific, use glob patterns. It is useful when loading al
 $ moleculer-runner services !services/others/**/*.service.js services/others/mandatory/main.service.js
 ```
 
-**Explanations:**
+**Explanations**
 - `services` - legacy mode. Load all services from the `services` folder with `**/*.service.js` file mask.
 - `!services/others/**/*.service.js` - skip all services in the `services/others` folder and sub-folders.
 - `services/others/mandatory/main.service.js` - load the exact service.

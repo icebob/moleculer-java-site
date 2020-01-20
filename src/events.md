@@ -6,22 +6,23 @@ runtime scalable applications from services
 deployed on different operating systems and implemented in different languages.
 
 Events can be grouped; events can be sent to
-- a specific node
-- to all listeners
-- to a group of listeners
-- or to one member from all groups
+- to all listeners (unconditional "broadcast")
+- a specific node ("broadcast" with "CallOptions.nodeID" parameter)
+- to a group of listeners ("broadcast" with "groups" parameter)
+- to one member from all groups (unconditional "emit")
+- or to one member from the specified groups ("emit" with "groups" parameter)
 
 ## Emit balanced events
 
 The event listeners are arranged to logical groups.
 It means that only one listener is triggered in every group.
 
-**Example:**
+**Example**
 
-An application contains 2 main services: `users` & `payments`.
-Both subscribe to the `user.created` event.
-3 instances of `users` service and 2 instances of `payments` service run.
-If the `user.created` event is emitted, only one `users` and one `payments` service will receive this event.
+An application contains 2 main services: "users" & "payments".
+Both subscribe to the "user.created" event.
+3 instances of "users" service and 2 instances of "payments" service run.
+If the "user.created" event is emitted, only one "users" and one "payments" service will receive this event.
 
 <div align="center">
     <img src="balanced-events.gif" alt="Balanced events diagram" />
@@ -30,7 +31,7 @@ If the `user.created` event is emitted, only one `users` and one `payments` serv
 The group name comes from the service name, but it can be overwritten in event definition in services
 (by the `@Group` Annotation).
 
-**Example:**
+**Example**
 
 ```java
 import services.moleculer.eventbus.*;
@@ -57,16 +58,7 @@ public class PaymentService extends Service {
 
 Balanced events can be sent using `broker.emit` function.
 The first parameter is the name of the event, the second parameter is the payload. 
-_To send multiple/hierarchical values, wrap them into a `Tree` object._
-
-Moleculer does not require a recommended JSON API, it uses an
-[abstract API](https://berkesa.github.io/datatree/)
-instead of a certain implementation.
-The `Tree` object is an **abstract layer** that uses an arbitrary JSON implementation.
-Tree API supports 18 popular
-[JSON implementations](serializers.html#json-serializer) (eg. Jackson, Gson, Boon, Jodd, FastJson),
-and 10 non-JSON data formats (YAML, ION, BSON, MessagePack, etc.).
-Regardless of implementation, sending events looks like this:
+To send multiple/hierarchical values, wrap them into a `Tree` object:
 
 ```java{12}
 // The payload is a "Tree" object (~=JSON structure)
@@ -251,7 +243,7 @@ public class MyService extends Service {
 }
 ```
 
-**Invisible (private or internal) Event Listeners**
+**Private (local or hidden) Event Listeners**
 
 With the "private" modifier, only the local events are monitored by the Event Listener.
 Such Event Listeners are invisible from the outside of the Node,
@@ -299,7 +291,7 @@ ctx.stream.onPacket((bytes, error, closed) -> {
 When you emit an event, the broker creates a `Context` instance which contains all
 request information and passes it to the event handler as a single argument.
 
-**Available properties & methods of `Context`:**
+**Available properties & methods of `Context`**
 
 | Name | Type |  Description |
 | ------- | ----- | ------- |

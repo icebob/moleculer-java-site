@@ -5,7 +5,7 @@ title: Middlewares
 Moleculer supports middlewares. The middleware is an `Object` with hooks & wrapper functions. It allows to wrap action handlers, event handlers, broker methods and hook lifecycle events.
 
 ## Complete List
-**All available methods:**
+**All available methods**
 ```java
 const MyCustomMiddleware = {
     // Wrap local action handlers (legacy middleware handler)

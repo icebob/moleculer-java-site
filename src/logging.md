@@ -4,7 +4,7 @@ title: Logging
 
 ## Moleculer logging basics
 
-Moleculer uses SLF4J (https://www.slf4j.org) for logging.
+Moleculer uses [SLF4J](https://www.slf4j.org) for logging.
 Here is a short example showcasing how you can access the logger:
 
 ```java{11}
@@ -18,7 +18,7 @@ public class Math extends Service {
     /**
      * Logger of this Service
      */
-    private static final Logger log = LoggerFactory.getLogger(Math.class);
+    private static final Logger logger = LoggerFactory.getLogger(Math.class);
 
     /**
      * The "math.add" Action.
@@ -26,7 +26,7 @@ public class Math extends Service {
     Action add = ctx -> {
 
         // Log request
-        log.info("Request received: " + ctx);
+        logger.info("Request received: " + ctx);
 
         // Calculate response
         int a = ctx.params.get("a", 0);
@@ -46,12 +46,12 @@ To do this, add the following dependencies to the build file:
 ```gradle
 dependencies {
 
-compile group: 'org.slf4j', name: 'slf4j-api',        version: '1.7.28'
-compile group: 'org.slf4j', name: 'slf4j-jdk14',      version: '1.7.28'
-compile group: 'org.slf4j', name: 'log4j-over-slf4j', version: '1.7.28'
-compile group: 'org.slf4j', name: 'jcl-over-slf4j',   version: '1.7.28'
+    compile group: 'org.slf4j', name: 'slf4j-api',        version: '1.7.28'
+    compile group: 'org.slf4j', name: 'slf4j-jdk14',      version: '1.7.28'
+    compile group: 'org.slf4j', name: 'log4j-over-slf4j', version: '1.7.28'
+    compile group: 'org.slf4j', name: 'jcl-over-slf4j',   version: '1.7.28'
 
-// ...other dependencies...
+    // ...other dependencies...
 
 }
 ```

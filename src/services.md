@@ -3,16 +3,16 @@
 The `Service` is a basic component in the Moleculer Ecosystem.
 Services may have Actions that other Services can invoke locally or over the network.
 Services can also define Event Listeners that can react to events created in the Moleculer Cluster.
-Using the Moleculer Framework, Services written in different (Java,
-[JavaScript](https://moleculer.services/) or [Go](https://moleculer-go-site.herokuapp.com/))
-languages can work effectively with each other.
+Using the Moleculer Framework, Services written in
+[different languages](https://github.com/moleculerjs/awesome-moleculer#polyglot-implementations)
+can work effectively with each other.
 
 Moleculer can be integrated with the Spring Framework.
 In the Spring Environment, Moleculer Services and ServiceBroker are Spring Beans.
 This will allow Moleculer Services to access the other Spring Components
 (eg. DAO classes for access the backend).
 
-The [WEB API Gateway](moleculer-web.html)
+The [WEB API Gateway](moleculer-web.html#about-api-gateway)
 module enables the Moleculer Services to function as REST/HTML services
 generating HTML pages using server-side Template Engines.
 In addition, they can receive / send large files or send WebSocket packets to browsers.
@@ -97,7 +97,7 @@ broker.call("v2.math.add", "a", 5, "b", 3);
 ```
 
 ::: tip REST call
-Via [WEB API Gateway](moleculer-web.html), make a request to `GET /v2/math/add`.
+Via [WEB API Gateway](moleculer-web.html#about-api-gateway), make a request to `GET /v2/math/add`.
 :::
 
 ## Events
