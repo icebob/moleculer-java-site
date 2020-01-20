@@ -101,6 +101,24 @@ The brief examples illustrate the following:
 
 ## Routes
 
+Like [Express.js](https://expressjs.com/en/guide/routing.html),
+Moleculer Moleculer groups request processors ([Middlewares](moleculer-web.html#http-middlewares)) into different Routes.
+Each Route can have one or more Middlewares, which are executed when the route is matched.
+Routes are matched *in the order they are added to the API Gateway*.
+When a request arrives the API Gateway will step through each Route,
+and examines whether the Route handles the request.
+If the Route handles the request, the API Gateway does not call the next Route.
+The following code is an example of a very basic Route:
+
+```java
+// Create then add a Route to API Gateway
+Route route = new Route();
+gateway.addRoute(route);
+
+// ...or in short:
+Route route = gateway.addRoute(new Route());
+```
+
 ### Mapping policy
 
 Routes have a `mappingPolicy` property to handle Routes without Aliases.
@@ -157,7 +175,7 @@ broker.start();
 You can use alias names instead of action names.
 You can also specify the method. Otherwise it will handle every method types. 
 Using named parameters in aliases is possible.
-Named parameters are defined by prefixing a colon to the parameter name (`:name`).
+Named parameters are defined by prefixing a colon to the parameter name (":name").
 
 ```java
 ServiceBroker broker = new ServiceBroker();
@@ -240,18 +258,24 @@ public class MyMiddleware extends HttpMiddleware {
 
         // Create new AbstractRequestProcessor or return "null", this is
         // decided by the "config" which contains the Action parameters.
-    
+
         return new AbstractRequestProcessor(next) {
             public void service(WebRequest req, WebResponse rsp) throws Exception {
-            
+
+                // --- FUNCTIONS BEFORE CALLING THE ACTION ---
+
                 // Do nothig, just invoke next Middleware or Action
                 next.service(req, rsp);
+
+                // --- FUNCTIONS AFTER CALLING THE ACTION ---                
             }
         };    
     }
 }
 ```
 
+The chain of the Route can be terminated if you do not call `next.service` but fill in `rsp` with the answer
+(for example, sending a regular "403 Forbidden" HTTP error message).
 The
 [GitHub page](https://github.com/moleculer-java/moleculer-java-web/tree/master/src/main/java/services/moleculer/web/middleware)
 of the API Gateway project has many examples of HTTP Middlewares.
@@ -677,6 +701,54 @@ route.use(new SessionCookie());
 
 // With custom cookie name
 route.use(new SessionCookie("SID"));
+```
+
+The `services.moleculer.web.middleware.session.SessionHandler` object uses
+"beforeCall" and "afterCall" hooks to store the "$session" structure of the request meta block.
+By default, `SessionHandler` keeps the contents of the "$session" blocks in memory for a specified time.
+`SessionHandler` looks for "$session" block based on the Session Cookie
+and copies it to all HTTP requests for the Session. This feature requires SessionCookie Middleware
+if the application is running on a Netty server (J2EE servers have their own cookie manager).
+
+```java
+SessionHandler sessionHandler = new SessionHandler(broker);
+gateway.setBeforeCall(sessionHandler.beforeCall());
+gateway.setAfterCall(sessionHandler.afterCall());
+```
+
+If you need to perform other functions in the "beforeCall" or "afterCall" block,
+you can call the SessionHandler as follows:
+
+```java
+SessionHandler sessionHandler = new SessionHandler(broker);
+CallProcessor  loadSession    = sessionHandler.beforeCall();
+gateway.setBeforeCall((currentRoute, req, rsp, data) -> {
+    loadSession.onCall(currentRoute, req, rsp, data);
+    // Other beforeCall" functions...
+});
+
+CallProcessor saveSession = sessionHandler.afterCall();
+gateway.setBeforeCall((currentRoute, req, rsp, data) -> {
+    saveSession.onCall(currentRoute, req, rsp, data);
+    // Other "afterCall" functions...
+});            
+```
+
+Actions access the persistent "$session" block as follows:
+
+```java
+Action action = ctx -> {
+
+    // Get the persistent "$session" block
+    Tree meta = ctx.params.getMeta();
+    Tree session = meta.get("$session");
+
+    // Read/write session data
+    String userID = session.get("userID", "anon");
+    session.put("now", new Date());
+
+    return null;
+};
 ```
 
 ### TopLevelCache Middleware
