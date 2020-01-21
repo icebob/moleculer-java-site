@@ -104,7 +104,7 @@ Via [WEB API Gateway](moleculer-web.html#about-api-gateway), make a request to `
 
 Services can monitor Events.
 Events can come from local but also from remote nodes.
-The data content of Events, like Action's, is a JSON structure.
+The content of the Event is a "JSON structure" (`ctx.params`) inside a `Context` object.
 
 **Example**
 

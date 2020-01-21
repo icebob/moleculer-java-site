@@ -6,27 +6,40 @@ These services can be disabled by setting `internalServices` parameter to `false
 
 ## List of nodes
 
-It lists all known nodes (including local node).
+The "$node.list" Action lists all known nodes (including local node).
 
-```java
+```java{1}
 broker.call("$node.list").then(rsp -> {
+
+    // Print JSON response
     logger.info(rsp);
+
+    // Example processing of the response (print IPs of nodes):
+    for (Tree nodeInfo: rsp) {
+        String id = nodeInfo.get("id", "");
+        System.out.println("Node ID: " + id);
+        for (Tree ip: nodeInfo.get("ipList")) {
+            System.out.println(" IP address: " + ip.asString());
+        }
+    }
 });
 ```
 
 **Sample response**
 
-```json
+```text
 [
   {
-    "id":"tsmith-pc-7700",
+    "id":"node1",
     "available":true,
     "lastHeartbeatTime":1579023883101,
     "cpu":8,
     "port":0,
     "hostname":"tsmith-pc",
     "ipList":[
-      "192.168.12.13"
+      "192.168.12.13",
+      "fe80:0:0:0:0:6efe:c0a8:3348%net4",
+      ...
     ],
     "client":{
       "type":"java",
@@ -35,6 +48,13 @@ broker.call("$node.list").then(rsp -> {
     }
   }
 ]
+
+Node ID: node1
+ IP address: 192.168.12.13
+ IP address: fe80:0:0:0:0:6efe:c0a8:3348%net4
+ IP address: fe80:0:0:0:0:110:7f:fffe%net5
+ IP address: fe80:0:0:0:4514:d05f:4195:80d8%eth5
+ IP address: fe80:0:0:0:9802:43e:ce67:4c25%eth6
 ```
 
 **Parameters**
@@ -45,17 +65,28 @@ broker.call("$node.list").then(rsp -> {
 
 ## List of services
 
-It lists all registered services (local & remote).
+The "$node.services" Action lists all registered services (local & remote).
 
-```java
+```java{1}
 broker.call("$node.services").then(rsp -> {
+
+    // Print JSON response
     logger.info(rsp);
+
+    // Example processing of the response (print nodeIDs of Services):
+    for (Tree serviceInfo: rsp) {
+        String name = serviceInfo.get("name", "");
+        System.out.println("Service: " + name);
+        for (Tree nodeID: serviceInfo.get("nodes")) {
+            System.out.println("  Node ID: " + nodeID.asString());
+        }
+    }
 });
 ```
 
 **Sample response**
 
-```json
+```text
 [
   {
     "name":"api-gw",
@@ -82,6 +113,13 @@ broker.call("$node.services").then(rsp -> {
     "metadata":null
   }
 ]
+
+Service: api-gw
+  Node ID: tsmith-pc-7700
+Service: chatService
+  Node ID: tsmith-pc-7700
+Service: upload
+  Node ID: tsmith-pc-7700
 ```
 
 **Parameters**
@@ -92,19 +130,28 @@ broker.call("$node.services").then(rsp -> {
 | `skipInternal` | `Boolean` | `false` | Skip the internal services (`$node`). |
 | `withActions` | `Boolean` | `false` | List with actions. |
 
-## List of local actions
+## List of Actions
 
-It lists all registered actions (local & remote).
+The "$node.actions" Action lists all registered actions (local & remote).
 
-```java
+```java{1}
 broker.call("$node.actions").then(rsp -> {
+
+    // Print JSON response
     logger.info(rsp);
+    
+    // Example processing of the response (print Actions and some attributes):
+    for (Tree actionInfo: rsp) {
+        System.out.println("Action: " + actionInfo.get("name", "") +
+                         ", local: "  + actionInfo.get("hasLocal", false) +
+                         ", count: "  + actionInfo.get("count", 0));
+    }    
 });
 ```
 
 **Sample response**
 
-```json
+```text
 [
   {
     "name":"$node.actions",
@@ -134,6 +181,10 @@ broker.call("$node.actions").then(rsp -> {
     }
   }
 ]
+
+Action: $node.actions, local: true, count: 1
+Action: blog.clear, local: true, count: 1
+Action: jmx.findObjects, local: true, count: 1
 ```
 
 **Options**
@@ -144,19 +195,30 @@ broker.call("$node.actions").then(rsp -> {
 | `skipInternal` | `Boolean` | `false` | Skip the internal actions (`$node`). |
 | `withEndpoints` | `Boolean` | `false` | List with endpoints _(nodes)_. |
 
-## List of local events
+## List of Event subscriptions
 
-It lists all event subscriptions.
+The "$node.events" Action lists all Event subscriptions.
 
-```java
+```java{1}
 broker.call("$node.events").then(rsp -> {
+
+    // Print JSON response
     logger.info(rsp);
+    
+    // Example processing of the response (print Events and some attributes):
+    for (Tree eventInfo: rsp) {
+        String subscription = eventInfo.get("name", "");
+        System.out.println("Subscription: " + subscription);
+        for (Tree event: eventInfo.get("event")) {
+            System.out.println(" " + event.getName() + " = " + event.asString());
+        }
+    }
 });
 ```
 
 **Sample response**
 
-```json
+```text
 [
   {
     "name":"$services.changed",
@@ -181,6 +243,13 @@ broker.call("$node.events").then(rsp -> {
     }
   }
 ]
+
+Subscription: $services.changed
+ name = $services.changed
+ group = nettyServer
+Subscription: websocket.send
+ name = websocket.send
+ group = api-gw
 ```
 
 **Options**
@@ -193,17 +262,29 @@ broker.call("$node.events").then(rsp -> {
 
 ## Health of node
 
-It returns the health info of local node (including process & OS information).
+The "$node.health" Action returns the health info of local node (including process & OS information).
 
-```java
+```java{1}
 broker.call("$node.health").then(rsp -> {
+
+    // Print JSON response
     logger.info(rsp);
+
+    // Example processing of the response (print IPs and some attributes):
+    System.out.println("IP Addresses:");
+    for (Tree ip: rsp.get("net.ip")) {
+        System.out.println(" " + ip.asString());
+    }
+
+    System.out.println("CPU cores: " + rsp.get("cpu.cores", 0));
+    System.out.println("OS type: "   + rsp.get("os.type", ""));
+    System.out.println("Homedir: "   + rsp.get("os.user.homedir", ""));
 });
 ```
 
 **Sample response**
 
-```json
+```text
 {
   "cpu":{
     "cores":8,
@@ -244,4 +325,10 @@ broker.call("$node.health").then(rsp -> {
     "utc":"Tue, 14 Jan 2020 17:35:07 GMT"
   }
 }
+
+IP Addresses:
+ 192.168.12.13
+CPU cores: 8
+OS type: Windows 10
+Homedir: C:\Users\TSmith
 ```

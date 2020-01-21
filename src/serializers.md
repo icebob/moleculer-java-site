@@ -151,7 +151,7 @@ Custom Serializer module can be created.
 To make your own Serializer, you need to derive it from the `services.moleculer.serializer.Serializer`
 superclass, and implement the `write` and `read` methods.
 
-Create custom Serializer:
+**Create custom Serializer**
 
 ```java
 public class CustomSerializer extends Serializer {
@@ -174,8 +174,132 @@ public class CustomSerializer extends Serializer {
 }
 ```
 
-Use custom Serializer:
+**Use custom Serializer**
 
 ```java
 transporter.setSerializer(new CustomSerializer());
+```
+
+## Message-level encryption
+
+The `BlockCipherSerializer` is capable of encrypting data packets using the specified algorithm.
+You can give it a "parent" Serializer,
+if not specified it uses JSON serialization before encryption.
+
+```java{4-6}
+BlockCipherSerializer serializer = new BlockCipherSerializer();
+
+// Same as "aes-256-cbc" in Node.js
+serializer.setAlgorithm("AES/CBC/PKCS5Padding"); // Algorithm
+serializer.setPassword("12345678901234567890123456789012"); // 32 bytes of password
+serializer.setIv("1234567890123456"); // 16 bytes of IV block - required for AES/CBC
+
+// Create Transporter and Service Broker
+Transporter transporter = new NatsTransporter("localhost");
+transporter.setSerializer(serializer);
+ServiceBroker broker = ServiceBroker.builder()
+                                    .nodeID("node1")
+                                    .transporter(transporter)
+                                    .build();
+```
+
+In Node.js-based Moleculer, code with similar functionality looks like this:
+
+```js{5-7}
+// JavaScript code
+const broker = new ServiceBroker({
+    transporter: "NATS",
+    middlewares: [
+        Middlewares.Transmit.Encryption("12345678901234567890123456789012", // Password
+                                        "aes-256-cbc", // Algorithm
+                                        "1234567890123456") // 16 bytes of IV block
+    ]
+});
+```
+
+## Compressing messages
+
+The `DeflaterSerializer` can compress messages larger than the specified size.
+It can also have a "parent" Serializer,
+if not specified it uses JSON serialization before compression.
+ 
+```java{2}
+Transporter transporter = new NatsTransporter("localhost");
+transporter.setSerializer(new DeflaterSerializer(512));
+
+// Create Service Broker
+ServiceBroker broker = ServiceBroker.builder()
+                                    .nodeID("node1")
+                                    .transporter(transporter)
+                                    .build();
+```
+
+In Node.js-based Moleculer, code with similar functionality looks like this:
+
+```js{4-5}
+const broker = new ServiceBroker({
+    transporter: "NATS",
+    middlewares: [
+        Middlewares.Transmit.Compression({ method: "deflateRaw",
+                                           threshold: "512b" }),
+    ]
+});
+```
+
+::: warning
+Using compression reduces performance, so use it only on slow networks.
+:::
+
+## Chaining Serializers
+
+By chaining Serializers, you can combine multiple Serializers.
+In the example below, the data is first serialized using the MessagePack algorithm.
+Deflater then compresses large data packets (larger than 1024 bytes)
+and then encrypts the compressed packet using the AES algorithm:
+
+```java{4-6}
+Transporter natsTransporter = new NatsTransporter("localhost");
+
+// Create Serializer-chain
+MsgPackSerializer msgPack = new MsgPackSerializer();
+DeflaterSerializer deflater = new DeflaterSerializer(msgPack);
+BlockCipherSerializer cipher = new BlockCipherSerializer(deflater, "1234567890123456");
+
+// Set Serializer-chain to Transporter
+natsTransporter.setSerializer(cipher);
+
+// Create Service Broker
+ServiceBroker broker = ServiceBroker.builder()
+                                    .nodeID("node1")
+                                    .transporter(natsTransporter)
+                                    .build();
+```
+
+**Double encryption**
+
+Chaining allows multiple encryption methods to be applied to a data packet.
+In the example below,
+the data is first encrypted using the "ARCFOUR" and then the "Blowfish" algorithm:
+
+```java{4-11}
+// Create JSON Serializer
+JsonSerializer jsonSerializer = new JsonSerializer();
+		
+// First cipher
+BlockCipherSerializer first = new BlockCipherSerializer(jsonSerializer,
+                                                        "password1",
+                                                        "ARCFOUR");
+// Second cipher
+BlockCipherSerializer second = new BlockCipherSerializer(first,
+                                                         "password2",
+                                                         "Blowfish");
+
+// Set Serializer-chain to Transporter
+transporter.setSerializer(second);
+
+// Create Service Broker
+ServiceBroker broker = ServiceBroker.builder()
+                                    .nodeID("node1")
+                                    .transporter(transporter)
+                                    .build();
 ```

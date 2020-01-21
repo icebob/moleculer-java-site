@@ -7,7 +7,6 @@ deployed on different operating systems and implemented in different languages.
 
 Events can be grouped; events can be sent to
 - to all listeners (unconditional "broadcast")
-- a specific node ("broadcast" with "CallOptions.nodeID" parameter)
 - to a group of listeners ("broadcast" with "groups" parameter)
 - to one member from all groups (unconditional "emit")
 - or to one member from the specified groups ("emit" with "groups" parameter)
@@ -276,8 +275,7 @@ Stream data can also be processed per packet.
 ctx.stream.onPacket((bytes, error, closed) -> {
     if (bytes != null) {
         // A byte-array has arrived
-    }
-    if (error != null) {
+    } else if (error != null) {
         // Error occurred
     }
     if (closed) {

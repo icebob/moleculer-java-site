@@ -361,13 +361,14 @@ the status code of the response and add any HTTP header to the response.
 * `ctx.meta.$template` - Name of the HTML template (eg. "test" means "test.html").
 * `ctx.meta.$locale` - Locale (~= language) of the generated HTML page (eg. "de", "fr", "en_uk").
     
-**Example**
+**Example: Invoke Template Engine**
 
 ```java
  Action list = ctx -> {
 
     // Create response "JSON"
     Tree rsp = new Tree();
+	rsp.put("name", "value")
 
     // Get the hidden meta block of the response
     Tree meta = rsp.getMeta();
@@ -391,6 +392,8 @@ the status code of the response and add any HTTP header to the response.
     return rsp;
 };
 ```
+
+**Example: Send image file to browser**
 
 The "Content-Type" value, status code and other HTTP headers
 can be changed even if the answer is a **Moleculer Stream**.
@@ -419,6 +422,42 @@ Since Stream has no "meta", it needs to be wrapped in a Tree object:
     return rsp;
 };
 ```
+
+**Example: Dynamic content generation**
+
+The following Action will be available at:
+`http://localhost:3000/dynamic.txt`  
+This was set by the `@HttpAlias` Annotation.
+The same could be done by adding a similar Alias to Route.
+
+```java
+@HttpAlias(method = "GET", path = "/dynamic.txt")
+Action img = ctx -> {
+
+    // Response text
+    String text = "Server time: " + new Date();
+
+    // Send text as PacketStream
+    PacketStream stream = ctx.createStream();        
+    byte[] bytes = text.getBytes(StandardCharsets.UTF_8);
+    stream.sendData(bytes);
+    stream.sendClose();
+
+    // Set HTML headers of the response
+    Tree rsp = new CheckedTree(stream);
+    Tree headers = rsp.getMeta().putMap("$responseHeaders");        
+    headers.put("Content-Length", bytes.length);
+	
+	// Same as "$responseType" just set it here as header
+    headers.put("Content-Type", "text/plain; charset=utf-8");
+
+    return rsp;
+};
+```
+
+Typing the URL ".../dynamic.txt" into your browser
+will display content similar to the following:  
+`Server time: Tue Jan 21 16:09:22 CET 2020`
 
 ## Built-in Middlewares
 
@@ -640,12 +679,16 @@ route.use(new RequestLogger());
 
 Compresses body of REST responses. Do not use it with `ServeStatic` Middleware;
 `ServeStatic` also compresses the data. Use it to compress the response of REST
-services. Using this Middleware reduces the performance, so use it only on slow networks.
+services.
 [[source](https://github.com/moleculer-java/moleculer-java-web/blob/master/src/main/java/services/moleculer/web/middleware/ResponseDeflater.java)]
 
 ```java
 route.use(new ResponseDeflater(Deflater.BEST_SPEED));
 ```
+
+::: warning
+Using compression reduces performance, so use it only on slow networks.
+:::
 
 ### ResponseHeaders Middleware
 
