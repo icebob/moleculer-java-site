@@ -127,7 +127,7 @@ The brief examples illustrate the following:
 
 **Node.js**
 
-Services in Node.js-based Modules can be used in Java-based Moleculer as well as the local Services.
+Node.js-based Moleculer Services can be used in Java-based applications as well as local Services.
 This requires a
 [Transporter](transporters.html#types-of-transporters)
 for both implementations.
@@ -136,4 +136,5 @@ for both implementations.
 
 ## License
 
-This project is available under the [MIT license](https://tldrlegal.com/license/mit-license).
+Moleculer for Java is available under the [MIT license](https://tldrlegal.com/license/mit-license),
+can be used in commercial products for free.
