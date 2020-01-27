@@ -12,7 +12,7 @@ Moleculer API Gateway provides full support for high-load React, Angular or VueJ
 - Supports server-side template engines (FreeMarker, Jade, Pebble, Thymeleaf, Mustache, Velocity)
 - Many built-in middlewares (ServeStatic, CORS headers, custom error messages, etc.)
 
-The Moleculer API Gateway is compatible with the following Servlet Containers / J2EE Servers:
+**The Moleculer API Gateway is compatible with the following Servlet Containers / J2EE Servers:**
 
 - Oracle WebLogic Server V12
 - Red Hat JBoss Enterprise Application Platform V7
@@ -248,7 +248,7 @@ route.use(new FirstMiddleware()); // Executed FIRST
 ```
 
 Moleculer's HTTP Middlewares use very similar logic to
-[Middlewares of **Express.js**](https://expressjs.com/en/guide/using-middleware.html).
+[Middlewares of Express.js](https://expressjs.com/en/guide/using-middleware.html).
 The following example implements an "empty" Middleware that passes the request without modification:
 
 ```java
@@ -256,8 +256,9 @@ public class MyMiddleware extends HttpMiddleware {
 
     public RequestProcessor install(RequestProcessor next, Tree config) {
 
-        // Create new AbstractRequestProcessor or return "null", this is
+        // Create new "RequestProcessor" or return "null", this is
         // decided by the "config" which contains the Action parameters.
+        // If you return "null", you won't install Middleware for the Action.
 
         return new AbstractRequestProcessor(next) {
             public void service(WebRequest req, WebResponse rsp) throws Exception {
@@ -267,7 +268,7 @@ public class MyMiddleware extends HttpMiddleware {
                 // Do nothig, just invoke next Middleware or Action
                 next.service(req, rsp);
 
-                // --- FUNCTIONS AFTER CALLING THE ACTION ---                
+                // --- FUNCTIONS AFTER CALLING THE ACTION ---
             }
         };    
     }

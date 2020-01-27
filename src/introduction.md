@@ -117,11 +117,22 @@ The brief examples illustrate the following:
 
 ## Subprojects
 
-* [High-performance Web API for Moleculer Apps](moleculer-web.html)
-* [Interactive Developer Console](moleculer-repl.html)
-* [JMX Service for Moleculer](https://moleculer-java.github.io/moleculer-java-jmx/)
-* [MongoDB API for Moleculer](https://moleculer-java.github.io/moleculer-java-mongo/)
-* [HTTP Client for Moleculer](https://moleculer-java.github.io/moleculer-java-httpclient/)
+**Java**
+
+- [High-performance Web API for Moleculer Apps](moleculer-web.html)
+- [Interactive Developer Console](moleculer-repl.html)
+- [JMX Service for Moleculer](https://moleculer-java.github.io/moleculer-java-jmx/)
+- [MongoDB API for Moleculer](https://moleculer-java.github.io/moleculer-java-mongo/)
+- [HTTP Client for Moleculer](https://moleculer-java.github.io/moleculer-java-httpclient/)
+
+**Node.js**
+
+Services in Node.js-based Modules can be used in Java-based Moleculer as well as the local Services.
+This requires a
+[Transporter](transporters.html#types-of-transporters)
+for both implementations.
+
+- [List of Node.js-based Moleculer Modules](https://moleculer.services/modules.html)
 
 ## License
 

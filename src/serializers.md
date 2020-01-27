@@ -1,6 +1,7 @@
 ## About data serialization
 
-Transporter needs a Serializer Module which serializes & deserializes the transferable data.
+[Transporter](transporters.html#types-of-transporters)
+needs a Serializer Module which serializes & deserializes the transferable data.
 The default Serializer is the `JsonSerializer` but there are several built-in Serializers
 can convert messages into MessagePack, BSON, CBOR, SMILE, Amazon ION or other binary formats.
 

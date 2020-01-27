@@ -73,6 +73,13 @@ Promise.resolve()
 
 The `Handler called` message appears only once because the response of the second call came from the cache.
 
+::: warning
+Caching **does not work** with streamed data,
+it can only store values sent or received in a single data structure.
+Do not use the `@Cache` Annotation for Actions that receive or send
+[Moleculer Streams](actions.html#streaming).
+:::
+
 ### Cache keys
 
 The cacher generates key from service name, action name and the params of context.

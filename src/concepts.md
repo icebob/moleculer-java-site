@@ -87,7 +87,7 @@ The Reflection API is a powerful feature of the Java language.
 With the API, the Java program can create an object or call a method on the fly.
 From execution prospective, the calls to reflection API are quite expensive,
 it could have a performance impact on the applications.
-Because of this, Moleculer uses the reflection API in very few cases.
+Because of this, Moleculer uses the reflection API in very few cases. For example
 `Actions` and `Event` listeners are not methods but `Functional Interfaces`.
 Calling them is much faster than calling methods using the Reflection API.
 
@@ -99,7 +99,7 @@ Listener listener = ctx -> { ... };
 
 ## No Object Mapping
 
-For similar performance reasons, Moleculer `Services` do not use Java Object Mappers.
+For the sake of simplicity, and similarity to Node.js version, Moleculer does not use Java Object Mappers.
 The data is received, processed and returned in "raw" JSON format.
 Object Mapper's are useful when starting the system,
 and we process configuration files using the Spring Framework, for example.
@@ -155,7 +155,7 @@ is that the Moleculer Promise object works with "raw" JSON objects.
 The value of a Moleculer Promise, which you get after the asynchronous processing,
 is always a `Tree` object.
 This `Tree` structure may come from other Services (including, for example, Node.js-based Services)
-or from asynchronous APIs (such as REST client or MongoDB APIs).
+or from asynchronous APIs.
 
 ```java
 // Sequential "waterfall" processing of Promises
@@ -184,5 +184,118 @@ Action createNewUser = ctx -> {
         return ctx.call("email.sendVerification", rsp);
 
     });
+}
+```
+
+Several Moleculer Modules have been created that work with Promise objects
+(for example [MongoDB API for Moleculer](https://moleculer-java.github.io/moleculer-java-mongo/)
+or
+[HTTP Client for Moleculer](https://moleculer-java.github.io/moleculer-java-httpclient/)).
+The following chapters show how to process the responses of asynchronous non-Promise functions using Promise logic.
+
+### Converting callback to Promise
+
+Callback-based processing can be converted to Promise-based processing according to the following scheme.
+The structure of the `Callback` interface is as follows:
+
+```java
+public interface Callback {
+	public void onFinised(Object data);
+	public void onError(Throwable error);
+}
+```
+
+And the `callbackMethod` using the `Callback` interface is as follows:
+
+```java
+public void callbackMethod(Object input, Callback callback) {
+	ForkJoinPool.commonPool().execute(() -> {
+		callback.onFinised("123"); // Can be Tree or POJO
+	});
+}
+```
+
+To convert it to Promise-based method,
+the call must be embedded in the constructor of Promise, as follows
+(this manner is similar to the ES6 Promise syntax):
+
+```java
+public static Promise promiseMethod(Object input) {
+	return new Promise(resolver -> {
+		callbackMethod(input, new Callback() {
+
+			public void onFinised(Object data) {
+				resolver.resolve(data);
+			}
+
+			public void onError(Throwable error) {
+				resolver.reject(error);
+			}
+		});
+	});
+}
+```
+
+Hereinafter we can use the `promiseMethod` in waterfall-like processing:
+
+```java
+Action add = ctx -> {
+	String input = ctx.params.get("input", "default");
+
+	return promiseMethod(input).then(rsp -> {
+		// ...
+	}).catchError(err -> {
+		// ...
+	});
+};
+```
+
+### Converting CompletableFuture to Promise
+
+For a consistent programming style, you should also convert frequently used `CompletableFuture` objects to Promise.
+Example function that returns a `CompletableFuture` object:
+
+```java
+public static CompletableFuture<String> futureMethod(Object input) {
+	CompletableFuture<String> future = new CompletableFuture<String>();
+	ForkJoinPool.commonPool().execute(() -> {
+		future.complete("123");	// Can be Tree or POJO
+	});
+	return future;
+}
+```
+
+To convert it to Promise-based method,
+simply pass the `CompletableFuture` as a Promise constructor parameter:
+
+```java
+public static Promise promiseMethod(Object input) {
+	return new Promise(futureMethod(input));
+}
+```
+
+If the `CompletableFuture` returns with a POJO object, you should convert it to a `Tree` object.
+This way, both *remote and local calls* will return with the same `Tree` (~=JSON) object:
+
+```java
+public static Promise promiseMethod(Object input) {
+	return new Promise(futureMethod(input)).then(rsp -> {
+        User user = (User) rsp.asObject();
+        Tree rsp = new Tree();
+        rsp.put("id", user.getID());
+        rsp.put("name", user.getName());
+        return rsp;        
+    };
+}
+```
+
+The Promise-based function can be published for other (eg. Node.js-based) Services via Actions,
+or converted directly into a REST service using the
+[@HttpAlias](moleculer-web.html#about-api-gateway) Annotation:
+
+```java
+@HttpAlias(method = "POST", path = "api/action") 
+public Action action = ctx -> {
+	return promiseMethod(ctx.params);
 }
 ```

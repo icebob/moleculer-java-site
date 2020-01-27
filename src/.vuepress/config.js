@@ -10,9 +10,7 @@ module.exports = {
 		[
 			'@vuepress/back-to-top'
 		],
-		[
-			'vuepress-plugin-smooth-scroll'
-		],
+		// ['vuepress-plugin-smooth-scroll'],
         [
             '@vuepress/google-analytics', {'ga': 'UA-156080046-1'}
         ],
@@ -35,6 +33,11 @@ module.exports = {
 		logo: 'logo.png',
 		repo: 'https://github.com/moleculer-java/moleculer-java',
 		repoLabel: 'GitHub',
+		docsRepo:  'moleculer-java/site',
+		docsDir:   'src',
+		editLinks: true,
+		editLinkText: 'Edit this page',
+		lastUpdated:  'Last Updated',		
 		nav: [
 			{ text: 'Home', link: '/' },
 			{ text: 'Documentation', link: 'introduction' },
