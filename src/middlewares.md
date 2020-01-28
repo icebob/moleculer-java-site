@@ -1,11 +1,11 @@
 ## About Middlewares
 
-Middleware functions are functions that have access to the request Context ("ctx"),
-the configuration of the Action ("config"),
-and the next Action (or Middleware) function in the application’s request-response cycle ("action"):
+`Middleware` functions are functions that have access to the request `Context` ("ctx"),
+the configuration of the `Action` ("config"),
+and the next `Action` (or `Middleware`) function in the application’s request-response cycle ("action"):
 The "config" contains all
 [Annotations](actions.html#converting-java-annotations-to-platform-independent-properties)
-of the Action, converted to a `Tree` (~= JSON) object.
+of the `Action`, converted to a `Tree` (~= JSON) object.
 
 ```java
 public class MyMiddleware extends Middleware {
@@ -34,20 +34,20 @@ public class MyMiddleware extends Middleware {
 }
 ```
 
-Use the `use` function of `ServiceBroker` to install the Middleware:
+Use the "use" function of `ServiceBroker` to install the `Middleware`:
 
 ```java
 broker.use(new MyMiddleware());
 ```
 
-Middleware functions can perform the following tasks:
+`Middleware` functions can perform the following tasks:
 
 - Execute any code.
 - Make changes to the request and the response objects.
 - End the request-response cycle.
-- Call the next Action or Middleware in the stack.
+- Call the next `Action` or `Middleware` in the stack.
 
-Middlewares is executed in **reverse order** as they are added to `ServiceBroker`:
+`Middlewares` is executed in **reverse order** as they are added to `ServiceBroker`:
 
 ```java
 broker.use(new LastMiddleware()); // Installed and/or executed LAST
@@ -58,8 +58,8 @@ broker.use(new FirstMiddleware()); // Installed and/or executed FIRST
 
 ## Example of Middleware-based pre-processing
 
-In Java-based Moleculer, it is easiest to configure Actions with Annotations.
-The following code snippet creates an Annotation to assign Roles to Actions:
+In Java-based Moleculer, it is easiest to configure `Actions` with annotations.
+The following code snippet creates an annotation to assign Roles to `Actions`:
 
 ```java
 @Retention(RetentionPolicy.RUNTIME)
@@ -71,7 +71,7 @@ public @interface RequiredRoles {
 }
 ```
 
-Annotations can be added to the Actions as follows:
+Annotations can be added to the `Actions` as follows:
 
 ```java{3,8}
 public class CheckedService extends Service {
@@ -89,7 +89,7 @@ public class CheckedService extends Service {
 }
 ```
 
-Middleware can access the list of "RequiredRoles" via the "config" object:
+`Middleware` can access the list of "RequiredRoles" via the "config" object:
 
 ```java
 public class AccessControllerMiddleware extends Middleware {
@@ -125,7 +125,7 @@ public class AccessControllerMiddleware extends Middleware {
 }
 ```
 
-Finally install the Middleware using the `use` function of `ServiceBroker`:
+Finally install the `Middleware` using the "use" function of `ServiceBroker`:
 
 ```java
 broker.use(new AccessControllerMiddleware());
@@ -133,9 +133,9 @@ broker.use(new AccessControllerMiddleware());
 
 ## Caching the response of Actions
 
-Among many other uses, Middleware is used to cache the response of Action.
-[Cacher](https://github.com/moleculer-java/moleculer-java/blob/master/src/main/java/services/moleculer/cacher/Cacher.java)
-Middleware is an abstract class that uses request input data as a key to store responses in a cache.
-The actual implementation of the Cacher can be local or distributed.
-Cacher Middleware is automatically added to `ServiceBroker` at startup.  
+Among many other uses, `Middleware` is used to cache the response of `Action`.
+[Cacher](https://github.com/moleculer-java/moleculer-java/blob/master/src/main/java/services/moleculer/cacher/`Cacher`.java)
+`Middleware` is an abstract class that uses request input data as a key to store responses in a cache.
+The actual implementation of the `Cacher` can be local or distributed.
+`Cacher` `Middleware` is automatically added to `ServiceBroker` at startup.  
 [Read more about caching.](caching.html#caching-action-calls)

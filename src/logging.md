@@ -46,10 +46,10 @@ To do this, add the following dependencies to the build file:
 ```gradle
 dependencies {
 
-    compile group: 'org.slf4j', name: 'slf4j-api',        version: '1.7.28'
-    compile group: 'org.slf4j', name: 'slf4j-jdk14',      version: '1.7.28'
-    compile group: 'org.slf4j', name: 'log4j-over-slf4j', version: '1.7.28'
-    compile group: 'org.slf4j', name: 'jcl-over-slf4j',   version: '1.7.28'
+    implementation group: 'org.slf4j', name: 'slf4j-api',        version: '1.7.30'
+    implementation group: 'org.slf4j', name: 'slf4j-jdk14',      version: '1.7.30'
+    implementation group: 'org.slf4j', name: 'log4j-over-slf4j', version: '1.7.30'
+    implementation group: 'org.slf4j', name: 'jcl-over-slf4j',   version: '1.7.30'
 
     // ...other dependencies...
 
@@ -59,7 +59,7 @@ dependencies {
 ## Logging in J2EE environment
 
 When using Spring Boot, you can turn off the initialization of Spring Boot logging,
-by setting the "org.springframework.boot.logging.LoggingSystem" property to "false".
+by setting the "org.springframework.boot.logging.LoggingSystem" property to "none".
 Thus, the Moleculer Application will use the J2EE server's default logging mechanism.
 It looks like this in "web.xml":
 
@@ -83,14 +83,38 @@ It looks like this in "web.xml":
 </web-app>
 ```
 
+ [Example of complete web.xml](https://github.com/moleculer-java/moleculer-spring-boot-demo/blob/master/src/main/webapp/WEB-INF/web.xml)
+
 ## Logging in standalone runtime mode
 
-When running standalone (on top of Netty), you need to set the "logging.config" parameter to something like this:
+When running standalone mode (on top of Netty Server), you need to set the "logging.config" parameter to something like this:
 
 ```
 java -Dlogging.config="classpath:logging.properties"
      -cp <list of JARs>
      services.moleculer.config.MoleculerRunner <app class>
+```
+
+[Example of a BAT file that starts in "development" stage](https://github.com/moleculer-java/moleculer-spring-boot-demo/blob/master/installer/bin/development-start.bat)
+
+By default, Molecular uses `services.moleculer.logger.AsyncFileLogger` to write log files in standalone mode.
+This logger writes files from a **separate Thread** and creates a **new file every day**.
+It can **compress** and/or **delete** old log files (see the "compressAfter" and "deleteAfter" properties).
+Setting the "logToConsole" parameter to "true" writes a **colored** log to `System.out`
+(optional [dependency of colored output](https://mvnrepository.com/artifact/com.diogonunes/JCDP/2.0.3.1))
+In the "production" stage, the "logToConsole" parameter should be set to "false",
+while in the "development" stage it should be set to "true":
+
+```
+handlers                                                = services.moleculer.logger.AsyncFileLogger
+services.moleculer.logger.AsyncFileLogger.directory     = log
+services.moleculer.logger.AsyncFileLogger.prefix        = moleculer.
+services.moleculer.logger.AsyncFileLogger.encoding      = UTF8
+services.moleculer.logger.AsyncFileLogger.compressAfter = 30 days
+services.moleculer.logger.AsyncFileLogger.deleteAfter   = 365 days
+services.moleculer.logger.AsyncFileLogger.logToConsole  = true
+services.moleculer.logger.AsyncFileLogger.level         = INFO
+.level                                                  = INFO
 ```
 
 ## Detailed Example

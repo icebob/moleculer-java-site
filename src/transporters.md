@@ -1,20 +1,20 @@
 ## Types of Transporters
 
-In order to communicate with other nodes (ServiceBroker instances) you need to configure a Transporter.
-There are two types of Transporter:
+In order to communicate with other nodes (`ServiceBroker` instances) you need to configure a `Transporter`.
+There are two types of `Transporter`:
 
-- **Centralized** Transporters: Transporters using a central server. The central server can be, for example, a Redis, NATS, Kafka, MQTT or a JMS server.
+- **Centralized** Transporters: `Transporters` using a central server. The central server can be, for example, a Redis, NATS, Kafka, MQTT or a JMS server.
 
-- **Decentralized**, Peer-to-Peer Transporters: Transporters without a central server. For example, TCPTransporter belongs to this group, which uses Gossip protocol to publish the status of the nodes.
+- **Decentralized**, Peer-to-Peer Transporters: `Transporters` without a central server. For example, `TcpTransporter` belongs to this group, which uses Gossip protocol to publish the status of the nodes.
 
-Transporter communicates with other nodes, transfers events, calls requests and processes responses.
-If a service runs on multiple instances on different nodes, the requests will be load-balanced among live nodes.
-Each Transporter can be assigned a Serializer. Serializers convert messages into bytes and vice versa.
-There are several built-in Transporters in Moleculer Framework.
+`Transporter` communicates with other nodes, transfers events, calls requests and processes responses.
+If a `Service` runs on multiple instances on different nodes, the requests will be load-balanced among live nodes.
+Each `Transporter` can be assigned a `Serializer`. `Serializers` convert messages into bytes and vice versa.
+There are several built-in `Transporters` in Moleculer Framework.
 
-## Centralized Transporters
+## Centralized `Transporters`
 
-Centralized Transporters connect to a central message broker that provide a reliable way of exchanging messages among remote nodes.
+Centralized `Transporters` connect to a central `MessageBroker` that provide a reliable way of exchanging messages among remote nodes.
 These brokers use publish/subscribe messaging pattern to deliver data packets.
 
 <div align="center">
@@ -76,7 +76,7 @@ broker.start();
 ### Redis Transporter
 
 ![](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)  
-Built-in Transporter for [Redis](http://redis.io/).
+Built-in `Transporter` for [Redis](http://redis.io/).
 Redis is an open source (BSD licensed), in-memory data structure store, used as a database, cache and message broker.
 
 ```java
@@ -107,7 +107,7 @@ ServiceBroker broker = ServiceBroker.builder()
 ### MQTT Transporter
 
 ![](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)  
-Built-in Transporter for [MQTT](http://mqtt.org/) protocol.
+Built-in `Transporter` for [MQTT](http://mqtt.org/) protocol.
 MQTT Transporter (eg. for [Mosquitto](https://mosquitto.org/) MQTT Server or ActiveMQ Server).
 MQTT is a machine-to-machine (M2M)/"Internet of Things" connectivity protocol.
 It was designed as an extremely lightweight publish/subscribe messaging transport.
@@ -140,10 +140,10 @@ ServiceBroker broker = ServiceBroker.builder()
                                     .build();
 ```
 
-### AMQP Transporter 
+### AMQP Transporter
 
 ![](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)  
-Built-in Transporter for [AMQP](https://www.amqp.org/) protocol.
+Built-in `Transporter` for [AMQP](https://www.amqp.org/) protocol.
 AMQP Transporter based on [RabbitMQ's](https://www.rabbitmq.com/) AMQP client API.
 AMQP provides a platform-agnostic method for ensuring information is safely transported
 between applications, among organizations, within mobile infrastructures, and across the Cloud.
@@ -179,7 +179,7 @@ ServiceBroker broker = ServiceBroker.builder()
 ### Kafka Transporter
 
 ![](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)  
-Built-in Transporter for [Kafka](https://kafka.apache.org/).
+Built-in `Transporter` for [Kafka](https://kafka.apache.org/).
 Kafka is used for building real-time data pipelines and streaming apps.
 It is horizontally scalable, fault-tolerant, wicked fast, and runs in production in thousands of companies.
 Kafka Transporter is a very simple implementation.
@@ -214,7 +214,7 @@ ServiceBroker broker = ServiceBroker.builder()
 
 ### JMS Transporter
 
-Built-in Transporter for [Java Message Service](https://www.oracle.com/technical-resources/articles/java/intro-java-message-service.html).
+Built-in `Transporter` for [Java Message Service](https://www.oracle.com/technical-resources/articles/java/intro-java-message-service.html).
 The Java Message Service API is a Java Message Oriented Middleware API for sending messages between two or more clients.
 It is an implementation to handle the Producer-consumer problem.
 JMS is a part of the Java Enterprise Edition.
@@ -256,22 +256,22 @@ ServiceBroker broker = ServiceBroker.builder()
 ### TCP Transporter
 
 ![](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)  
-TCP Transporter uses fault tolerant and peer-to-peer
+TCP `Transporter` uses fault tolerant and peer-to-peer
 [Gossip protocol](https://en.wikipedia.org/wiki/Gossip_protocol)
 to discover location and service information about the other nodes
 participating in a Moleculer Cluster. In Moleculer's P2P architecture all
 nodes are equal, there is no "leader" or "controller" node, so the cluster is
-truly horizontally scalable. This Transporter aims to run on top of an
+truly horizontally scalable. This `Transporter` aims to run on top of an
 infrastructure of hundreds of nodes.
  
 It contains an integrated UDP discovery feature to detect new and disconnected nodes on the network.
-If the UDP is prohibited on your network, use `urls` option.
+If the UDP is prohibited on your network, use "urls" option.
 It is a list of remote endpoints (host/ip, port, nodeID).
 It can be a static list in your configuration or a file path which contains the list.
-TCP Transporter provides the highest speed data transfer between Moleculer
+TCP `Transporter` provides the highest speed data transfer between Moleculer
 Nodes - hundred thousand packets per second can be transmitted from one node to another over a high-speed LAN.
  
-Use TCP Transporter with default options:
+Use TCP `Transporter` with default options:
 
 ```java
 // Create Transporter
@@ -349,7 +349,7 @@ transporter.setUdpMulticastTTL(1);
 transporter.setUdpBroadcast(false);
 ```
 
-TCP Transporter with static endpoint list:
+TCP `Transporter` with static endpoint list:
 
 ```java
 TcpTransporter transporter = new TcpTransporter("172.17.0.1:6000/node-1",
@@ -361,9 +361,9 @@ ServiceBroker broker = ServiceBroker.builder()
                                     .build();
 ```
 
-_You don't need to set `port` because it find & parse the self TCP port from URL list._
+_You don't need to set "port" because it find & parse the self TCP port from URL list._
 
-TCP Transporter with static endpoint list file:
+TCP `Transporter` with static endpoint list file:
 
 ```java
 TcpTransporter transporter = new TcpTransporter(new URL("file:///nodes.json"));
@@ -388,9 +388,9 @@ So all nodes must know only the gossiper node address to be able to communicate 
 
 ### Internal Transporter
 
-Internal Transporter is a built-in message bus that can connect multiple ServiceBrokers running in the same JVM.
-This Transporter is primarily used for testing purposes.
-The calls are made in separate Threads, so call timeouts can be used.
+Internal `Transporter` is a built-in message bus that can connect multiple `ServiceBrokers` running in the same JVM.
+This `Transporter` is primarily used for testing purposes (eg. for testing `Serializers`, `Listeners` or `Actions`).
+The calls are made in separate `Threads`, so call timeouts can be used.
 
 Using the shared (static) communication group:
 
@@ -448,9 +448,9 @@ ServiceBroker broker4 = ServiceBroker.builder()
 
 ### File System Transporter
 
-Built-in, filesystem-based, server-less Transporter.
-With this Transporter multiple Service Brokers can communicate with each other through a shared directory structure.
-File System Transporter is not advisable for use in production mode as it is much slower than other Transporter.
+Built-in, filesystem-based, server-less `Transporter`.
+With this `Transporter` multiple `Service` Brokers can communicate with each other through a shared directory structure.
+File System `Transporter` is not advisable for use in production mode as it is much slower than other `Transporter`.
 Rather it can be considered as a reference implementation or a code sample.
 
 ```java
@@ -461,28 +461,13 @@ ServiceBroker broker = ServiceBroker.builder()
                                     .build();
 ```
 
-### UDP Multicast Transporter
-
-Built-in, multicast UDP-based, server-less transporter.
-This is another Transporter implementation example.
-UDP Multicast Transporter is not for production use;
-UDP communication is lossy, and the packet size is limited.
-
-```java
-UdpMulticastTransporter transporter = new UdpMulticastTransporter();
-ServiceBroker broker = ServiceBroker.builder()
-                                    .nodeID("server-1")
-                                    .transporter(transporter)
-                                    .build();
-```
-
 ## Custom Transporter
 
-Custom Transporter module can be created.
-The simplest solution is to copy the source code of an existing Transporter
-and modify the `connect`, `stopped`, `subscribe` and `publish` methods.
+Custom `Transporter` module can be created.
+The simplest solution is to copy the source code of an existing `Transporter`
+and modify the "connect", "stopped", "subscribe" and "publish" methods.
 
-Create custom Transporter:
+Create custom `Transporter`:
 
 ```java
 public class CustomTransporter extends Transporter {
@@ -493,7 +478,7 @@ public class CustomTransporter extends Transporter {
 }
 ```
 
-Use custom Transporter:
+Use custom `Transporter`:
 
 ```java
 ServiceBroker broker = ServiceBroker.builder()

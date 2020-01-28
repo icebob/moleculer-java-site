@@ -1,9 +1,9 @@
 ## About Actions
 
-Actions are the callable/public methods of the Services.
+`Actions` are the callable/public methods of the `Services`.
 The action calling represents a remote-procedure-call (RPC).
 It has request parameters and returns a response like an HTTP service.
-If there are multiple instances of Services, the Service Broker
+If there are multiple instances of `Services`, the `ServiceBroker`
 invokes instances according to the specified call strategy.
 [Read more about balancing](balancing.html).
 
@@ -13,22 +13,22 @@ invokes instances according to the specified call strategy.
 
 ## Calling Actions
 
-To call an Action, use the `broker.call` method.
-The broker looks for the Service (and the node) that has the Action and calls it.
-The Action returns a [Promise](https://berkesa.github.io/datatree-promise/).
+To call an `Action`, use the broker.call method.
+The broker looks for the `Service` (and the node) that has the `Action` and calls it.
+The `Action` returns a [Promise](https://berkesa.github.io/datatree-promise/).
 
 ```java
 Promise res = broker.call(actionName, params, opts);
 ```
-The `actionName` is a dot-separated string.
-The first part of it is the service name, while the second part of it represents the action name.
+The "actionName" is a dot-separated string.
+The first part of it is the `Service` name, while the second part of it represents the `Action` name.
 So if you have a "posts" service with a "create" action, you can call it as "posts.create".
 
-The `params` is an object which is passed to the action as a part of the [Context](actions.html#context).
-The service can access it via `ctx.params`.
-The last parameter is the `opts`.
-The `opts` is an `Options` to set/override some request parameters,
-for example `timeout`, `retryCount` or `nodeID`.
+The "params" is an object which is passed to the `Action` as a part of the [Context](actions.html#context).
+The service can access it via "ctx.params".
+The last parameter is the "opts".
+The "opts" is an `Options` to set/override some request parameters,
+for example "timeout", "retryCount" or "nodeID".
 CallOptions can be produced using method chainig:
 
 ```java{9}
@@ -55,7 +55,7 @@ promise.then(rsp -> {
 });
 ```
 
-If the request consists of simple name-value pairs, you do not need to create a Tree object as above.
+If the request consists of simple name-value pairs, you do not need to create a `Tree` object as above.
 The name-value pairs can be listed after the "service.action" parameter:
 
 ```java{2,3,4,5}
@@ -76,9 +76,9 @@ broker.call("service.action",
 
 | Name | Type | Default | Description |
 | ------- | ----- | ------- | ------- |
-| `timeout` | `Number` | `null` | Timeout of request in milliseconds. [Read more](fault-tolerance.html#Timeout) |
-| `retries` | `Number` | `null` | Count of retry of request. If the request is timed out or any I/O error occurs, broker will try to call again. [Read more](fault-tolerance.html#Retry) |
-| `nodeID` | `String` | `null` | Target nodeID. If set, it will make a direct call to the given node. |
+| timeout | Number | null | Timeout of request in milliseconds. [Read more](fault-tolerance.html#Timeout) |
+| retries | Number | null | Count of retry of request. If the request is timed out or any I/O error occurs, broker will try to call again. [Read more](fault-tolerance.html#Retry) |
+| nodeID | String | null | Target nodeID. If set, it will make a direct call to the given node. |
 
 ### Usages
 
@@ -106,10 +106,10 @@ logger.info("User: ", rsp);
 ```
 
 ::: warning Do not block
-The `waitFor` is a blocking operation (temporarily pauses the running Thread),
+The "waitFor" is a blocking operation (temporarily pauses the running `Thread`),
 do not use this method unless it is absolutely necessary for something
-(eg. for testing).
-Preferably `then()` and `catchError()` non-blocking methods should be used.
+(eg. for testing or using Thread-bound API, like Hibernate or Spring Transactions).
+Preferably "then()" and "catchError()" non-blocking methods should be used.
 Asynchronous operations can be organized into a Waterfall Sequence using these methods.
 :::
 
@@ -135,7 +135,7 @@ return Promise.resolve().then(rsp -> {
 ### Metadata
 
 The request structure may contain metadata. It can be name-value pairs or any structure.
-Unlike the Node.js version, the Java version stores the metadata in `params`:
+Unlike the Node.js version, the Java version stores the metadata in "params":
 
 ```java{5}
 Tree params = new Tree();
@@ -151,7 +151,7 @@ broker.call("service.action", params).then(rsp -> {
 });
 ```
 
-The remote service can access the metadata block with the `ctx.params.getMeta()` function.
+The remote `Service` can access the metadata block with the "ctx.params.getMeta()" function.
 Meta is merged at nested calls:
 
 ```java
@@ -179,7 +179,7 @@ broker.call("test.first", params);
 broker.call("test.first", "_meta.a", "John");
 ```
 
-The `meta` is sent back to the caller service.
+The "meta" is sent back to the caller `Service`.
 Use it to send extra meta information back to the caller
 (eg. send response headers back to API gateway or set resolved logged in user to metadata).
 
@@ -211,9 +211,9 @@ broker.call("test.first");
 
 ## Streaming
 
-Moleculer-Java supports streams as request `params` and as response.
+Moleculer supports streams as request "params" and as response.
 This is useful for uploading or downloading large files, or encoding/decoding the content.
-This also allows you to transfer media files between services.
+This also allows you to transfer media files between `Services`.
 
 ### Examples
 
@@ -227,7 +227,7 @@ stream.sendData("more bytes".getBytes());
 stream.sendClose(); // Streams must be closed
 ```
 
-The receiving Service can handle incoming data in an event-driven manner:
+The receiving `Service` can handle incoming data in an event-driven manner:
 
 ```java
 @Name("service")
@@ -251,8 +251,8 @@ public class ReceiverService extends Service {
 
 **Sending a file to a service**
 
-Please note, the `params` should be a stream, you cannot add other variables to the `params`.
-Use the `meta` property to transfer additional data.
+Please note, the "params" should be a stream, you cannot add other variables to the "params".
+Use the "meta" property to transfer additional data.
 
 ```java
 // Create stream
@@ -330,30 +330,30 @@ broker.call("storage.get", "filename", filename).then(rsp -> {
 
 ## Context
 
-When you call an action, the broker creates a `Context` instance which contains all request information
+When you call an `Action`, the broker creates a `Context` instance which contains all request information
 and passes it to the action handler as a single argument.
 
-**Available properties & methods of the `Context`**
+**Available properties & methods of the Context**
 
 | Name | Type |  Description |
 | ------- | ----- | ------- |
-| `ctx.id` | `String` | Unique context ID |
-| `ctx.name` | `String` | Action name (in "service.action" format) |
-| `ctx.requestID` | `String` | Request ID. If you make nested-calls, it will be the same ID |
-| `ctx.parentID` | `String` | Parent context ID (in nested-calls) |
-| `ctx.params` | `Tree` | Request params including metadata (second argument from `broker.call`) |
-| `ctx.stream` | `PacketStream` | Request stream or `null` |
-| `ctx.level` | `int` | Request level (in nested-calls, the first level is `1`) |
-| `ctx.startTime` | `long` | Timestamp of the context creation |
-| `ctx.call()` | `Method` | Make nested-calls (same arguments like in `broker.call`) |
-| `ctx.emit()` | `Method` | Emit an event (same as `broker.emit`) |
-| `ctx.broadcast()` | `Method` | Broadcast an event (same as `broker.broadcast`) 
+| ctx.id | String | Unique context ID |
+| ctx.name | String | Action name (in service.action format) |
+| ctx.requestID | String | Request ID. If you make nested-calls, it will be the same ID |
+| ctx.parentID | String | Parent context ID (in nested-calls) |
+| ctx.params | Tree | Request params including metadata (second argument from broker.call) |
+| ctx.stream | PacketStream | Request stream or null |
+| ctx.level | int | Request level (in nested-calls, the first level is 1) |
+| ctx.startTime | long | Timestamp of the context creation |
+| ctx.call() | Method | Make nested-calls (same arguments like in broker.call) |
+| ctx.emit() | Method | Emit an event (same as broker.emit) |
+| ctx.broadcast() | Method | Broadcast an event (same as broker.broadcast) 
 
 ## Publishing Actions as REST services
 
-The WEB API Gateway module enables the Moleculer Services to function as REST services.
-There are several ways to publish an Action as a REST service.
-The simplest method is to use the `@HttpAlias` Annotation.  
+The WEB API Gateway module enables the Moleculer `Services` to function as REST services.
+There are several ways to publish an `Action` as a REST service.
+The simplest method is to use the "@HttpAlias" annotation.  
 [Read more about WEB API Gateway.](moleculer-web.html)
 
 ```java{6}
@@ -369,30 +369,30 @@ public class UserService extends Service {
 }
 ```
 
-In the example above, `saveUser` Action will be available with a POST method at the following URL:  
+In the example above, "saveUser" `Action` will be available with a POST method at the following URL:  
 *<http(s): //server:host/path>*/api/saveUser
 
-## Converting Java Annotations to platform-independent properties
+## Converting Java annotations to platform-independent properties
 
-ServiceBroker converts Java Annotations of Actions into JSON format,
+`ServiceBroker` converts Java annotations of `Actions` into JSON format,
 therefore, they can be parsed on remote nodes.
 The programming language doesn't matter, such as those available on JavaScript based nodes.
 These properties are passed on as the service is discovered.
 
 It is advisable to process these properties using (Java or JavaScipt-based)
 [Middlewares](middlewares.html), and based on the values of the properties,
-Middlewares may change the way the services work.
+`Middlewares` may change the way the services work.
 
-The following example shows three types of Annotation conversions.
-The first one (the `@Deprecated`) is an Annotation without parameters.
-Such Annotations are passed as logical values with a "true" value.
-The second Annotation (the `@SingleValue`) can have only one value.
-Such Annotations are passed as a key-value pair.
-The third Annotation (the `@MultiValue`) contains more values.
-Such Annotations are converted into a JSON structures by the ServiceBroker.
-It is important to note that only Annotations with a `RetentionPolicy` value of `RUNTIME`
-will be available in the Service Descriptor
-(for example, `@SuppressWarnings` is not visible on remote nodes
+The following example shows three types of annotation conversions.
+The first one (the "@Deprecated") is an annotation without parameters.
+Such annotations are passed as logical values with a "true" value.
+The second annotation (the "@SingleValue") can have only one value.
+Such annotations are passed as a key-value pair.
+The third annotation (the "@MultiValue") contains more values.
+Such annotations are converted into a JSON structures by the `ServiceBroker`.
+It is important to note that only annotations with a `RetentionPolicy` value of "RUNTIME"
+will be available in the `Service` Descriptor
+(for example, "@SuppressWarnings" is not visible on remote nodes
 because it exists only at the source level).
 
 ```java
@@ -409,7 +409,7 @@ public class TestService extends Service {
 }
 ```
 
-Generated service description, also available on remote nodes:
+Generated `Service` description, also available on remote nodes:
 
 ```json
 "service.action":{
@@ -423,9 +423,9 @@ Generated service description, also available on remote nodes:
 }
 ```
 
-The Service Descriptor is received by all remote nodes and can be processed,
+The `Service` Descriptor is received by all remote nodes and can be processed,
 regardless of the programming language.
-Sample [Middleware](middlewares.html) that checks the configuration of a Java (or JavaScript) Action:
+Sample [Middleware](middlewares.html) that checks the configuration of a Java (or JavaScript) `Action`:
 
 ```java
 public class DeprecationChecker extends Middleware {
@@ -444,7 +444,7 @@ public class DeprecationChecker extends Middleware {
 }
 ```
 
-To install the above [Middleware](middlewares.html), call the ServiceBroker `use` function:
+To install the above [Middleware](middlewares.html), call the `ServiceBroker` "use" function:
 
 ```java
 broker.use(new DeprecationChecker());

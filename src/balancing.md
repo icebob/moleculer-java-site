@@ -1,9 +1,9 @@
 ## About load balancing
 
-Moleculer has several built-in load balancing Strategies.
-If a Service has **multiple running instances**,
-ServiceRegistry uses these Strategies to select a node from all available nodes.
-The default (pre-set) invocation mode is the Round-Robin Strategy.
+Moleculer has several built-in load balancing `Strategies`.
+If a `Service` has **multiple running instances**,
+`ServiceRegistry` uses these `Strategies` to select a node from all available nodes.
+The default (pre-set) invocation mode is the Round-Robin `Strategy`.
 
 <div align="center">
     <img src="action-balancing.gif" alt="Action balancing diagram" />
@@ -11,8 +11,8 @@ The default (pre-set) invocation mode is the Round-Robin Strategy.
 
 ## Built-in Strategies
 
-To configure Strategy, set `strategy()` builder option when creating the ServiceBroker.
-Alternatively, set up the Strategy of the ServiceBrokerConfig using the `setStrategyFactory()` method.
+To configure `Strategy`, set "strategy()" builder option when creating the `ServiceBroker`.
+Alternatively, set up the `Strategy` of the `ServiceBrokerConfig` using the "setStrategyFactory()" method.
 
 **Configure a balancing Strategy**
 
@@ -35,11 +35,11 @@ ServiceBroker broker = ServiceBroker.builder()
 
 ![](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)  
 This Strategy selects a node based on [round-robin](https://en.wikipedia.org/wiki/Round-robin_DNS) algorithm.
-This is the default invocation Strategy.
-You can use the `setPreferLocal` function to configure ServiceRegistry
+This is the default invocation `Strategy`.
+You can use the "setPreferLocal" function to configure `ServiceRegistry`
 to invoke locally available services whenever they are available in the JVM.
-If set to "true", ServiceBroker will always use internal action calls, if possible.
-Such a function exists for each StrategyFactory.
+If set to "true", `ServiceBroker` will always use internal `Action` calls, if possible.
+Such a function exists for each `StrategyFactory`.
 
 **Usage**
 
@@ -52,22 +52,22 @@ ServiceBroker broker = ServiceBroker.builder().strategy(strategy).build();
 ### Random Strategies
 
 ![](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)  
-These Strategies randomly select the node.
+These strategies randomly select the callable node.
 The load on each node (as in round-robin) will be roughly the same.
 
 **Usage**
 
 ```java
-// Faster random
+// Faster pseudo random
 XorShiftRandomStrategyFactory strategy = new XorShiftRandomStrategyFactory();
 
-// Slower random
+// Slower secure random
 SecureRandomStrategyFactory strategy = new SecureRandomStrategyFactory();
 ```
 ### CPU usage-based Strategy
 
 ![](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)  
-This Strategy selects a node which has the lowest CPU usage.
+This `Strategy` selects a node which has the lowest CPU usage.
 Due to the node list can be very long,
 it gets samples and selects the node with the lowest CPU usage from only samples instead of the whole node list.
 CPU-based load balancing works even when the application is heterogeneous (consisting of Java and Node.js modules).
@@ -90,25 +90,25 @@ ServiceBroker broker = ServiceBroker.builder()
                                     .build();        
 ```
 
-To determine CPU usage, ServiceBroker needs a Monitor instance that can query the current CPU usage.
-Such Monitor is the SigarMonitor based on the [Sigar API](https://github.com/hyperic/sigar).
+To determine CPU usage, `ServiceBroker` needs a `Monitor` instance that can query the current CPU usage.
+Such `Monitor` is the `SigarMonitor` based on the [Sigar API](https://github.com/hyperic/sigar).
 It requires the presence of [JAR files for the Sigar API](https://mvnrepository.com/artifact/org.hyperic/sigar/1.6.4) in the Java classpath.
 It is also necessary to copy the [native Sigar binaries](https://github.com/hyperic/sigar/wiki/binaries) into the "java.library.path" directory.
-Using the Sigar API is optional; if it not found on the classpath, ServiceBroker will automatically use the JMX-based CPU monitor.
+Using the Sigar API is optional; if it not found on the classpath, `ServiceBroker` will automatically use the **JMX-based** CPU monitor.
 
 **Strategy options**
 
 | Name | Type | Default | Description |
 | ---- | ---- | --------| ----------- |
-| `sampleCount` | `int` | `3` | The number of samples. The minimum value is "1" (you can't turn off sampling). |
-| `lowCpuUsage` | `int` | `10` | The low CPU usage percent (%). The node which has lower CPU usage than this value is selected immediately. |
+| sampleCount | int | 3 | The number of samples. The minimum value is 1 (you can't turn off sampling). |
+| lowCpuUsage | int | 10 | The low CPU usage percent (%). The node which has lower CPU usage than this value is selected immediately. |
 
 ### Latency-based Strategy
 
 ![](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)  
-This Strategy selects a node which has the lowest latency, measured by periodic ping commands.
-Strategy will ping each node one by one.
-Due to slow sampling, it may take a few minutes for the Services to select optimal Nodes.
+This `Strategy` selects a node which has the lowest latency, measured by periodic ping commands.
+`NetworkLatencyStrategy` will ping each node one by one.
+Due to slow sampling, it may take a few minutes for the `Services` to select optimal nodes.
 
 **Usage**
 
@@ -128,21 +128,21 @@ ServiceBroker broker = ServiceBroker.builder().strategy(strategy).build();
 
 | Name | Type | Default | Description |
 | ---- | ---- | --------| ----------- |
-| `sampleCount` | `int` | `5` | The number of samples. If you have a lot of hosts/nodes, it's recommended to *increase* the value. Minimum value is "1". |
-| `collectCount` | `int` | `5` | The number of measured latency per host to keep in order to calculate the average latency. |
-| `pingInterval` | `int` | `10` | Ping interval in SECONDS. If you have a lot of host/nodes, it's recommended to *increase* the value. |
-| `pingTimeout` | `long` | `5000` | Ping timeout time, in MILLISECONDS. |
+| sampleCount | int | 5 | The number of samples. If you have a lot of hosts/nodes, it's recommended to *increase* the value. Minimum value is "1". |
+| collectCount | int | 5 | The number of measured latency per host to keep in order to calculate the average latency. |
+| pingInterval | int | 10 | Ping interval in SECONDS. If you have a lot of host/nodes, it's recommended to *increase* the value. |
+| pingTimeout | long | 5000 | Ping timeout time, in MILLISECONDS. |
 
 ### Sharding Strategy
 
 ![](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)  
-Shard invocation Strategy is based on [consistent-hashing](https://www.toptal.com/big-data/consistent-hashing) algorithm.
-It uses a key value from context `params` or `meta` to route the request to nodes.
+Shard invocation `Strategy` is based on [consistent-hashing](https://www.toptal.com/big-data/consistent-hashing) algorithm.
+It uses a key value from context "params" or "meta" to route the request to nodes.
 It means that requests with same key value will be routed to the same node.
 
 **Usage**
 
-Shard key is `name` in context `params`:
+Shard key is "name" in context params :
 
 ```java
 // Create sharding strategy
@@ -153,7 +153,7 @@ strategy.setShardKey("name");
 ServiceBroker broker = ServiceBroker.builder().strategy(strategy).build();
 ```
 
-Shard key is `user.id` in context `meta`:
+Shard key is user.id in context meta :
 
 ```java
 ShardStrategyFactory strategy = new ShardStrategyFactory();
@@ -162,25 +162,25 @@ ServiceBroker broker = ServiceBroker.builder().strategy(strategy).build();
 ```
 
 ::: tip
-If shard key is in context's `meta` it must be declared with a `#` at the beginning.
-The actual `#` is ignored.
+If shard key is in context's "meta" it must be declared with a "#" at the beginning.
+The actual "#" is ignored.
 :::
 
 **Strategy options**
 
 | Name | Type | Default | Description |
 | ---- | ---- | --------| ----------- |
-| `shardKey` | `String` | `null` |  Shard key |
-| `vnodes` | `int` | `10` | Number of virtual nodes |
-| `ringSize` | `Integer` | null | Size of the ring |
-| `cacheSize` | `int` | `1024` | Size of the cache |
+| shardKey | String | null |  Shard key |
+| vnodes | int | 10 | Number of virtual nodes |
+| ringSize | Integer | null | Size of the ring |
+| cacheSize | int | 1024 | Size of the cache |
 
 ## Custom Strategy
 
-Custom Strategy can be created by implementing StrategyFactory and Strategy interfaces.
+Custom `Strategy` can be created by implementing `StrategyFactory` and `Strategy` interfaces.
 We recommend to copy the source of [SecureRandomStrategyFactory](https://github.com/moleculer-java/moleculer-java/blob/master/src/main/java/services/moleculer/strategy/SecureRandomStrategyFactory.java)
 and [SecureRandomStrategy](https://github.com/moleculer-java/moleculer-java/blob/master/src/main/java/services/moleculer/strategy/SecureRandomStrategy.java)
-classes, and modify the `next()` method in the SecureRandomStrategy.java.
+classes, and modify the "next()" method in the "SecureRandomStrategy.java".
 
 **Usage**
 

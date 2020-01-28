@@ -1,30 +1,30 @@
 ## About Moleculer Services
 
 The `Service` is a basic component in the Moleculer Ecosystem.
-Services may have Actions that other Services can invoke locally or over the network.
-Services can also define Event Listeners that can react to events created in the Moleculer Cluster.
-Using the Moleculer Framework, Services written in
+`Services` may have `Actions` that other `Services` can invoke locally or over the network.
+`Services` can also define Event `Listeners` that can react to events created in the Moleculer Cluster.
+Using the Moleculer Framework, `Services` written in
 [different languages](https://github.com/moleculerjs/awesome-moleculer#polyglot-implementations)
 can work effectively with each other.
 
 Moleculer can be integrated with the Spring Framework.
-In the Spring Environment, Moleculer Services and ServiceBroker are Spring Beans.
-This will allow Moleculer Services to access the other Spring Components
+In the Spring Environment, Moleculer `Services` and `ServiceBroker` are Spring Beans.
+This will allow Moleculer `Services` to access the other Spring Components
 (eg. DAO classes for access the backend).
 
 The [WEB API Gateway](moleculer-web.html#about-api-gateway)
-module enables the Moleculer Services to function as REST/HTML services
+module enables the Moleculer `Services` to function as REST/HTML services
 generating HTML pages using server-side Template Engines.
 In addition, they can receive / send large files or send WebSocket packets to browsers.
 
 ## Actions
 
-The actions are the callable/public methods of a Service.
-They are callable with `broker.call` or `ctx.call` methods.
+The actions are the callable/public methods of a `Service`.
+They are callable with "broker.call" or "ctx.call" methods.
 
 **Example**
 
-A Service schema of adding and subtracting two numbers (the example defines two Actions):
+A `Service` schema of adding and subtracting two numbers (the example defines two `Actions`):
 
 ```java{4,9}
 @Name("math")
@@ -43,15 +43,15 @@ public class MathService extends Service {
 }
 ```
 
-The `@Name` attribute isn't a mandatory property, if missing,
-MessageBroker will generate the Service name from the Class name.
-The algorithm used to create Services names is similar to when Spring registers Beans;
+The "@Name" attribute isn't a mandatory property, if missing,
+MessageBroker will generate the `Service` name from the Class name.
+The algorithm used to create `Services` names is similar to when Spring registers Beans;
 the first letter will be lowercase, the rest will not change
 (for example, `MathService` registers as "mathService").
-This rule also applies to Action names;
+This rule also applies to `Action` names;
 you can specify the name with the "@Name" attribute;
-if missing, the Java field name will be the action name (eg. `add` Action registers as "add").
-To register the `MathService` in a MessageBroker, use the `createService` method:
+if missing, the Java field name will be the action name (eg. "add" `Action` registers as "add").
+To register the `MathService` in a MessageBroker, use the "createService" method:
 
 ```java{2}
 MessageBroker broker = MessageBroker.builder().build();
@@ -59,7 +59,7 @@ broker.createService(new MathService());
 broker.start();
 ```
 
-To call the Service, use the `call` method:
+To call the `Service`, use the "call" method:
 
 ```java{3,8}
 // in thread-blocking style:
@@ -74,8 +74,8 @@ broker.call("math.sub", "a", 5, "b", 3).then(rsp -> {
 });
 ```
 
-From the caller perspective does not matter the physical location of the Service.
-The "math.add" and "math.sub" Actions can be on other machine,
+From the caller perspective does not matter the physical location of the `Service`.
+The "math.add" and "math.sub" `Actions` can be on other machine,
 written in a different programming language.  
 [Read more about Actions.](actions.html)
 
@@ -90,21 +90,21 @@ public class MathV2Service extends Service {
 }
 ```
 
-To call the versioned Service, use the "v2." prefix:
+To call the versioned `Service`, use the "v2." prefix:
 
 ```java
 broker.call("v2.math.add", "a", 5, "b", 3);
 ```
 
 ::: tip REST call
-Via [WEB API Gateway](moleculer-web.html#about-api-gateway), make a request to `GET /v2/math/add`.
+Via [WEB API Gateway](moleculer-web.html#about-api-gateway), make a request to GET /v2/math/add.
 :::
 
 ## Events
 
-Services can monitor Events.
+`Services` can monitor Events.
 Events can come from local but also from remote nodes.
-The content of the Event is a "JSON structure" (`ctx.params`) inside a `Context` object.
+The content of the Event is a "JSON structure" (ctx.params) inside a `Context` object.
 
 **Example**
 
@@ -122,7 +122,7 @@ public class PaymentService extends Service {
 
 ## Lifecycle handlers
 
-There are some lifecycle service events, that will be triggered by the ServiceBroker.
+There are some lifecycle service events, that will be triggered by the `ServiceBroker`.
 
 ```java{3,9}
 public class TestService extends Service {
@@ -140,17 +140,17 @@ public class TestService extends Service {
 } 
 ```
 
-These are called when ServiceBroker starts or stops the Services.  
+These are called when `ServiceBroker` starts or stops the `Services`.  
 [Read more about lifecycle of Services.](lifecycle.html)
 
-Other system-level events can be handled by Event Listeners
-(eg. another Node joining the cluster or a change in the Service list).  
+Other system-level events can be handled by Event `Listeners`
+(eg. another Node joining the cluster or a change in the `Service` list).  
 [Read more about internal events.](events.html)
 
 ## Dependencies
 
-If a Service depends on other Services, use the `@Dependencies` Annotation to denote dependencies.
-The service waits for dependent services before calls the `started` lifecycle event handler. 
+If a `Service` depends on other `Services`, use the "@Dependencies" annotation to denote dependencies.
+The service waits for dependent services before calls the "started" lifecycle event handler. 
 
 ```java{1}
 @Dependencies({"logService", "backendService"})
@@ -159,14 +159,14 @@ public class RestService extends Service {
 }
 ```
 
-The main difference between the `@Dependencies` Annotation and Spring `@DependsOn` Annotation
-is that `@Dependencies` monitors the entire Moleculer Cluster.
-In the example above, "logService" or "backendService" can be a **remote** Service.
-The Spring `@DependsOn` Annotation only monitors the local `ApplicationContext`.
+The main difference between the "@Dependencies" annotation and Spring "@DependsOn" annotation
+is that "@Dependencies" monitors the entire Moleculer Cluster.
+In the example above, "logService" or "backendService" can be a **remote** `Service`.
+The Spring "@DependsOn" annotation only monitors the local `ApplicationContext`.
 
 ## Wait for services via ServiceBroker
 
-To wait for services, you can also use the `waitForServices` method of `ServiceBroker`.
+To wait for services, you can also use the "waitForServices" method of `ServiceBroker`.
 It returns a `Promise` which will be resolved when all defined services are available & started.
 
 **Example**

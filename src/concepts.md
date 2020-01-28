@@ -35,7 +35,7 @@ Because of this, Moleculer uses an
 [abstract API](https://berkesa.github.io/datatree/)
 instead of a certain JSON implementation.
 The `Tree` object is an **abstract layer** that uses an arbitrary JSON implementation.
-Tree API supports 18 popular
+`Tree` API supports 18 popular
 [JSON implementations](serializers.html#json-serializer) (eg. Jackson, Gson, Boon, Jodd, FastJson),
 and 10 non-JSON data formats (YAML, ION, BSON, MessagePack, etc.).
 Java-based JSON (and non-JSON) APIs are constantly evolving,
@@ -65,7 +65,7 @@ System.out.println(params);
 }
 ```
 
-In addition, the Tree API provides some useful features:
+In addition, the `Tree` API provides some useful features:
 
 - JSON path functions (`tree.get("cities[2].location")`)
 - Easy iteration over Java Collections and Maps (`for (Tree child: parent)`)
@@ -88,7 +88,7 @@ With the API, the Java program can create an object or call a method on the fly.
 From execution prospective, the calls to reflection API are quite expensive,
 it could have a performance impact on the applications.
 Because of this, Moleculer uses the reflection API in very few cases. For example
-`Actions` and event `Listeners` are not methods but `Functional Interfaces`.
+`Actions` and event `Listeners` are not methods but Functional Interfaces.
 Calling them is much faster than calling methods using the Reflection API.
 
 ```java
@@ -130,12 +130,12 @@ The output can be one of the following:
 
 - *null*
 - String
-- *Numbers:* byte, short, int, long, float, double, BigDecimal, BigInteger
+- *Numbers:* byte, short, int, long, float, double, `BigDecimal`, `BigInteger`
 - boolean
 - byte array
-- java.util.Date
-- java.util.UUID
-- java.net.InetAddress
+- `java.util.Date`
+- `java.util.UUID`
+- `java.net.InetAddress`
 - `Tree` object (hierarchical data structure from the above types)
 - `Promise` object (it's like an asynchronous `Tree`)
 - `PacketStream` object (when transferring large, binary files)
@@ -144,7 +144,7 @@ The output can be one of the following:
 
 Moleculer uses ES6-like
 [Promises](https://berkesa.github.io/datatree-promise/)
-(based on the Java8's CompletableFuture API) to avoid
+(based on the Java8's `CompletableFuture` API) to avoid
 [callback hell](https://www.google.com/search?q=callback+hell+promise).
 A `Promise` is an object that may produce a simple value (or a `Tree` object) some time in the future:
 either a resolved value, or a reason that it's not resolved (e.g., a network error occurred).
@@ -154,7 +154,7 @@ The main difference between Promise-based operation of other systems and Molecul
 is that the Moleculer `Promise` object works with "raw" JSON objects.
 The value of a Moleculer `Promise`, which you get after the asynchronous processing,
 is always a `Tree` object.
-This `Tree` structure may come from other Services (including, for example, Node.js-based Services)
+This `Tree` structure may come from other `Services` (including, for example, Node.js-based `Services`)
 or from asynchronous APIs.
 
 ```java
@@ -205,9 +205,9 @@ public interface Callback {
 }
 ```
 
-And the `callbackMethod` using the `Callback` interface is as follows:
+And the "callbackMethod" using the `Callback` interface is as follows:
 
-```java
+```java{3}
 public void callbackMethod(Object input, Callback callback) {
     ForkJoinPool.commonPool().execute(() -> {
         callback.onFinised("123"); // Can be Tree or POJO
@@ -216,10 +216,10 @@ public void callbackMethod(Object input, Callback callback) {
 ```
 
 To convert it to Promise-based method,
-the call must be embedded in the constructor of Promise, as follows
-(this manner is similar to the ES6 Promise syntax):
+the call must be embedded in the constructor of `Promise`, as follows
+(this manner is similar to the ES6 `Promise` syntax):
 
-```java
+```java{3}
 public static Promise promiseMethod(Object input) {
     return new Promise(resolver -> {
         callbackMethod(input, new Callback() {
@@ -236,12 +236,13 @@ public static Promise promiseMethod(Object input) {
 }
 ```
 
-Hereinafter we can use the `promiseMethod` in waterfall-like processing:
+Hereinafter we can use the "promiseMethod" in waterfall-like processing:
 
-```java
+```java{5}
 Action add = ctx -> {
     String input = ctx.params.get("input", "default");
 
+    // Waterfall processing of asynchronous events
     return promiseMethod(input).then(rsp -> {
         // ...
     }).catchError(err -> {
@@ -252,10 +253,10 @@ Action add = ctx -> {
 
 ### Converting CompletableFuture to Promise
 
-For a consistent programming style, you should also convert frequently used `CompletableFuture` objects to Promise.
+For a consistent programming style, you should also convert frequently used `CompletableFuture` objects to `Promise`.
 Example function that returns a `CompletableFuture` object:
 
-```java
+```java{4}
 public static CompletableFuture<String> futureMethod(Object input) {
     CompletableFuture<String> future = new CompletableFuture<String>();
     ForkJoinPool.commonPool().execute(() -> {
@@ -265,10 +266,10 @@ public static CompletableFuture<String> futureMethod(Object input) {
 }
 ```
 
-To convert it to Promise-based method,
-simply pass the `CompletableFuture` as a Promise constructor parameter:
+To convert it to `Promise`-based method,
+simply pass the `CompletableFuture` as a `Promise` constructor parameter:
 
-```java
+```java{2}
 public static Promise promiseMethod(Object input) {
     return new Promise(futureMethod(input));
 }
@@ -277,7 +278,7 @@ public static Promise promiseMethod(Object input) {
 If the `CompletableFuture` returns with a POJO object, you should convert it to a `Tree` object.
 This way, both *remote and local calls* will return with the same `Tree` (~=JSON) object:
 
-```java
+```java{2}
 public static Promise promiseMethod(Object input) {
     return new Promise(futureMethod(input)).then(rsp -> {
         User user = (User) rsp.asObject(); // Convert "User" object to Tree
@@ -289,11 +290,11 @@ public static Promise promiseMethod(Object input) {
 }
 ```
 
-The Promise-based function can be published for other (eg. Node.js-based) Services via Actions,
+The `Promise`-based function can be published for other (eg. Node.js-based) `Services` via `Actions`,
 or converted directly into a REST service using the
 [@HttpAlias](moleculer-web.html#about-api-gateway) Annotation:
 
-```java
+```java{1}
 @HttpAlias(method = "POST", path = "api/action") 
 public Action action = ctx -> {
     return promiseMethod(ctx.params);
@@ -307,10 +308,10 @@ The individual "then" blocks do not reach each other's variables.
 Therefore, sharing local variables between blocks would be problematic.
 Fortunately, the blocks reach request-level "global" variables of the `Action`.
 If any data in the blocks is needed later, it must be stored in this global containers.
-Since these variables must be `final`, we cannot use "primitive" types (int, String, etc.), only containers (eg. Tree, AtomicReference, array, map).
+Since these variables must be "final", we cannot use "primitive" types (int, String, etc.), only containers (eg. `Tree`, `AtomicReference`, array, map).
 The following example uses a single `Tree` object to store the processing variables of the request:
 
-```java
+```java{5}
 public Action action = ctx -> {
 
     // --- GLOBAL VARIABLE CONTAINER OF THE REQUEST ---
@@ -340,7 +341,7 @@ public Action action = ctx -> {
 There are other solutions besides using a single "global" `Tree` object.
 It might be a good idea to use single-length arrays or store operation variables in multiple Atomic containers:
 
-```java
+```java{5,10}
 public Action action = ctx -> {
 
     // --- GLOBAL VARIABLE CONTAINERS OF THE REQUEST ---

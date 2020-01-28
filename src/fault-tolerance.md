@@ -1,14 +1,14 @@
 ## Handling errors
 
-ServiceBroker protects against circular function calls.
+`ServiceBroker` protects against circular function calls.
 It also manages call-level timeout and has a retry logic handler.
 In addition, there is a built-in Circuit Breaker solution in Moleculer.
-A Circuit Breaker does the Action calls and it monitors the service health. Once it gets some issue,
-it trips and all further calls goto another Node and finally restores automatically once the Service came back.
+A Circuit Breaker does the `Action` calls and it monitors the service health. Once it gets some issue,
+it trips and all further calls goto another node and finally restores automatically once the `Service` came back.
 
 ## Default Service Invoker
 
-This is the default call logic when you create a ServiceBroker instance.
+This is the default call logic when you create a `ServiceBroker` instance.
 
 ```java
 // Create a Default Service Invoker
@@ -28,8 +28,8 @@ ServiceBroker broker = ServiceBroker.builder().invoker(invoker).build();
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| `maxCallLevel` | `int` | `100` | Max call level to avoid circular calls |
-| `writeErrorsToLog` | `boolean` | `true` | Write errors to log file |
+| maxCallLevel | int | 100 | Max call level to avoid circular calls |
+| writeErrorsToLog | boolean | true | Write errors to log file |
 
 ### Call-level retry and timeout
 
@@ -70,12 +70,12 @@ because the first call has already been rejected with a `RequestTimeoutError` er
 
 ## Circuit Breaker
 
-Moleculer has a built-in circuit-breaker solution.
+Moleculer has a built-in Circuit Breaker solution.
 It uses a time window to check the number of the failed requests.
-Once the error limit is reached, it trips the circuit breaker.
+Once the error limit is reached, it trips the Circuit Breaker.
 The Circuit Breaker is a descendant of Default Service Invoker.
 
-::: tip What is the circuit breaker?
+::: tip What is the Circuit Breaker?
 The Circuit Breaker can prevent an application from repeatedly trying to execute an operation that's likely to fail.
 Allowing it to continue without waiting for the fault to be fixed or wasting CPU cycles while it determines that the fault is long lasting.
 The Circuit Breaker pattern also enables an application to detect whether the fault has been resolved.
@@ -85,7 +85,7 @@ Read more about circuit breaker on [Martin Fowler blog](https://martinfowler.com
 or on [Microsoft Azure Docs](https://docs.microsoft.com/azure/architecture/patterns/circuit-breaker).
 :::
 
-If you enable it, all service calls will be protected by this built-in circuit breaker.
+If you enable it, all service calls will be protected by this built-in Circuit Breaker.
 
 ```java
 // Create Circuit Breaker
@@ -111,9 +111,9 @@ ServiceBroker broker = ServiceBroker.builder().invoker(invoker).build();
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| `windowLength` | `long` | `5000` | Length of time-window in milliseconds |
-| `maxErrors` | `Number` | `3` | Maximum number of errors in time-window |
-| `lockTimeout` | `Number` | `10000` | Number of milliseconds to switch from `open` to `half-open` state |
-| `ignoredTypes` | `Throwable[]` | null | Ignorable Error/Exception types |
-| `maxCallLevel` | `int` | `100` | Max call level to avoid circular calls |
-| `writeErrorsToLog` | `boolean` | `true` | Write errors to log file |
+| windowLength | long | 5000 | Length of time-window in milliseconds |
+| maxErrors | Number | 3 | Maximum number of errors in time-window |
+| lockTimeout | Number | 10000 | Number of milliseconds to switch from open to half-open state |
+| ignoredTypes | Throwable[] | null | Ignorable Error/Exception types |
+| maxCallLevel | int | 100 | Max call level to avoid circular calls |
+| writeErrorsToLog | boolean | true | Write errors to log file |

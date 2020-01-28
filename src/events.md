@@ -1,19 +1,18 @@
 ## Types of event broadcasts
 
-Molculer Service Broker has a built-in event bus for sending events to local and remote services.
-Events can be used to create event-driven,
-runtime scalable applications from services
+Molculer `ServiceBroker` has a built-in event bus for sending events to local and remote services.
+Events can be used to create event-driven, runtime scalable applications from services
 deployed on different operating systems and implemented in different languages.
 
 Events can be grouped; events can be sent to
-- to all listeners (unconditional "broadcast")
-- to a group of listeners ("broadcast" with "groups" parameter)
+- to all `Listeners` (unconditional "broadcast")
+- to a group of `Listeners` ("broadcast" with "groups" parameter)
 - to one member from all groups (unconditional "emit")
 - or to one member from the specified groups ("emit" with "groups" parameter)
 
 ## Emit balanced events
 
-The event listeners are arranged to logical groups.
+The event `Listeners` are arranged to logical groups.
 It means that only one listener is triggered in every group.
 
 **Example**
@@ -27,12 +26,12 @@ If the "user.created" event is emitted, only one "users" and one "payments" serv
     <img src="balanced-events.gif" alt="Balanced events diagram" />
 </div>
 
-The group name comes from the service name, but it can be overwritten in event definition in services
-(by the `@Group` Annotation).
+The group name comes from the `Service` name, but it can be overwritten in event definition in services
+(by the "@Group" Annotation).
 
 **Example**
 
-```java
+```java{7,8}
 import services.moleculer.eventbus.*;
 import services.moleculer.service.*;
 
@@ -55,7 +54,7 @@ public class PaymentService extends Service {
 }
 ```
 
-Balanced events can be sent using `broker.emit` function.
+Balanced events can be sent using "broker.emit" function.
 The first parameter is the name of the event, the second parameter is the payload. 
 To send multiple/hierarchical values, wrap them into a `Tree` object:
 
@@ -86,7 +85,7 @@ broker.emit("user.created", user, Groups.of("mail", "payments"));
 If the data structure to be sent consists only of key-value pairs,
 it is not necessary to create a `Tree` object.
 It is enough to list the key-value pairs after the event name
-(the same syntax can be used for the `ctx.broadcast` and `broker.broadcast` methods):
+(the same syntax can be used for the "ctx.broadcast" and "broker.broadcast" methods):
 
 ```java{2,3}
 ctx.emit("user.created",
@@ -95,7 +94,7 @@ ctx.emit("user.created",
          Groups.of("mail", "payments"));
 ```
 
-Creating a Tree object is required when passing more complex data structures between Nodes,
+Creating a `Tree` object is required when passing more complex data structures between nodes,
 which contain sub-structures (~=hierarchical JSON objects and JSON arrays).
 
 ### Streaming binary files
@@ -135,14 +134,14 @@ stream.sendClose();
 
 ## Broadcast event
 
-The broadcast event is sent to all available local & remote services.
-It is not balanced, all event listener instances receive this event.
+The broadcast event is sent to all available local & remote `Services`.
+It is not balanced, all event `Listener` instances receive this event.
 
 <div align="center">
     <img src="broadcast-events.gif" alt="Broadcast events diagram" />
 </div>
 
-Send broadcast events with `broker.broadcast` method.
+Send broadcast events with "broker.broadcast" method:
 
 ```java{16}
 // The payload is a hierarchical (~=JSON) structure:
@@ -181,15 +180,15 @@ ctx.broadcast("user.created",
 
 ## Local broadcast event
 
-Send broadcast events only to all local services with `broker.broadcastLocal` method.
+Send broadcast events only to all local `Services` with "broker.broadcastLocal" method:
 ```java
 broker.broadcastLocal("config.changed", config);
 ```
 
 ## Subscribe to events
 
-The contents of the events are wrapped in an object called Event Context to receive the message.
-The Event Context is very similar to Action Context.
+The contents of the events are wrapped in an object called event `Context` to receive the message.
+The event `Context` is very similar to `Context` of `Actions`.
 
 **Context-based event handler & emit a nested event**
 
@@ -244,9 +243,9 @@ public class MyService extends Service {
 
 **Private (local or hidden) Event Listeners**
 
-With the "private" modifier, only the local events are monitored by the Event Listener.
-Such Event Listeners are invisible from the outside of the Node,
-and cannot be called from other Service Brokers.
+With the "private" modifier, only the local events are monitored by the event `Listener`.
+Such event `Listeners` are invisible from the outside of the node,
+and cannot be called from other `ServiceBrokers`.
 
 ```java
 @Subscribe("$services.changed")
@@ -257,7 +256,7 @@ private Listener listener = ctx -> {
 
 **Redirecting streamed content**
 
-Stream data can be redirected to a File, ByteChannel or OutputStream.
+Stream data can be redirected to a `File`, `ByteChannel` or `OutputStream`.
 
 ```java
 ctx.stream.transferTo(new File("/temp.bin")).then(rsp -> {
@@ -274,7 +273,7 @@ Stream data can also be processed per packet.
 ```java
 ctx.stream.onPacket((bytes, error, closed) -> {
     if (bytes != null) {
-        // A byte-array has arrived
+        // A byte-array has received
     } else if (error != null) {
         // Error occurred
     }
@@ -284,88 +283,88 @@ ctx.stream.onPacket((bytes, error, closed) -> {
 });
 ```
 
-## Context
+## `Context`
 
-When you emit an event, the broker creates a `Context` instance which contains all
+When you emit an event, the `ServiceBroker` creates a `Context` instance which contains all
 request information and passes it to the event handler as a single argument.
 
 **Available properties & methods of `Context`**
 
 | Name | Type |  Description |
 | ------- | ----- | ------- |
-| `ctx.id` | `String` | Unique Context ID. |
-| `ctx.name` | `String` | Name of the event. |
-| `ctx.params` | `Tree` | Request params. Contains meta-data (`ctx.params.getMeta()`). |
-| `ctx.level` | `int` | Request level (in nested-calls). The first level is `1`. |
-| `ctx.nodeID` | `String` | The caller or target Node ID. |
-| `ctx.parentID` | `String` | Parent context ID (in nested-calls). |
-| `ctx.requestID` | `String` | Request ID (does not change during the call chain). |
-| `ctx.stream` | `PacketStream` | Streamed content (large files or real-time media). |
-| `ctx.opts` | `Options` | Calling options. |
-| `ctx.call()` | `Method` | Make nested-calls. Same arguments like in `broker.call` |
-| `ctx.emit()` | `Method` | Emit an event, same as `broker.emit` |
-| `ctx.broadcast()` | `Method` | Broadcast an event, same as `broker.broadcast` |
+| ctx.id | String | Unique Context ID. |
+| ctx.name | String | Name of the event. |
+| ctx.params | Tree | Request params. Contains meta-data (ctx.params.getMeta()). |
+| ctx.level | int | Request level (in nested-calls). The first level is 1. |
+| ctx.nodeID | String | The caller or target Node ID. |
+| ctx.parentID | String | Parent context ID (in nested-calls). |
+| ctx.requestID | String | Request ID (does not change during the call chain). |
+| ctx.stream | PacketStream | Streamed content (large files or real-time media). |
+| ctx.opts | Options | Calling options. |
+| ctx.call() | Method | Make nested-calls. Same arguments like in broker.call |
+| ctx.emit() | Method | Emit an event, same as broker.emit |
+| ctx.broadcast() | Method | Broadcast an event, same as broker.broadcast |
 
 ## Internal events
 
-The broker broadcasts some internal events.
-Internal events always starts with `$` prefix.
+The `ServiceBroker` broadcasts some internal events.
+Internal events always starts with "$" prefix.
 
-### `$services.changed`
+### $services.changed
 
-The broker sends this event if the local node or a remote node loads or destroys services.
-
-**Payload**
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| `localService ` | `boolean` | True if a local service changed. |
-
-### `$node.connected`
-
-The broker sends this event when a node connected or reconnected.
+The `ServiceBroker` sends this event if the local node or a remote node loads or destroys services.
 
 **Payload**
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| `node` | `Tree` | Node info object |
-| `reconnected` | `boolean` | Is reconnected? |
+| localService | boolean | True if a local service changed. |
 
-### `$node.updated`
+### $node.connected
 
-The broker sends this event when it has received an INFO message from a node
-(ie. a service is loaded or destroyed).
+The `ServiceBroker` sends this event when a node connected or reconnected.
 
 **Payload**
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| `node` | `Tree` | Node info object |
+| node | Tree | Node info object |
+| reconnected | boolean | Is reconnected? |
 
-### `$node.disconnected`
+### $node.updated
 
-The broker sends this event when a node disconnected (gracefully or unexpectedly).
+The `ServiceBroker` sends this event when it has received an INFO message from a node
+(ie. a `Service` is loaded or destroyed).
 
 **Payload**
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| `node` | `Tree` | Node info object |
-| `unexpected` | `boolean` | `true` - Not received heartbeat, `false` - Received `DISCONNECT` message from node. |
+| node | Tree | Node info object |
 
-### `$broker.started`
+### $node.disconnected
 
-The broker sends this event once `broker.start()` is called and all local services are started.
+The `ServiceBroker` sends this event when a node disconnected (gracefully or unexpectedly).
 
-### `$broker.stopped`
+**Payload**
 
-The broker sends this event once `broker.stop()` is called and all local services are stopped.
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| node | Tree | Node info object |
+| unexpected | boolean | "true" - Not received heartbeat, "false" - Received "DISCONNECT" message from node. |
 
-### `$transporter.connected`
+### $broker.started
 
-The transporter sends this event once the transporter is connected.
+The `ServiceBroker` sends this event once "broker.start()" is called and all local `Services` are started.
 
-### `$transporter.disconnected`
+### $broker.stopped
 
-The transporter sends this event once the transporter is disconnected.
+The `ServiceBroker` sends this event once "broker.stop()" is called and all local `Services` are stopped.
+
+### $transporter.connected
+
+The `Transporter` sends this event once the `Transporter` is connected.
+
+### $transporter.disconnected
+
+The `Transporter` sends this event once the `Transporter` is disconnected.

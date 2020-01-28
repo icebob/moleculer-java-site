@@ -1,8 +1,8 @@
 ## About the Developer Console
 
-The REPL console is a special Moleculer service that executes console commands.
+The REPL console is a special Moleculer `Service` that executes console commands.
 Console commands can be used to **test** Moleculer actions and event listeners or measure the **response time** of a service.
-It is also possible to create **custom commands**. The console can be used via standard input / output and telnet.
+It is also possible to create **custom commands**. The console can be used via standard input-output and telnet.
 
 ## Download
 
@@ -23,7 +23,7 @@ It is also possible to create **custom commands**. The console can be used via s
 
 ```gradle
 dependencies {
-    compile group: 'com.github.berkesa', name: 'moleculer-java-repl', version: '1.2.1' 
+    implementation group: 'com.github.berkesa', name: 'moleculer-java-repl', version: '1.2.1' 
 }
 ```
 
@@ -254,7 +254,7 @@ mol $ call math.add --a 5 --b Bob --c --no-d --e.f "hello"
 mol $ call math.add {"a": 5, "b": "Bob", "c": true, "d": false, "e": { "f": "hello" } }
 ```
 
-Params will be `{"a":5, "b":"Bob", "c":"--no-d", "e":{ "f":"hello" }}`
+Params will be {"a":5, "b":"Bob", "c":"--no-d", "e":{ "f":"hello" }}
 
 **Output**
 
@@ -262,13 +262,13 @@ Params will be `{"a":5, "b":"Bob", "c":"--no-d", "e":{ "f":"hello" }}`
 
 ### Direct call
 
-Get health info from `node-12` node
+Get health info from node-12 node
 
 ```bash
 mol $ dcall node-12 $node.health
 ```
 
->Parameter passing is similar to `call` command.
+>Parameter passing is similar to "call" command.
 
 ### Emit an event
 
@@ -282,7 +282,7 @@ mol $ emit user.created
 mol $ emit user.created --a 5 --b Bob --c --no-d --e.f "hello"
 ```
 
-Params will be `{"a":5, "b":"Bob", "c":"--no-d", "e":{ "f":"hello" }}`
+Params will be {"a":5, "b":"Bob", "c":"--no-d", "e":{ "f":"hello" }}
 
 ### Benchmark services
 

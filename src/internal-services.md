@@ -1,12 +1,12 @@
 ## About Internal Services
 
-The `ServiceBroker` contains some internal services to check the node health or get some registry information.
-These services can be disabled by setting `internalServices` parameter to `false` in
+The `ServiceBroker` contains some internal `Services` to check the node health or get some registry information.
+These services can be disabled by setting "internalServices" parameter to "false" in
 [ServiceBrokerConfig](broker.html#create-a-service-broker).
 
 ## List of nodes
 
-The "$node.list" Action lists all known nodes (including local node).
+The "$node.list" `Action` lists all known nodes (including local node).
 
 ```java{1}
 broker.call("$node.list").then(rsp -> {
@@ -16,8 +16,7 @@ broker.call("$node.list").then(rsp -> {
 
     // Example processing of the response (print IPs of nodes):
     for (Tree nodeInfo: rsp) {
-        String id = nodeInfo.get("id", "");
-        System.out.println("Node ID: " + id);
+        System.out.println("Node ID: " + nodeInfo.get("id", ""));
         for (Tree ip: nodeInfo.get("ipList")) {
             System.out.println(" IP address: " + ip.asString());
         }
@@ -61,11 +60,11 @@ Node ID: node1
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| `withServices` | `Boolean` | `false` | List with services. |
+| withServices | Boolean | false | List with services. |
 
-## List of services
+## List of Services
 
-The "$node.services" Action lists all registered services (local & remote).
+The "$node.services" `Action` lists all registered `Services` (local & remote).
 
 ```java{1}
 broker.call("$node.services").then(rsp -> {
@@ -75,8 +74,7 @@ broker.call("$node.services").then(rsp -> {
 
     // Example processing of the response (print nodeIDs of Services):
     for (Tree serviceInfo: rsp) {
-        String name = serviceInfo.get("name", "");
-        System.out.println("Service: " + name);
+        System.out.println("Service: " + serviceInfo.get("name", ""));
         for (Tree nodeID: serviceInfo.get("nodes")) {
             System.out.println("  Node ID: " + nodeID.asString());
         }
@@ -126,13 +124,13 @@ Service: upload
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| `onlyLocal` | `Boolean` | `false` | List only local services. |
-| `skipInternal` | `Boolean` | `false` | Skip the internal services (`$node`). |
-| `withActions` | `Boolean` | `false` | List with actions. |
+| onlyLocal | Boolean | false | List only local services. |
+| skipInternal | Boolean | false | Skip the internal services ("$node"). |
+| withActions | Boolean | false | List with actions. |
 
 ## List of Actions
 
-The "$node.actions" Action lists all registered actions (local & remote).
+The "$node.actions" `Action` lists all registered `Actions` (local & remote).
 
 ```java{1}
 broker.call("$node.actions").then(rsp -> {
@@ -191,13 +189,13 @@ Action: jmx.findObjects, local: true, count: 1
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| `onlyLocal` | `Boolean` | `false` | List only local actions. |
-| `skipInternal` | `Boolean` | `false` | Skip the internal actions (`$node`). |
-| `withEndpoints` | `Boolean` | `false` | List with endpoints _(nodes)_. |
+| onlyLocal | Boolean | false | List only local actions. |
+| skipInternal | Boolean | false | Skip the internal actions ("$node"). |
+| withEndpoints | Boolean | false | List with endpoints _(nodes)_. |
 
-## List of Event subscriptions
+## List of event subscriptions
 
-The "$node.events" Action lists all Event subscriptions.
+The "$node.events" `Action` lists all event subscriptions.
 
 ```java{1}
 broker.call("$node.events").then(rsp -> {
@@ -256,13 +254,13 @@ Subscription: websocket.send
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| `onlyLocal` | `Boolean` | `false` | List only local subscriptions. |
-| `skipInternal` | `Boolean` | `false` | Skip the internal event subscriptions `$`. |
-| `withEndpoints` | `Boolean` | `false` | List with endpoints _(nodes)_. |
+| onlyLocal | Boolean | false | List only local subscriptions. |
+| skipInternal | Boolean | false | Skip the internal event subscriptions "$". |
+| withEndpoints | Boolean | false | List with endpoints _(nodes)_. |
 
 ## Health of node
 
-The "$node.health" Action returns the health info of local node (including process & OS information).
+The "$node.health" `Action` returns the health info of local node (including process & OS information).
 
 ```java{1}
 broker.call("$node.health").then(rsp -> {

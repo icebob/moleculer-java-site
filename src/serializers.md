@@ -1,18 +1,18 @@
 ## About data serialization
 
 [Transporter](transporters.html#types-of-transporters)
-needs a Serializer Module which serializes & deserializes the transferable data.
-The default Serializer is the `JsonSerializer` but there are several built-in Serializers
+needs a `Serializer` Module which serializes & deserializes the transferable data.
+The default `Serializer` is the `JsonSerializer` but there are several built-in `Serializers`
 can convert messages into MessagePack, BSON, CBOR, SMILE, Amazon ION or other binary formats.
 
 ## JSON Serializer
 
 ![](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)  
-This is the built-in default Serializer.
+This is the built-in default `Serializer`.
 It serializes the packets to JSON string and deserializes the received JSON bytes to `Tree` objects.
-The performance of JSON Serializers in Java and JavaScript is very good,
-JSON serialization is usually faster than most binary Serializers.
-This Serializer is compatible with the JavaScript/Go version of Moleculer.
+The performance of JSON `Serializers` in Java and JavaScript is very good,
+JSON serialization is usually faster than most binary `Serializers`.
+This `Serializer` is compatible with the JavaScript/Go version of Moleculer.
 
 ```java
 NatsTransporter transporter = new NatsTransporter("nats://nats.server:4222");
@@ -28,12 +28,12 @@ ServiceBroker broker = ServiceBroker.builder()
                                     .build();
 ```
 
-The `readers` and `writers` parameters are used to specify the JSON API
+The "readers" and "writers" parameters are used to specify the JSON API
 to be used by Moleculer for deserialization / serialization.
 This is important if you have multiple JSON implementations on the classpath.
 Several implementations can be specified in order of importance, separated by commas.
-If not specified, ServiceBroker will automatically try to choose the fastest JSON API.
-The values of the `readers` and `writers` parameters are listed below:
+If not specified, `ServiceBroker` will automatically try to choose the fastest JSON API.
+The values of the "readers" and "writers" parameters are listed below:
 
 | Reader/writer ID | JSON API and Dependency |
 | ---------------- | ----------------------- |
@@ -54,21 +54,22 @@ The values of the `readers` and `writers` parameters are listed below:
 | "sojo"    | [SOJO](https://mvnrepository.com/artifact/net.sf.sojo/sojo) |
 | "util"    | [JsonUtil](https://mvnrepository.com/artifact/org.kopitubruk.util/JSONUtil) |
 | "ion"     | [Amazon Ion](https://mvnrepository.com/artifact/software.amazon.ion/ion-java) |
+| "jsoniter"| [Json Iterator](https://mvnrepository.com/artifact/com.jsoniter/jsoniter) |
 | "builtin" | Built-in JSON parser (no dependencies) |
 
 So, for example, if you want to use a "FastJSON" implementation,
 put the implementation reference in the "dependencies" block of the (build.gradle or pom.xml) build script,
-then set `readers` and `writers` to "fast". To verify, type "info" command into the REPL console.
+then set "readers" and "writers" to "fast". To verify, type "info" command into the REPL console.
 The "info" command will display the current Moleculer configuration, including the the JSON API which is in use.
 
 ## MessagePack Serializer
 
 ![](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)  
-Built-in [MsgPack](https://msgpack.org) Serializer.
+Built-in [MsgPack](https://msgpack.org) `Serializer`.
 MessagePack is an efficient binary serialization format. It lets you exchange
 data among multiple languages like JSON. But it's smaller. Small
 integers are encoded into a single byte, and typical short strings require
-only one extra byte in addition to the strings themselves. This Serializer is
+only one extra byte in addition to the strings themselves. This `Serializer` is
 compatible with the JavaScript version of Moleculer.
  
 ```java
@@ -76,13 +77,13 @@ transporter.setSerializer(new MsgPackSerializer());
 ```
 
 ::: warning MessagePack dependencies
-To use MessagePack Serializer, add the following dependency to the build script:  
+To use MessagePack `Serializer`, add the following dependency to the build script:  
 [group: 'org.msgpack', name: 'msgpack', version: '0.6.12'](https://mvnrepository.com/artifact/org.msgpack/msgpack)  
 :::
 
 ## BSON Serializer
 
-Built-in [BSON](http://bsonspec.org/) Serializer.
+Built-in [BSON](http://bsonspec.org/) `Serializer`.
 BSON, short for Binary JSON, is a binary-encoded serialization of JSON-like documents.
 Like JSON, BSON supports the embedding of documents and arrays within other documents and arrays. 
  
@@ -91,13 +92,13 @@ transporter.setSerializer(new BsonSerializer());
 ```
 
 ::: warning BSON dependencies
-To use BSON Serializer, add the following dependency to the build script:  
+To use BSON `Serializer`, add the following dependency to the build script:  
 [group: 'de.undercouch', name: 'bson4jackson', version: '2.9.2'](https://mvnrepository.com/artifact/de.undercouch/bson4jackson)
 :::
 
 ## CBOR Serializer
 
-Built-in [CBOR](https://cbor.io/) Serializer.
+Built-in [CBOR](https://cbor.io/) `Serializer`.
 CBOR is based on the wildly successful JSON data model: numbers, strings,
 arrays, maps (called objects in JSON), and a few values such as false, true,
 and null.
@@ -107,13 +108,13 @@ transporter.setSerializer(new CborSerializer());
 ```
 
 ::: warning CBOR dependencies
-To use CBOR Serializer, add the following dependency to the build script:  
+To use CBOR `Serializer`, add the following dependency to the build script:  
 [group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-cbor', version: '2.10.0'](https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-cbor)
 :::
 
 ## Amazon ION Serializer
 
-Built-in [ION](http://amzn.github.io/ion-docs/) Serializer.
+Built-in [ION](http://amzn.github.io/ion-docs/) `Serializer`.
 Amazon Ion is a richly-typed, self-describing, hierarchical data
 serialization format offering interchangeable binary and text
 representations. The binary representation is efficient to store, transmit,
@@ -124,13 +125,13 @@ transporter.setSerializer(new IonSerializer());
 ```
 
 ::: warning Amazon ION dependencies
-To use ION Serializer, add the following dependency to the build script:  
+To use ION `Serializer`, add the following dependency to the build script:  
 [group: 'software.amazon.ion', name: 'ion-java', version: '1.5.1'](https://mvnrepository.com/artifact/software.amazon.ion/ion-java)
 :::
 
 ## SMILE Serializer
 
-Built-in [SMILE](https://en.wikipedia.org/wiki/Smile_(data_interchange_format)) Serializer.
+Built-in [SMILE](https://en.wikipedia.org/wiki/Smile_(data_interchange_format)) `Serializer`.
 SMILE is a computer data interchange format based on JSON. It can also be
 considered as a binary serialization of generic JSON data model, which means
 that tools that operate on JSON may be used with SMILE as well, as long as
@@ -142,15 +143,15 @@ transporter.setSerializer(new SmileSerializer());
 ```
 
 ::: warning SMILE dependencies
-To use SMILE Serializer, add the following dependency to the build script:  
+To use SMILE `Serializer`, add the following dependency to the build script:  
 [group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-smile', version: '2.10.0'](https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-smile)
 :::
 
 ## Custom Serializer
 
-Custom Serializer module can be created.
-To make your own Serializer, you need to derive it from the `services.moleculer.serializer.Serializer`
-superclass, and implement the `write` and `read` methods.
+Custom `Serializer` module can be created.
+To make your own `Serializer`, you need to derive it from the services.moleculer.serializer.`Serializer`
+superclass, and implement the "write" and "read" methods.
 
 **Create custom Serializer**
 
@@ -184,7 +185,7 @@ transporter.setSerializer(new CustomSerializer());
 ## Message-level encryption
 
 The `BlockCipherSerializer` is capable of encrypting data packets using the specified algorithm.
-You can give it a "parent" Serializer,
+You can give it a "parent" `Serializer`,
 if not specified it uses JSON serialization before encryption.
 
 ```java{4-6}
@@ -221,7 +222,7 @@ const broker = new ServiceBroker({
 ## Compressing messages
 
 The `DeflaterSerializer` can compress messages larger than the specified size.
-It can also have a "parent" Serializer,
+It can also have a "parent" `Serializer`,
 if not specified it uses JSON serialization before compression.
  
 ```java{2}
@@ -253,7 +254,7 @@ Using compression reduces performance, so use it only on slow networks.
 
 ## Chaining Serializers
 
-By chaining Serializers, you can combine multiple Serializers.
+By chaining `Serializers`, you can combine multiple `Serializers`.
 In the example below, the data is first serialized using the MessagePack algorithm.
 Deflater then compresses large data packets (larger than 1024 bytes)
 and then encrypts the compressed packet using the AES algorithm:
@@ -285,7 +286,7 @@ the data is first encrypted using the "ARCFOUR" and then the "Blowfish" algorith
 ```java{4-11}
 // Create JSON Serializer
 JsonSerializer jsonSerializer = new JsonSerializer();
-		
+        
 // First cipher
 BlockCipherSerializer first = new BlockCipherSerializer(jsonSerializer,
                                                         "password1",

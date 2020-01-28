@@ -1,9 +1,9 @@
 ## About API Gateway
 
-Moleculer API Gateway is a Service that makes other Moleculer Services available through REST.
+Moleculer API Gateway is a `Service` that makes other Moleculer `Services` available through REST.
 It allows to create high-performance, non-blocking, distributed web applications.
 Web request processing can be fine tuned using server-independent middlewares.
-Moleculer API Gateway provides full support for high-load React, Angular or VueJS applications.
+Moleculer API Gateway provides full support for high-load **React**, **Angular** or **VueJS** applications.
 
 ### Features
 
@@ -44,7 +44,7 @@ but it also includes a fallback implementation for older servers).
 
 ```gradle
 dependencies {
-    compile group: 'com.github.berkesa', name: 'moleculer-java-web', version: '1.2.6' 
+    implementation group: 'com.github.berkesa', name: 'moleculer-java-web', version: '1.2.6' 
 }
 ```
 
@@ -67,14 +67,14 @@ After starting the program, enter the following URL into your browser:
 `http://localhost:3000/math/add?a=3&b=6`
 
 The response will be "9". The above service can also be invoked using a POST method.  
-To do this, submit the `{"a":3,"b":5}` JSON (as POST body) to this URL:  
+To do this, submit the {"a":3,"b":5} JSON (as POST body) to this URL:  
 `http://localhost:300/math/add`
 
 You can access all services, including [internal "$node" Service](internal-services.html).
 
 **Example URLs**    
 
-- Call `test.hello` action: `http://localhost:3000/test/hello`
+- Call test.hello action: `http://localhost:3000/test/hello`
 - Get health info of node:  `http://localhost:3000/~node/health`
 - List of nodes in cluster: `http://localhost:3000/~node/list`
 - List of Event listeners:  `http://localhost:3000/~node/events`
@@ -89,9 +89,9 @@ The project can be imported into the Eclipse IDE or IntelliJ IDEA.
 The brief examples illustrate the following:
 
 - Integration of Moleculer API into the Spring Boot Framework
-- Configuring HTTP Routes and Middlewares
-- Creating non-blocking Moleculer Services
-- Publishing and invoking Moleculer Services as REST Services
+- Configuring HTTP `Routes` and `Middlewares`
+- Creating non-blocking Moleculer `Services`
+- Publishing and invoking Moleculer `Services` as REST `Services`
 - Generating HTML pages in multiple languages using Template Engines
 - Using WebSockets (sending real-time server-side events to browsers)
 - Using file upload and download
@@ -102,13 +102,13 @@ The brief examples illustrate the following:
 ## Routes
 
 Like [Express.js](https://expressjs.com/en/guide/routing.html),
-Moleculer Moleculer groups request processors ([Middlewares](moleculer-web.html#http-middlewares)) into different Routes.
-Each Route can have one or more Middlewares, which are executed when the route is matched.
-Routes are matched *in the order they are added to the API Gateway*.
-When a request arrives the API Gateway will step through each Route,
-and examines whether the Route handles the request.
-If the Route handles the request, the API Gateway does not call the next Route.
-The following code is an example of a very basic Route:
+Moleculer Moleculer groups request processors ([Middlewares](moleculer-web.html#http-middlewares)) into different `Routes`.
+Each `Route` can have one or more `Middlewares`, which are executed when the `Route` is matched.
+`Routes` are matched **in the order they are added to the API Gateway**.
+When a request arrives the API Gateway will step through each `Route`,
+and examines whether the `Route` handles the request.
+If the `Route` handles the request, the API Gateway does not call the next `Route`.
+The following code is an example of a very basic `Route`:
 
 ```java
 // Create then add a Route to API Gateway
@@ -121,25 +121,25 @@ Route route = gateway.addRoute(new Route());
 
 ### Mapping policy
 
-Routes have a `mappingPolicy` property to handle Routes without Aliases.
+`Routes` have a "mappingPolicy" property to handle `Routes` without Aliases.
 
 **Available options**
 
-- RESTRICT - enable to request only the Routes with Aliases (default)
-- ALL - enable to request all Routes with or without Aliases
+- RESTRICT - enable to request only the `Routes` with Aliases (default)
+- ALL - enable to request all `Routes` with or without Aliases
 
 ```java
 Route route = gateway.addRoute(new Route(MappingPolicy.RESTRICT));
 route.addAlias("POST", "add", "math.add");
 ```
 
-In this case, you can't call Action at URLs "/math.add" or "/math/add",
+In this case, you can't call `Action` at URLs "/math.add" or "/math/add",
 just at "/add" via "POST" method.
 
 ## Whitelist
 
-If you don't want to publish all Actions, you can filter them with whitelist option.
-Use match strings or regexp in list. _To enable all actions, use `"**"` item._
+If you don't want to publish all `Actions`, you can filter them with whitelist option.
+Use match strings or regexp in list. _To enable all actions, use "**"._
 
 ```java
 ServiceBroker broker = new ServiceBroker();
@@ -172,7 +172,7 @@ broker.start();
 
 ## Aliases
 
-You can use alias names instead of action names.
+You can use Alias names instead of `Action` names.
 You can also specify the method. Otherwise it will handle every method types. 
 Using named parameters in aliases is possible.
 Named parameters are defined by prefixing a colon to the parameter name (":name").
@@ -217,28 +217,28 @@ route.addAlias("REST", "users", "users");
 ```
 
 ::: warning
-To use this shorthand alias, create a Service which has `list`, `get`, `create`, `update` and `remove` actions.
+To use this shorthand alias, create a `Service` which has "list", "get", "create", "update" and "remove" actions.
 :::
 
-## HTTP Middlewares
+## HTTP `Middlewares`
 
-HTTP Middleware is used to intercept the client request and do some pre-processing.
+HTTP `Middleware` is used to intercept the client request and do some pre-processing.
 It can also intercept the response and do post-processing before sending to the client in web application.
-Some common tasks that we can do with HTTP Middlewares are:
+Some common tasks that we can do with HTTP `Middlewares` are:
 
-- Formatting of request body or header before sending it to Action.
+- Formatting of request body or header before sending it to `Action`.
 - Authentication and autherization of request for resources.
 - Logging request parameters.
 - Alter response by adding some cookies or header information.
 - End the request-response cycle.
 
-You can extend the `HttpMiddleware` abstract class to create an HTTP Middleware.
-HTTP Middlewares can be added globally or at Route-level to the ApiGateway.
-Bind Middleware to an instance of the API Gateway object by using the `gateway.use(middleware)` function.
-Route-level Middleware works in the same way as global Middleware,
-except it is bound to an instance of Route.
+You can extend the `HttpMiddleware` abstract class to create an HTTP `Middleware`.
+HTTP `Middlewares` can be added globally or at Route-level to the `ApiGateway`.
+Bind `Middleware` to an instance of the API Gateway object by using the "gateway.use(middleware)" function.
+Route-level `Middleware` works in the same way as global `Middleware`,
+except it is bound to an instance of `Route`.
 
-Middlewares is executed in **reverse order** as they are added to routes (or to the API Gateway):
+`Middlewares` is executed in **reverse order** as they are added to `Routes` (or to the `ApiGateway`):
 
 ```java
 route.use(new LastMiddleware()); // Executed LAST
@@ -247,9 +247,9 @@ route.use(new SecondMiddleware());
 route.use(new FirstMiddleware()); // Executed FIRST
 ```
 
-Moleculer's HTTP Middlewares use very similar logic to
+Moleculer's HTTP `Middlewares` use very similar logic to
 [Middlewares of Express.js](https://expressjs.com/en/guide/using-middleware.html).
-The following example implements an "empty" Middleware that passes the request without modification:
+The following example implements an "empty" `Middleware` that passes the request without modification:
 
 ```java
 public class MyMiddleware extends HttpMiddleware {
@@ -275,20 +275,19 @@ public class MyMiddleware extends HttpMiddleware {
 }
 ```
 
-The chain of the Route can be terminated if you do not call `next.service` but fill in `rsp` with the answer
-(for example, sending a regular "403 Forbidden" HTTP error message).
-The
+The chain of the `Route` can be terminated if you do not call "next.service" but fill in "rsp" with the answer
+(for example, sending a regular "403 Forbidden" HTTP error message). The
 [GitHub page](https://github.com/moleculer-java/moleculer-java-web/tree/master/src/main/java/services/moleculer/web/middleware)
-of the API Gateway project has many examples of HTTP Middlewares.
+of the API Gateway project has many examples of HTTP `Middlewares`.
 
 ## Multiple Routes
 
-Complex web applications require multiple Routes.
+Complex web applications require multiple `Routes`.
 Usually one Route is required for REST services and one for static content
 (HTML pages, CSS files, images, etc.).
-The policy for REST Route "RESTRICT" (this is the default policy)
+The policy for REST `Route` "RESTRICT" (this is the default policy)
 because only the REST services that are configured can be called.
-The policy for static Route is "ALL" because it accepts all requests
+The policy for static `Route` is "ALL" because it accepts all requests
 and returns a "404 Not Found" message if the requested file is not exists:
 
 ```java
@@ -311,7 +310,7 @@ staticRoute.use(new Redirector("/", "index.html", 307));
 ## Route hooks
 
 API Gateway has before & after call hooks.
-The `setBeforeCall` and `setAfterCall` functions provide
+The "setBeforeCall" and "setAfterCall" functions provide
 low-level access to the HTTP request or response:
 
 ```java
@@ -326,7 +325,7 @@ gateway.setBeforeCall((currentRoute, req, rsp, data) -> {
 });            
 ```
 
-The `getInternalObject` function can be used to access the actual `HttpServletRequest`,
+The "getInternalObject" function can be used to access the actual `HttpServletRequest`,
 `HttpServletResponse` or Netty's `ChannelHandlerContext` object:
 
 ```java
@@ -348,20 +347,21 @@ gateway.setBeforeCall((currentRoute, req, rsp, data) -> {
 
 ## Response type & status code
 
-When the response is received from an Action,
+When the response is received from an `Action`,
 the API Gateway checks the "meta" block to see if it contains certain special fields.
 With these meta fields, you can change the "Content-Type" header,
 the status code of the response and add any HTTP header to the response.
 
 **Special meta fields**
 
-* `ctx.meta.$statusCode` - Status code (eg. 200, 404) of the HTTP response message.
-* `ctx.meta.$responseType` - Content-Type header's value of the HTTP response message.
-* `ctx.meta.$responseHeaders` - Set of response headers (it's a Map, not a single value).
-* `ctx.meta.$location` - Location in header for redirects (relative URL).
-* `ctx.meta.$template` - Name of the HTML template (eg. "test" means "test.html").
-* `ctx.meta.$locale` - Locale (~= language) of the generated HTML page (eg. "de", "fr", "en_uk").
-    
+* ctx.meta.$statusCode - Status code (eg. 200, 404) of the HTTP response message
+* ctx.meta.$responseType - Content-Type header's value of the HTTP response message
+* ctx.meta.$responseHeaders - Set of response headers (it's a Map, not a single value)
+* ctx.meta.$location - Location in header for redirects (relative URL)
+* ctx.meta.$template - Name of the HTML template (eg. "test" means "test.html")
+* ctx.meta.$locale - Locale (~= language) of the generated HTML page (eg. "de", "fr", "en_uk")
+* ctx.meta.$session - Variables of the current [HTTP-session](moleculer-web.html#sessioncookie-middleware)
+
 **Example: Invoke Template Engine**
 
 ```java
@@ -369,7 +369,7 @@ the status code of the response and add any HTTP header to the response.
 
     // Create response "JSON"
     Tree rsp = new Tree();
-	rsp.put("name", "value")
+    rsp.put("name", "value")
 
     // Get the hidden meta block of the response
     Tree meta = rsp.getMeta();
@@ -387,7 +387,7 @@ the status code of the response and add any HTTP header to the response.
     // Convert response by using
     // server-side Template Engine
     meta.put("$template", "test"); // test.html
-    meta.put("$locale", "en_us"); // Locale
+    meta.put("$locale", "en_us");  // Locale (optional)
     
     // Return response
     return rsp;
@@ -398,7 +398,7 @@ the status code of the response and add any HTTP header to the response.
 
 The "Content-Type" value, status code and other HTTP headers
 can be changed even if the answer is a **Moleculer Stream**.
-Since Stream has no "meta", it needs to be wrapped in a Tree object:
+Since `PacketStream` has no "meta", it needs to be wrapped in a `Tree` object:
 
 ```java
  Action list = ctx -> {
@@ -426,10 +426,10 @@ Since Stream has no "meta", it needs to be wrapped in a Tree object:
 
 **Example: Dynamic content generation**
 
-The following Action will be available at:
-`http://localhost:3000/dynamic.txt`  
-This was set by the `@HttpAlias` Annotation.
-The same could be done by adding a similar Alias to Route.
+The following `Action` will be available at:
+http://localhost:3000/dynamic.txt  
+This was set by the "@HttpAlias" Annotation.
+The same could be done by adding a similar Alias to `Route`.
 
 ```java
 @HttpAlias(method = "GET", path = "/dynamic.txt")
@@ -448,8 +448,8 @@ Action img = ctx -> {
     Tree rsp = new CheckedTree(stream);
     Tree headers = rsp.getMeta().putMap("$responseHeaders");        
     headers.put("Content-Length", bytes.length);
-	
-	// Same as "$responseType" just set it here as header
+    
+    // Same as "$responseType" just set it here as header
     headers.put("Content-Type", "text/plain; charset=utf-8");
 
     return rsp;
@@ -462,13 +462,13 @@ will display content similar to the following:
 
 ## Built-in Middlewares
 
-Moleculer API Gateway contains many pre-built HTTP Middlewares.
+Moleculer API Gateway contains many pre-built HTTP `Middlewares`.
 These Middleware's can be integrated into web applications to speed up application development.
 
 ### ServeStatic Middleware
 
-Middleware to serve files from a specified root directory. If the file is not
-found, it sends a 404 response. ServeStatic supports content compression,
+`Middleware` to serve files from a specified root directory. If the file is not
+found, it sends a 404 response. `ServeStatic` supports content compression,
 automatic "Content-Type" detection, and ETAGs.
 The specified directory (the "/www" in the example below)
 can be in the file system or on the classpath.
@@ -519,7 +519,7 @@ route.use(new Favicon("/www/images/custom.ico")); // Executed first
 
 Handles "/favicon.ico" HTTP requests.
 Favicons can be specified using a path to the filesystem,
-or by default this Middleware will look for a file on the classpath with the name "favicon.ico".
+or by default this `Middleware` will look for a file on the classpath with the name "favicon.ico".
 [[source](https://github.com/moleculer-java/moleculer-java-web/blob/master/src/main/java/services/moleculer/web/middleware/Favicon.java)]
 
 ```java
@@ -529,7 +529,7 @@ route.use(new Favicon("custom.ico"));
 ### BasicAuthenticator Middleware
 
 Simple middleware that provides HTTP BASIC Authentication support.
-When the BasicAuthenticator Middleware receives this information,
+When the BasicAuthenticator `Middleware` receives this information,
 it calls the configured `BasicAuthProvider` with the username and password to authenticate the user.
 If the authentication is successful the handler attempts to authorise the user.
 If that is successful then the routing of the request is allowed to continue to the application handlers,
@@ -624,7 +624,7 @@ route.use(filter);
 
 ### IpFilter Middleware
 
-The `IpFilter` Middleware adds the ability to allow or block requests based on the IP address of the client.
+The `IpFilter` `Middleware` adds the ability to allow or block requests based on the IP address of the client.
 [[source](https://github.com/moleculer-java/moleculer-java-web/blob/master/src/main/java/services/moleculer/web/middleware/IpFilter.java)]
 
 ```java
@@ -678,7 +678,7 @@ route.use(new RequestLogger());
 
 ### ResponseDeflater Middleware
 
-Compresses body of REST responses. Do not use it with `ServeStatic` Middleware;
+Compresses body of REST responses. Do not use it with `ServeStatic` `Middleware`;
 `ServeStatic` also compresses the data. Use it to compress the response of REST
 services.
 [[source](https://github.com/moleculer-java/moleculer-java-web/blob/master/src/main/java/services/moleculer/web/middleware/ResponseDeflater.java)]
@@ -693,7 +693,7 @@ Using compression reduces performance, so use it only on slow networks.
 
 ### ResponseHeaders Middleware
 
-This Middleware unconditionally adds the specified headers to any HTTP response within the Route.
+This `Middleware` unconditionally adds the specified headers to any HTTP response within the Route.
 [[source](https://github.com/moleculer-java/moleculer-java-web/blob/master/src/main/java/services/moleculer/web/middleware/ResponseHeaders.java)]
 
 ```java
@@ -726,7 +726,7 @@ route.use(new ResponseTime("X-Custom"));
 
 ### ResponseTimeout Middleware
 
-Middleware that will timeout requests if the response has not been written
+`Middleware` that will timeout requests if the response has not been written
 after the specified time. HTTP response code will be "408".
 [[source](https://github.com/moleculer-java/moleculer-java-web/blob/master/src/main/java/services/moleculer/web/middleware/ResponseTimeout.java)]
 
@@ -747,11 +747,11 @@ route.use(new SessionCookie());
 route.use(new SessionCookie("SID"));
 ```
 
-The `services.moleculer.web.middleware.session.SessionHandler` object uses
+The services.moleculer.web.middleware.session.`SessionHandler` object uses
 "beforeCall" and "afterCall" hooks to store the "$session" structure of the request meta block.
 By default, `SessionHandler` keeps the contents of the "$session" blocks in memory for a specified time.
 `SessionHandler` looks for "$session" block based on the Session Cookie
-and copies it to all HTTP requests for the Session. This feature requires SessionCookie Middleware
+and copies it to all HTTP requests for the Session. This feature requires SessionCookie `Middleware`
 if the application is running on a Netty server (J2EE servers have their own cookie manager).
 
 ```java
@@ -761,7 +761,7 @@ gateway.setAfterCall(sessionHandler.afterCall());
 ```
 
 If you need to perform other functions in the "beforeCall" or "afterCall" block,
-you can call the SessionHandler as follows:
+you can call the `SessionHandler` as follows:
 
 ```java
 SessionHandler sessionHandler = new SessionHandler(broker);
@@ -778,7 +778,7 @@ gateway.setBeforeCall((currentRoute, req, rsp, data) -> {
 });            
 ```
 
-Actions access the persistent "$session" block as follows:
+`Actions` access the persistent "$session" block as follows:
 
 ```java
 Action action = ctx -> {
@@ -828,11 +828,11 @@ route.use(new XSRFToken());
 
 Moleculer ApiGateway includes dynamic page generation capabilities by
 including out of the box support for several popular template engines.
-Action's basically return data in JSON format.
+`Actions` basically return data in JSON format.
 To convert the JSON data structure to HTML,
 you must specify the template name in the **"$template" meta property**.
-If there is a "$template" meta property in the Action's response,
-ApiGateway calls the Template Engine and converts the response to HTML.
+If there is a "$template" meta property in the `Action's` response,
+`ApiGateway` calls the Template Engine and converts the response to HTML.
 Example code that puts three values ("a", "b", and "c") in the response JSON,
 then creates a table and then converts this data with "test.html" template:
 
@@ -863,7 +863,7 @@ Action html = ctx -> {
 }
 ```
 
-The Template Engine used by ApiGateway can be specified by the `setTemplateEngine` function of ApiGateway.
+The Template Engine used by `ApiGateway` can be specified by the "setTemplateEngine" function of `ApiGateway`.
 The following chapters describe how to configure the built-in Template Engines.
 
 ### Mustache Template Engine
@@ -886,7 +886,7 @@ templateEngine.setTemplatePath("/www"); // Root path of templates
 gateway.setTemplateEngine(templateEngine);
 ```
 
-The `setTemplatePath` function defines the root directory of the templates.
+The "setTemplatePath" function defines the root directory of the templates.
 This can be in the file system or on the classpath.
 
 **Advanced example**
@@ -921,7 +921,8 @@ gateway.setTemplateEngine(templateEngine);
 **Sample template syntax**
 
 The "header" inserts a page snippet named "header.html" into the HTML page.
-This "header" block will be included in every template example.
+This "header" block will be included in every template example.  
+[The following template can be called with this code.](moleculer-web.html#template-engines)
 
 ```html
 <html>
@@ -994,7 +995,8 @@ gateway.setTemplateEngine(templateEngine);
 
 **Sample template syntax**
 
-The templates have the same syntax as the Mustache syntax.
+The templates have the same syntax as the Mustache syntax.  
+[The following template can be called with this code.](moleculer-web.html#template-engines)
 
 ```html
 <html>
@@ -1066,7 +1068,8 @@ gateway.setTemplateEngine(templateEngine);
 
 **Sample template syntax**
 
-[Learn more about DataTreeTemplates syntax.](https://github.com/berkesa/datatree-templates#template-syntax)
+[Learn more about DataTreeTemplates syntax.](https://github.com/berkesa/datatree-templates#template-syntax)  
+[The following template can be called with this code.](moleculer-web.html#template-engines)
 
 ```html
 <html>
@@ -1141,6 +1144,8 @@ gateway.setTemplateEngine(templateEngine);
 
 **Sample template syntax**
 
+[The following template can be called with this code.](moleculer-web.html#template-engines)
+
 ```html
 <html>
     <body>
@@ -1212,6 +1217,8 @@ gateway.setTemplateEngine(templateEngine);
 
 **Sample template syntax**
 
+[The following template can be called with this code.](moleculer-web.html#template-engines)
+
 ```jade
 doctype html
 html
@@ -1273,6 +1280,8 @@ gateway.setTemplateEngine(templateEngine);
 ```
 
 **Sample template syntax**
+
+[The following template can be called with this code.](moleculer-web.html#template-engines)
 
 ```html
 <html>
@@ -1344,6 +1353,8 @@ gateway.setTemplateEngine(templateEngine);
 ```
 
 **Sample template syntax**
+
+[The following template can be called with this code.](moleculer-web.html#template-engines)
 
 ```html
 <html>

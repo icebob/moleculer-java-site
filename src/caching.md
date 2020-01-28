@@ -71,12 +71,12 @@ Promise.resolve()
 [2017-08-18T13:04:33.849Z] INFO  Users count from cache: 2
 ```
 
-The `Handler called` message appears only once because the response of the second call came from the cache.
+The Handler called message appears only once because the response of the second call came from the cache.
 
 ::: warning
 Caching **does not work** with streamed data,
 it can only store values sent or received in a single data structure.
-Do not use the `@Cache` Annotation for Actions that receive or send
+Do not use the "@Cache" `Annotation` for `Actions` that receive or send
 [Moleculer Streams](actions.html#streaming).
 :::
 
@@ -87,8 +87,8 @@ The syntax of key is:
 ```
 <serviceName>.<actionName>:<parameters or hash of parameters>
 ```
-So if you call the `posts.list` action with params `{ limit: 5, offset: 20 }`,
-cacher generates cache key from `params` based on JSON serialization and/or hash algorithm.
+So if you call the posts.list action with params { limit: 5, offset: 20 },
+cacher generates cache key from "params" based on JSON serialization and/or hash algorithm.
 So the next time, when you call this action with the same params,
 it will find the entry in the cache by key.
 
@@ -98,14 +98,14 @@ it will find the entry in the cache by key.
 posts.find:limit|5|offset|20
 ```
 
-The `params` structure may contain properties that are not relevant to the cache key.
+The "params" structure may contain properties that are not relevant to the cache key.
 In addition, it can cause performance problems if the key is too long.
 Therefore, we recommend that you set the key properties of the "cache" note, which contains a list of basic parameter names under the "keys" property.
 
-Therefore it is recommended to set the key properties of the `cache` annotation which
+Therefore it is recommended to set the key properties of the "cache" annotation which
 contains a list of essential parameter names:
 
-**Strict the list of `params` & `meta` properties for key generation**
+**Strict the list of "params" & "meta" properties for key generation**
 
 ```java{6}
 @Name("posts")
@@ -126,7 +126,7 @@ If params is { limit: 10, offset: 30 } and meta is { user: { id: 123 } }, the ca
 posts.list:10|30|123
 ```
 
-::: tip Performance
+::: tip Performance Tip
 Using "Cache keys" can greatly speed up the application by reducing the amount of data to be serialized.  
 ![](https://img.shields.io/badge/performance-%2B20%25-brightgreen.svg)
 :::
@@ -134,12 +134,12 @@ Using "Cache keys" can greatly speed up the application by reducing the amount o
 ### Limiting cache key length
 
 Occasionally, the key can be very long, which can cause performance issues.
-To avoid it, maximize the length of concatenated params in the key with `maxParamsLength` cacher option.
+To avoid it, maximize the length of concatenated params in the key with "maxParamsLength" cacher option.
 When the key is longer than this configured limitvalue,
 the cacher calculates a hash (SHA256) from the full key and adds it to the end of the key.
 
-> The minimum of `maxParamsLength` is 44 (SHA 256 hash length in Base64).  
-> To disable key shortening, set `maxParamsLength` to zero.
+The minimum of "maxParamsLength" is 44 (SHA 256 hash length in Base64).
+To disable key shortening, set "maxParamsLength" to zero.
 
 **Generate a full key from the whole params without limit**
 
@@ -193,7 +193,7 @@ broker.createService(new Service("posts") {
 
 ### Manual caching
 
-The cacher module can be used manually. Just call the `get`, `set`, `del` methods of the ServiceBroker's `Cacher`.
+The cacher module can be used manually. Just call the "get", "set", "del" methods of the ServiceBroker's `Cacher`.
 
 ```java
 // The Cacher is in the ServiceBroker's config object
@@ -242,7 +242,7 @@ cacher.del("users.model:8|true|2");
 
 The best practice to clear cache entries among multiple service instances is that use broadcast events.
 This solution is only required when using local caches.
-It is enough to delete shared (eg. Redis) caches with one `clean` command,
+It is enough to delete shared (eg. Redis) caches with one "clean" command,
 because the data is stored on a central server.
 When using local caches, each node store a *local copy* of the cached data.
 
@@ -292,7 +292,7 @@ public class UserService extends Service {
 ```
 
 The above code could be optimized to not delete the entire cache region but just one record
-(by the "userID" - because "userID" is the Cache Key at the `find` Action).
+(by the "userID" - because "userID" is the Cache Key at the "find" `Action`).
 
 ## Local cachers
 
@@ -305,7 +305,7 @@ Memory cache is not a distributed cache, it works like a local Map in the VM's m
 But the number of queries can be millions per second,
 because repetitive queries do not generate network traffic.
 Supports global and entry-level TTL.
-ServiceBroker uses `MemoryCacher` by default.
+`ServiceBroker` uses `MemoryCacher` by default.
 
 **Configure memory cacher**
 
@@ -324,11 +324,11 @@ ServiceBroker broker = ServiceBroker.builder()
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| `ttl` | `int` | `0` | Default time-to-live in SECONDS (0 = no TTL) |
-| `capacity` | `int` | `2048` | Maximum number of entries per cache region |
-| `useCloning` | `boolean` | `true` | Make clone from the returned values |
-| `cleanup` | `int` | `5` | Cleanup period time in SECONDS |
-| `accessOrder` | `boolean` | `true` | The ordering mode - `true` for access-order (LRU cache), `false` for insertion-order |
+| ttl | int | 0 | Default time-to-live in SECONDS (0 = no TTL) |
+| capacity | int | 2048 | Maximum number of entries per cache region |
+| useCloning | boolean | true | Make clone from the returned values |
+| cleanup | int | 5 | Cleanup period time in SECONDS |
+| accessOrder | boolean | true | The ordering mode - true for access-order (LRU cache), false for insertion-order |
 
 ### Off-heap memory cacher
 
@@ -340,9 +340,10 @@ if you plan to store few thousands (or less) entries in the cache,
 use the faster `MemoryCacher`, otherwise use `OHCacher`.
 Supports global and entry-level TTL.
 
-**Required dependency**
-
-Off-heap cacher requires [OHC dependencies](https://mvnrepository.com/artifact/org.caffinitas.ohc/ohc-core-j8).
+::: warning Off-heap cacher dependencies
+To use Off-heap Cacher, add the following dependency to the build script:  
+[group: 'org.caffinitas.ohc', name: 'ohc-core-j8', version: '0.6.1'](https://mvnrepository.com/artifact/org.caffinitas.ohc/ohc-core-j8)
+:::
 
 **Configure off-heap cacher**
 
@@ -360,12 +361,12 @@ ServiceBroker broker = ServiceBroker.builder()
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| `ttl` | `int` | `0` | Default time-to-live in SECONDS (0 = no TTL) |
-| `capacity` | `int` | auto | Capacity for data over the whole cache in MEGABYTES |
-| `segmentCount` | `int` | `number-of-cores * 2` | Number of segments (must be a power of 2) |
-| `hashTableSize` | `int` | `8192` | HashTable size (must be a power of 2) |
-| `compressAbove` | `int` | `1024` | Compress key and/or value above this size (BYTES) |
-| `compressionLevel` | `int` | `1` | Compression level (best speed = 1, best compression = 9) |
+| ttl | int | 0 | Default time-to-live in SECONDS (0 = no TTL) |
+| capacity | int | auto | Capacity for data over the whole cache in MEGABYTES |
+| segmentCount | int | number-of-cores * 2 | Number of segments (must be a power of 2) |
+| hashTableSize | int | 8192 | HashTable size (must be a power of 2) |
+| compressAbove | int | 1024 | Compress key and/or value above this size (BYTES) |
+| compressionLevel | int | 1 | Compression level (best speed = 1, best compression = 9) |
 
 ## Distributed cachers
 
@@ -378,9 +379,10 @@ It's the one of the fastest distributed cache for Moleculer.
 `RedisCacher` is implemented for both Java and Node.js based Moleculer frameworks.
 Supports global and entry-level TTL configuration.
 
-**Required dependency**
-
-Redis cacher requires [Letuce API](https://mvnrepository.com/artifact/biz.paluch.redis/lettuce).
+::: warning Redis dependencies
+To use Redis Cacher, add the following dependency to the build script:  
+[group: 'biz.paluch.redis', name: 'lettuce', version: '4.5.0.Final'](https://mvnrepository.com/artifact/biz.paluch.redis/lettuce)
+:::
 
 **Configure Redis cacher**
 
@@ -408,12 +410,12 @@ ServiceBroker broker = ServiceBroker.builder()
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| `urls` | `String[]` | `localhost` | Array of URLs of the Redis servers |
-| `ttl` | `int` | `0` | Time-to-live in SECONDS (0 = disabled) |
-| `maxParamsLength` | `int` | `0` | Maximum length of params in generated keys |
-| `serializer` | `Serializer` | `JsonSerializer` | Implementation of the serializer/deserializer |
-| `password` | `String` | `null` | Configures authentication (URI may contain the password) |
-| `secure` | `boolean` | `false` | Sets SSL connection on/off (URI may contain the SSL info) |
+| urls | String[] | localhost | Array of URLs of the Redis servers |
+| ttl | int | 0 | Time-to-live in SECONDS (0 = disabled) |
+| maxParamsLength | int | 0 | Maximum length of params in generated keys |
+| serializer | Serializer | JsonSerializer | Implementation of the serializer/deserializer |
+| password | String | null | Configures authentication (URI may contain the password) |
+| secure | boolean | false | Sets SSL connection on/off (URI may contain the SSL info) |
 
 **Redis URI syntax**
 
@@ -435,10 +437,10 @@ _redis-sentinel_ : // [*:* _password_@] _host1_[*:* _port1_] [, _host2_[*:* _por
 
 ### JCache cacher
 
-JSR-107 JCache is a standardized caching API.
-Core JCache API does NOT support entry-level TTL parameter.
-If you need this feature use RedisCacher, MemoryCacher, or Off-heap Cacher.
-JCache is implemented by various caching solutions:
+JSR-107 `JCache` is a standardized caching API.
+Core `JCache` API does NOT support entry-level TTL parameter.
+If you need this feature use `RedisCacher`, `MemoryCacher`, or Off-heap `Cacher`.
+`JCache` is implemented by various caching solutions:
 
 - Apache Ignite
 - Hazelcast
@@ -450,16 +452,17 @@ JCache is implemented by various caching solutions:
 - Caffeine
 - etc.
 
-The performance and operation of JCacher implementations can be very different.
+The performance and operation of `JCache` implementations can be very different.
 
-**Required dependency**
-
-JCache cacher requires [JCache API](https://mvnrepository.com/artifact/javax.cache/cache-api)
+::: warning JCache dependencies
+To use JCache Cacher, add the following dependency to the build script:  
+[group: 'group: 'javax.cache', name: 'cache-api', version: '1.1.1''](https://mvnrepository.com/artifact/javax.cache/cache-api)  
 and it is also necessary to put the dependencies of the JCache implementation in the classpath.
+:::
 
 **Configure JCache cacher**
 
-Using the JVM's default JCache implementation:
+Using the JVM's default `JCache` implementation:
 
 ```java{2}
 ServiceBroker broker = ServiceBroker.builder()
@@ -467,7 +470,7 @@ ServiceBroker broker = ServiceBroker.builder()
                                     .build();
 ```
 
-Create Cacher using the specified CacheProvider implementation:
+Create `Cacher` using the specified `CacheProvider` implementation:
 
 ```java{5}
 // "RICachingProvider" is part of a JCache implementation,
@@ -485,19 +488,19 @@ ServiceBroker broker = ServiceBroker.builder()
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| `maxParamsLength` | `int` | `0` | Maximum length of params in generated keys |
-| `closeEmptyPartitions` | `boolean` | `true` | Close and dispose empty caches |
+| maxParamsLength | int | 0 | Maximum length of params in generated keys |
+| closeEmptyPartitions | boolean | true | Close and dispose empty caches |
 
 ## Custom cacher
 
-When you create your own Cacher, the new Cacher class must be inherited from `services.moleculer.cacher.Cacher`.
+When you create your own `Cacher`, the new `Cacher` class must be inherited from `services.moleculer.cacher.Cacher`.
 The get(), set(), del(), clean() functions must be implemented.
-You can get ideas for implementation from the contents of the `services.moleculer.cacher` package,
-which contains the Cachers already made.
-The easiest way to build your own Cacher implementation is to inherit your own from an existing cacher class.
+You can get ideas for implementation from the contents of the "services.moleculer.cacher" package,
+which contains the `Cachers` already made.
+The easiest way to build your own `Cacher` implementation is to inherit your own from an existing cacher class.
 To overwrite the built-in cache key generator,
-override the `getCacheKey` function with your implementation.
-The implementations of the cachers can be found in the `services.moleculer.cacher` package.
+override the "getCacheKey" function with your implementation.
+The implementations of the cachers can be found in the "services.moleculer.cacher" package.
 
 ```java{1}
 Cacher cacher = new MyCustomCacher();

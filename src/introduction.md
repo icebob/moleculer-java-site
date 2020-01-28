@@ -11,7 +11,7 @@ common platform for modules written in different languages.
 
 - Polyglot (implemented in [multiple languages](https://github.com/moleculerjs/awesome-moleculer#polyglot-implementations))
 - High-performance, non-blocking messaging and event APIs
-- Asynchronous REST Services for high-load React, Angular or VueJS applications
+- Asynchronous REST `Services` for high-load React, Angular or VueJS applications
 - Runs as a standard J2EE application or with a built-in Netty server
 - Fault Tolerance and high availability (circuit breaker, request timeout, retry, etc.)
 - Load balanced requests & events (round-robin, random, cpu-usage, network latency, sharding)
@@ -84,8 +84,8 @@ The complete dependency list is as follows:
 
 ```gradle
 dependencies {
-    compile group: 'com.github.berkesa', name: 'moleculer-java',     version: '1.2.4'
-    compile group: 'com.github.berkesa', name: 'moleculer-java-web', version: '1.2.6' 
+    implementation group: 'com.github.berkesa', name: 'moleculer-java',     version: '1.2.4'
+    implementation group: 'com.github.berkesa', name: 'moleculer-java-web', version: '1.2.6' 
 }
 ```
 
@@ -94,7 +94,7 @@ After starting the program, enter the following URL into your browser:
 
 The response will be "9" (because 3 and 6 are the values of the "a" and "b" parameters).
 The above service can also be invoked using a POST method.
-To do this, submit the `{"a":3,"b":5}` JSON (as POST body) to this URL:  
+To do this, submit the {"a":3,"b":5} JSON (as POST body) to this URL:  
 `http://localhost:8080/math/add`
 
 ## Detailed Example
@@ -105,9 +105,9 @@ The project can be imported into the Eclipse IDE or IntelliJ IDEA.
 The brief examples illustrate the following:
 
 - Integration of Moleculer API into the Spring Boot Framework
-- Configuring HTTP Routes and Middlewares
-- Creating non-blocking Moleculer Services
-- Publishing and invoking Moleculer Services as REST Services
+- Configuring HTTP Routes and `Middlewares`
+- Creating non-blocking Moleculer `Services`
+- Publishing and invoking Moleculer `Services` as REST `Services`
 - Generating HTML pages in multiple languages using Template Engines
 - Using WebSockets (sending real-time server-side events to browsers)
 - Using file upload and download
@@ -121,13 +121,13 @@ The brief examples illustrate the following:
 
 - [High-performance Web API for Moleculer Apps](moleculer-web.html)
 - [Interactive Developer Console](moleculer-repl.html)
-- [JMX Service for Moleculer](https://moleculer-java.github.io/moleculer-java-jmx/)
+- [JMX `Service` for Moleculer](https://moleculer-java.github.io/moleculer-java-jmx/)
 - [MongoDB API for Moleculer](https://moleculer-java.github.io/moleculer-java-mongo/)
 - [HTTP Client for Moleculer](https://moleculer-java.github.io/moleculer-java-httpclient/)
 
 **Node.js**
 
-Node.js-based Moleculer Services can be used in Java-based applications as well as local Services.
+Node.js-based Moleculer `Services` can be used in Java-based applications as well as local `Services`.
 This requires a
 [Transporter](transporters.html#types-of-transporters)
 for both implementations.
