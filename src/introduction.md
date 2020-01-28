@@ -121,7 +121,7 @@ The brief examples illustrate the following:
 
 - [High-performance Web API for Moleculer Apps](moleculer-web.html)
 - [Interactive Developer Console](moleculer-repl.html)
-- [JMX `Service` for Moleculer](https://moleculer-java.github.io/moleculer-java-jmx/)
+- [JMX Service for Moleculer](https://moleculer-java.github.io/moleculer-java-jmx/)
 - [MongoDB API for Moleculer](https://moleculer-java.github.io/moleculer-java-mongo/)
 - [HTTP Client for Moleculer](https://moleculer-java.github.io/moleculer-java-httpclient/)
 

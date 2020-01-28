@@ -220,7 +220,7 @@ the call must be embedded in the constructor of `Promise`, as follows
 (this manner is similar to the ES6 `Promise` syntax):
 
 ```java{3}
-public static Promise promiseMethod(Object input) {
+public Promise promiseMethod(Object input) {
     return new Promise(resolver -> {
         callbackMethod(input, new Callback() {
 
@@ -257,7 +257,7 @@ For a consistent programming style, you should also convert frequently used `Com
 Example function that returns a `CompletableFuture` object:
 
 ```java{4}
-public static CompletableFuture<String> futureMethod(Object input) {
+public CompletableFuture<String> futureMethod(Object input) {
     CompletableFuture<String> future = new CompletableFuture<String>();
     ForkJoinPool.commonPool().execute(() -> {
         future.complete("123"); // Can be Tree or POJO
@@ -270,7 +270,7 @@ To convert it to `Promise`-based method,
 simply pass the `CompletableFuture` as a `Promise` constructor parameter:
 
 ```java{2}
-public static Promise promiseMethod(Object input) {
+public Promise promiseMethod(Object input) {
     return new Promise(futureMethod(input));
 }
 ```
@@ -279,7 +279,7 @@ If the `CompletableFuture` returns with a POJO object, you should convert it to 
 This way, both *remote and local calls* will return with the same `Tree` (~=JSON) object:
 
 ```java{2}
-public static Promise promiseMethod(Object input) {
+public Promise promiseMethod(Object input) {
     return new Promise(futureMethod(input)).then(rsp -> {
         User user = (User) rsp.asObject(); // Convert "User" object to Tree
         Tree tree = new Tree();
@@ -290,13 +290,13 @@ public static Promise promiseMethod(Object input) {
 }
 ```
 
-The `Promise`-based function can be published for other (eg. Node.js-based) `Services` via `Actions`,
+The Promise-based function can be published for other (eg. Node.js-based) `Services` via `Actions`,
 or converted directly into a REST service using the
 [@HttpAlias](moleculer-web.html#about-api-gateway) Annotation:
 
 ```java{1}
 @HttpAlias(method = "POST", path = "api/action") 
-public Action action = ctx -> {
+Action action = ctx -> {
     return promiseMethod(ctx.params);
 };
 ```
@@ -309,10 +309,10 @@ Therefore, sharing local variables between blocks would be problematic.
 Fortunately, the blocks reach request-level "global" variables of the `Action`.
 If any data in the blocks is needed later, it must be stored in this global containers.
 Since these variables must be "final", we cannot use "primitive" types (int, String, etc.), only containers (eg. `Tree`, `AtomicReference`, array, map).
-The following example uses a single `Tree` object to store the processing variables of the request:
+The following example uses a **single** `Tree` object to store the processing variables of the request:
 
 ```java{5}
-public Action action = ctx -> {
+Action action = ctx -> {
 
     // --- GLOBAL VARIABLE CONTAINER OF THE REQUEST ---
 
@@ -342,7 +342,7 @@ There are other solutions besides using a single "global" `Tree` object.
 It might be a good idea to use single-length arrays or store operation variables in multiple Atomic containers:
 
 ```java{5,10}
-public Action action = ctx -> {
+Action action = ctx -> {
 
     // --- GLOBAL VARIABLE CONTAINERS OF THE REQUEST ---
 
@@ -380,3 +380,26 @@ public Action action = ctx -> {
 ```
 
 There is **no need to synchronize** global variables because the execution of "then" blocks is always sequential in the waterfall logic.
+
+::: tip
+
+Use String constants to avoid misspelled variable names. 
+String constants can be placed in a separate `Interface` so that we can refer to them from multiple `Services`.
+The Code Completion feature of your IDE helps you complete these field names.
+
+```java
+public static final String FIELD_NAME    = "name";
+public static final String FIELD_AGE     = "age";
+public static final String FIELD_BALANCE = "balance";
+public static final String FIELD_VIP     = "vip";
+// ...
+
+Action action = ctx -> {
+    String  name    = ctx.params.get(FIELD_NAME,    "");
+    int     age     = ctx.params.get(FIELD_AGE,     0);
+    double  balance = ctx.params.get(FIELD_BALANCE, 0d);
+    boolean isVip   = ctx.params.get(FIELD_VIP,     false);
+    // ...
+};
+```
+:::
