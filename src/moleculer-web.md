@@ -220,7 +220,7 @@ route.addAlias("REST", "users", "users");
 To use this shorthand alias, create a `Service` which has "list", "get", "create", "update" and "remove" actions.
 :::
 
-## HTTP `Middlewares`
+## HTTP Middlewares
 
 HTTP `Middleware` is used to intercept the client request and do some pre-processing.
 It can also intercept the response and do post-processing before sending to the client in web application.
