@@ -251,60 +251,6 @@ ServiceBroker broker = ServiceBroker.builder()
                                     .build();
 ```
 
-### Google Pub/Sub Transporter
-
-Built-in Transporter for [Google Cloud Pub/Sub](https://cloud.google.com/pubsub/docs/overview).
-The Google Cloud Pub/Sub service allows applications to exchange messages reliably, quickly, and asynchronously.
-
-```java
-GoogleTransporter transporter = new GoogleTransporter("/credentials.json");
-ServiceBroker broker = ServiceBroker.builder()
-                                    .nodeID("server-1")
-                                    .transporter(transporter)
-                                    .build();
-```
-
-::: warning Google Pub/Sub dependencies
-To use Google Pub/Sub Transporter, add the following dependency to the build script:  
-[group: 'com.google.cloud', name: 'google-cloud-pubsub', version: '1.96.0'](https://mvnrepository.com/artifact/com.google.cloud/google-cloud-pubsub)
-:::
-
-Detailed example:
-
-```java
-GoogleTransporter transporter = new GoogleTransporter("/credentials.json");
-transporter.setProjectID("Project-123");
-transporter.setBatchingSettings(customBatchSettings);
-transporter.setCredentialsProvider(customCredentialsProvider);
-transporter.setRetrySettings(customRetrySettings);
-ServiceBroker broker = ServiceBroker.builder()
-                                    .nodeID("server-1")
-                                    .transporter(transporter)
-                                    .build();
-```
-
-### Ably.io Transporter
-
-Built-in Transporter for [Ably.io](https://www.ably.io/).
-Ably's realtime APIs expose the entire Ably infrastructure to developers,
-making it easy to power realtime functionality at any scale.
-Ably's free "developer" plan contains 3m monthly messages,
-100 peak connections and 100 peak channels.
-
-```java
-ServiceBroker broker = ServiceBroker.builder()
-                                    .nodeID("node1")
-                                    .transporter(new AblyTransporter("apiKey"))
-                                    .build();
-```
-
-The "apiKey" role must have "Publish" and "Subscribe" privileges.
-
-::: warning Ably.io dependencies
-To use Ably.io Transporter, add the following dependency to the build script:  
-[group: 'io.ably', name: 'ably-java', version: '1.1.8'](https://mvnrepository.com/artifact/io.ably/ably-java)
-:::
-
 ## Decentralized, Peer-to-Peer Transporters
 
 ### TCP Transporter

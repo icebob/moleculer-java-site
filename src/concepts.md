@@ -1,4 +1,4 @@
-## Core Moleculer concepts
+## Moleculer programming concepts
 
 Moleculer's central communication module is the `ServiceBroker`.
 The `ServiceBroker` supports the following communication patterns:
@@ -88,7 +88,7 @@ With the API, the Java program can create an object or call a method on the fly.
 From execution prospective, the calls to reflection API are quite expensive,
 it could have a performance impact on the applications.
 Because of this, Moleculer uses the reflection API in very few cases. For example
-`Actions` and `Event` listeners are not methods but `Functional Interfaces`.
+`Actions` and event `Listeners` are not methods but `Functional Interfaces`.
 Calling them is much faster than calling methods using the Reflection API.
 
 ```java
@@ -121,10 +121,10 @@ Action action = ctx -> {
 };
 ```
 
-The input for Action and Event Listener is always a
+The input for `Action` and event `Listener` is always a
 [Context](actions.html#context)
 (which has metadata besides input JSON, such as who sent the message).
-The returned value cannot be a POJO (Plain Old Java Object),
+The returned value cannot be a POJO (Plain Old Java Object with getter/setter methods),
 such values must be converted to a `Tree` object.
 The output can be one of the following:
 
@@ -146,13 +146,13 @@ Moleculer uses ES6-like
 [Promises](https://berkesa.github.io/datatree-promise/)
 (based on the Java8's CompletableFuture API) to avoid
 [callback hell](https://www.google.com/search?q=callback+hell+promise).
-A Promise is an object that may produce a simple value (or a `Tree` object) some time in the future:
+A `Promise` is an object that may produce a simple value (or a `Tree` object) some time in the future:
 either a resolved value, or a reason that it's not resolved (e.g., a network error occurred).
-Promise users can attach callbacks to handle the fulfilled `Tree` or the reason for rejection.
+`Promise` users can attach callbacks to handle the fulfilled `Tree` or the reason for rejection.
 
 The main difference between Promise-based operation of other systems and Moleculer
-is that the Moleculer Promise object works with "raw" JSON objects.
-The value of a Moleculer Promise, which you get after the asynchronous processing,
+is that the Moleculer `Promise` object works with "raw" JSON objects.
+The value of a Moleculer `Promise`, which you get after the asynchronous processing,
 is always a `Tree` object.
 This `Tree` structure may come from other Services (including, for example, Node.js-based Services)
 or from asynchronous APIs.
@@ -187,11 +187,11 @@ Action createNewUser = ctx -> {
 }
 ```
 
-Several Moleculer Modules have been created that work with Promise objects
+Several Moleculer Modules have been created that work with `Promise` objects
 (for example [MongoDB API for Moleculer](https://moleculer-java.github.io/moleculer-java-mongo/)
 or
 [HTTP Client for Moleculer](https://moleculer-java.github.io/moleculer-java-httpclient/)).
-The following chapters show how to process the responses of asynchronous non-Promise functions using Promise logic.
+The following chapters show how to process the responses of asynchronous non-Promise functions using `Promise` logic.
 
 ### Converting callback to Promise
 
@@ -200,8 +200,8 @@ The structure of the `Callback` interface is as follows:
 
 ```java
 public interface Callback {
-	public void onFinised(Object data);
-	public void onError(Throwable error);
+    public void onFinised(Object data);
+    public void onError(Throwable error);
 }
 ```
 
@@ -209,9 +209,9 @@ And the `callbackMethod` using the `Callback` interface is as follows:
 
 ```java
 public void callbackMethod(Object input, Callback callback) {
-	ForkJoinPool.commonPool().execute(() -> {
-		callback.onFinised("123"); // Can be Tree or POJO
-	});
+    ForkJoinPool.commonPool().execute(() -> {
+        callback.onFinised("123"); // Can be Tree or POJO
+    });
 }
 ```
 
@@ -221,18 +221,18 @@ the call must be embedded in the constructor of Promise, as follows
 
 ```java
 public static Promise promiseMethod(Object input) {
-	return new Promise(resolver -> {
-		callbackMethod(input, new Callback() {
+    return new Promise(resolver -> {
+        callbackMethod(input, new Callback() {
 
-			public void onFinised(Object data) {
-				resolver.resolve(data);
-			}
+            public void onFinised(Object data) {
+                resolver.resolve(data);
+            }
 
-			public void onError(Throwable error) {
-				resolver.reject(error);
-			}
-		});
-	});
+            public void onError(Throwable error) {
+                resolver.reject(error);
+            }
+        });
+    });
 }
 ```
 
@@ -240,13 +240,13 @@ Hereinafter we can use the `promiseMethod` in waterfall-like processing:
 
 ```java
 Action add = ctx -> {
-	String input = ctx.params.get("input", "default");
+    String input = ctx.params.get("input", "default");
 
-	return promiseMethod(input).then(rsp -> {
-		// ...
-	}).catchError(err -> {
-		// ...
-	});
+    return promiseMethod(input).then(rsp -> {
+        // ...
+    }).catchError(err -> {
+        // ...
+    });
 };
 ```
 
@@ -257,11 +257,11 @@ Example function that returns a `CompletableFuture` object:
 
 ```java
 public static CompletableFuture<String> futureMethod(Object input) {
-	CompletableFuture<String> future = new CompletableFuture<String>();
-	ForkJoinPool.commonPool().execute(() -> {
-		future.complete("123");	// Can be Tree or POJO
-	});
-	return future;
+    CompletableFuture<String> future = new CompletableFuture<String>();
+    ForkJoinPool.commonPool().execute(() -> {
+        future.complete("123"); // Can be Tree or POJO
+    });
+    return future;
 }
 ```
 
@@ -270,7 +270,7 @@ simply pass the `CompletableFuture` as a Promise constructor parameter:
 
 ```java
 public static Promise promiseMethod(Object input) {
-	return new Promise(futureMethod(input));
+    return new Promise(futureMethod(input));
 }
 ```
 
@@ -279,12 +279,12 @@ This way, both *remote and local calls* will return with the same `Tree` (~=JSON
 
 ```java
 public static Promise promiseMethod(Object input) {
-	return new Promise(futureMethod(input)).then(rsp -> {
-        User user = (User) rsp.asObject();
-        Tree rsp = new Tree();
-        rsp.put("id", user.getID());
-        rsp.put("name", user.getName());
-        return rsp;        
+    return new Promise(futureMethod(input)).then(rsp -> {
+        User user = (User) rsp.asObject(); // Convert "User" object to Tree
+        Tree tree = new Tree();
+        tree.put("id", user.getID());
+        tree.put("name", user.getName());
+        return tree;        
     };
 }
 ```
@@ -296,6 +296,86 @@ or converted directly into a REST service using the
 ```java
 @HttpAlias(method = "POST", path = "api/action") 
 public Action action = ctx -> {
-	return promiseMethod(ctx.params);
-}
+    return promiseMethod(ctx.params);
+};
 ```
+
+## Visibility of variables
+
+The blocks of waterfall model are executed by separate `Threads`.
+The individual "then" blocks do not reach each other's variables.
+Therefore, sharing local variables between blocks would be problematic.
+Fortunately, the blocks reach request-level "global" variables of the `Action`.
+If any data in the blocks is needed later, it must be stored in this global containers.
+Since these variables must be `final`, we cannot use "primitive" types (int, String, etc.), only containers (eg. Tree, AtomicReference, array, map).
+The following example uses a single `Tree` object to store the processing variables of the request:
+
+```java
+public Action action = ctx -> {
+
+    // --- GLOBAL VARIABLE CONTAINER OF THE REQUEST ---
+
+    final Tree global = new Tree();
+
+    // --- WATERFALL SEQUENCE ---
+
+    return Promise.resolve().then(rsp -> {
+
+        // Executed using Thread #1
+        global.put("key", 123);
+
+    }).then(rsp -> {
+
+        // Executed using Thread #2
+        int value = global.get("key", 0);
+
+        // Create aggregated response
+        Tree out = new Tree();
+        out.put("num", value * 2);
+        return out;
+    });
+};
+```
+
+There are other solutions besides using a single "global" `Tree` object.
+It might be a good idea to use single-length arrays or store operation variables in multiple Atomic containers:
+
+```java
+public Action action = ctx -> {
+
+    // --- GLOBAL VARIABLE CONTAINERS OF THE REQUEST ---
+
+    // Method #1: Variables in single-length arrays
+    final String[]  var1 = new String[1];        
+    final Tree[]    var2 = new Tree[1];
+    final boolean[] var3 = new boolean[1];
+
+    // Method #2: Variables in Atomic containers
+    final AtomicReference<Tree> var4 = new AtomicReference<>();
+    final AtomicLong            var5 = new AtomicLong();
+    final AtomicBoolean         var6 = new AtomicBoolean();
+
+    // --- WATERFALL SEQUENCE ---
+
+    return Promise.resolve().then(rsp -> {
+
+        // Executed using Thread #1
+        var1[0] = rsp.get("var1", "");
+        var2[0] = rsp.get("var2");
+        var4.set(rsp);
+        var5.set(rsp.get("var5", 0));
+        // ...
+
+    }).then(rsp -> {
+
+        // Executed using Thread #2
+        String val1 = var1[0];
+        Tree   val4 = var4.get();
+        long   val5 = var5.get();
+        // ...
+
+    });
+};
+```
+
+There is **no need to synchronize** global variables because the execution of "then" blocks is always sequential in the waterfall logic.
