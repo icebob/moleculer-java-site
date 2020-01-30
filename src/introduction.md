@@ -11,7 +11,7 @@ common platform for modules written in different languages.
 
 - Polyglot (implemented in [multiple languages](https://github.com/moleculerjs/awesome-moleculer#polyglot-implementations))
 - High-performance, non-blocking messaging and event APIs
-- Asynchronous REST `Services` for high-load React, Angular or VueJS applications
+- Asynchronous REST Services for high-load React, Angular or VueJS applications
 - Runs as a standard J2EE application or with a built-in Netty server
 - Fault Tolerance and high availability (circuit breaker, request timeout, retry, etc.)
 - Load balanced requests & events (round-robin, random, cpu-usage, network latency, sharding)
@@ -20,7 +20,7 @@ common platform for modules written in different languages.
 - Built-in caching solution (memory cache, Redis cache, off-heap cache, JCache)
 - Send and receive streamed data (for transferring large files, media content)
 - Built-in service registry & dynamic service discovery
-- Supports middlewares (for using cache, encryption or logging modules)
+- Supports WebSockets, SSL, Middlewares (for using cache, encryption or logging modules)
 - Supports template engines for generating server-side HTMLs (FreeMarker, Jade, Thymeleaf, etc.)
 - Interactive developer console (local or telnet) with custom commands
 - Open source - Moleculer is 100% open source and free of charge

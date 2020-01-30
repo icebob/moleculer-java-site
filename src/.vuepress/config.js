@@ -10,7 +10,6 @@ module.exports = {
 		[
 			'@vuepress/back-to-top'
 		],
-		// ['vuepress-plugin-smooth-scroll'],
         [
             '@vuepress/google-analytics', {'ga': 'UA-156080046-1'}
         ],
