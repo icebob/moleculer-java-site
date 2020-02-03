@@ -280,6 +280,10 @@ The chain of the `Route` can be terminated if you do not call "next.service" but
 [GitHub page](https://github.com/moleculer-java/moleculer-java-web/tree/master/src/main/java/services/moleculer/web/middleware)
 of the API Gateway project has many examples of HTTP `Middlewares`.
 
+There is another kind of middleware in the Molecular Framework; the `Middleware`.
+The `Middleware` is similar to `HttpMiddleware`, but it processes internal `Action` calls instead of HTTP requests.  
+[Read more about Middlewares](middlewares.html#about-middlewares)
+
 ## Multiple Routes
 
 Complex web applications require multiple `Routes`.

@@ -5,10 +5,14 @@ title: Logging
 ## Moleculer logging basics
 
 Moleculer uses [SLF4J](https://www.slf4j.org) for logging.
+Each
+[Service](services.html#about-moleculer-services),
+[Middleware](middlewares.html#about-middlewares) and 
+[HttpMiddleware](moleculer-web.html#http-middlewares)
+instance inherits its own "logger" instance from the superclass.
 Here is a short example showcasing how you can access the logger:
 
-```java{11}
-import org.slf4j.*;
+```java{13}
 import org.springframework.stereotype.Controller;
 import services.moleculer.service.*;
 
@@ -16,16 +20,11 @@ import services.moleculer.service.*;
 public class Math extends Service {
 
     /**
-     * Logger of this Service
-     */
-    private static final Logger logger = LoggerFactory.getLogger(Math.class);
-
-    /**
      * The "math.add" Action.
      */
     Action add = ctx -> {
 
-        // Log request
+        // Log request - the "logger" instance was made by superclass
         logger.info("Request received: " + ctx);
 
         // Calculate response
@@ -55,35 +54,6 @@ dependencies {
 
 }
 ```
-
-## Logging in J2EE environment
-
-When using Spring Boot, you can turn off the initialization of Spring Boot logging,
-by setting the "org.springframework.boot.logging.LoggingSystem" property to "none".
-Thus, the Moleculer Application will use the J2EE server's default logging mechanism.
-It looks like this in "web.xml":
-
-```xml{11}
-<?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns="http://java.sun.com/xml/ns/javaee" ...>
-    
-    <servlet>
-        <servlet-name>Moleculer Servlet</servlet-name>
-        <servlet-class>services.moleculer.web.servlet.MoleculerServlet</servlet-class>
-
-        <!-- USE THE J2EE SERVER'S LOGGING SYSTEM -->
-                
-        <init-param>
-            <param-name>-Dorg.springframework.boot.logging.LoggingSystem</param-name>
-            <param-value>none</param-value>
-        </init-param>
-        ...
-    </servlet>
-
-</web-app>
-```
-
- [Example of complete web.xml](https://github.com/moleculer-java/moleculer-spring-boot-demo/blob/master/src/main/webapp/WEB-INF/web.xml)
 
 ## Logging in standalone runtime mode
 
@@ -116,6 +86,36 @@ services.moleculer.logger.AsyncFileLogger.logToConsole  = true
 services.moleculer.logger.AsyncFileLogger.level         = INFO
 .level                                                  = INFO
 ```
+
+## Logging in J2EE environment
+
+When using Spring Boot, the logger is mostly J2EE's own logger, but this is optional.
+You can turn off the initialization of Spring Boot logging,
+by setting the "org.springframework.boot.logging.LoggingSystem" property to "none".
+Thus, the Moleculer Application will use the J2EE server's default logging mechanism.
+In "web.xml" it looks like this:
+
+```xml{11}
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" ...>
+    
+    <servlet>
+        <servlet-name>Moleculer Servlet</servlet-name>
+        <servlet-class>services.moleculer.web.servlet.MoleculerServlet</servlet-class>
+
+        <!-- USE THE J2EE SERVER'S LOGGING SYSTEM -->
+                
+        <init-param>
+            <param-name>-Dorg.springframework.boot.logging.LoggingSystem</param-name>
+            <param-value>none</param-value>
+        </init-param>
+        ...
+    </servlet>
+
+</web-app>
+```
+
+ [Example of complete web.xml](https://github.com/moleculer-java/moleculer-spring-boot-demo/blob/master/src/main/webapp/WEB-INF/web.xml)
 
 ## Detailed Example
 

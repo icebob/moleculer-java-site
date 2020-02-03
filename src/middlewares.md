@@ -134,8 +134,12 @@ broker.use(new AccessControllerMiddleware());
 ## Caching the response of Actions
 
 Among many other uses, `Middleware` is used to cache the response of `Action`.
-[Cacher](https://github.com/moleculer-java/moleculer-java/blob/master/src/main/java/services/moleculer/cacher/`Cacher`.java)
+[Cacher](https://github.com/moleculer-java/moleculer-java/blob/master/src/main/java/services/moleculer/cacher/Cacher.java)
 `Middleware` is an abstract class that uses request input data as a key to store responses in a cache.
 The actual implementation of the `Cacher` can be local or distributed.
 `Cacher` `Middleware` is automatically added to `ServiceBroker` at startup.  
 [Read more about caching.](caching.html#caching-action-calls)
+
+There is another kind of middleware in the Molecular Framework; the `HttpMiddleware`.
+An HTTP Middleware is similar to Middleware, but HTTP Middleware processes HTTP requests instead of internal `Action` calls.  
+[Read more about HTTP Middlewares](moleculer-web.html#http-middlewares)

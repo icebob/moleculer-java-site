@@ -34,7 +34,7 @@ There is no similar native support for dynamic creation of JSON objects in Java 
 Because of this, Moleculer uses an
 [abstract API](https://berkesa.github.io/datatree/)
 instead of a certain JSON implementation.
-The `Tree` object is an **abstract layer** that uses an arbitrary JSON implementation.
+The `io.datatree.Tree` object is an **abstract layer** that uses an arbitrary JSON implementation.
 `Tree` API supports 18 popular
 [JSON implementations](serializers.html#json-serializer) (eg. Jackson, Gson, Boon, Jodd, FastJson),
 and 10 non-JSON data formats (YAML, ION, BSON, MessagePack, etc.).
@@ -79,9 +79,9 @@ In addition, the `Tree` API provides some useful features:
 - Merging, filtering structures (`tree.copyFrom(source)`, `tree.find(condition)`, etc.)
 
 In summary, Node.js-based Moleculer `Services` sends and receives JavaScript Objects.
-The equivalent is the `Tree` Object in the Java-based Moleculer.
+The equivalent is the `Tree` object in the Java-based Moleculer.
 
-## Avoid Reflection
+## Avoid reflection
 
 The Reflection API is a powerful feature of the Java language.
 With the API, the Java program can create an object or call a method on the fly.
@@ -97,7 +97,7 @@ Action action = ctx -> { ... };
 Listener listener = ctx -> { ... };
 ```
 
-## No Object Mapping
+## No object mapping
 
 For the sake of simplicity, and similarity to Node.js version, Moleculer does not use Java Object Mappers.
 The data is received, processed and returned in "raw" JSON format.
@@ -105,6 +105,7 @@ Object Mapper's are useful when starting the system,
 and we process configuration files using the Spring Framework, for example.
 However, it is faster at runtime if the incoming data packet is received immediately
 after parsing it from the binary (JSON, MessagePack, etc.) format.
+The `Tree` data type helps in accurate type conversion, even allowing you to specify default values.
 
 ```java
 // Input and output data are in "raw" JSON format
@@ -146,7 +147,7 @@ Moleculer uses ES6-like
 [Promises](https://berkesa.github.io/datatree-promise/)
 (based on the Java8's `CompletableFuture` API) to avoid
 [callback hell](https://www.google.com/search?q=callback+hell+promise).
-A `Promise` is an object that may produce a simple value (or a `Tree` object) some time in the future:
+An `io.datatree.Promise` is an object that may produce a simple value (or a `Tree` object) some time in the future:
 either a resolved value, or a reason that it's not resolved (e.g., a network error occurred).
 `Promise` users can attach callbacks to handle the fulfilled `Tree` or the reason for rejection.
 
@@ -210,7 +211,7 @@ And the "callbackMethod" using the `Callback` interface is as follows:
 ```java{3}
 public void callbackMethod(Object input, Callback callback) {
     ForkJoinPool.commonPool().execute(() -> {
-        callback.onFinised("123"); // Can be Tree or POJO
+        callback.onFinised("123"); // ...or it could be a "Tree" structure
     });
 }
 ```
@@ -260,7 +261,7 @@ Example function that returns a `CompletableFuture` object:
 public CompletableFuture<String> futureMethod(Object input) {
     CompletableFuture<String> future = new CompletableFuture<String>();
     ForkJoinPool.commonPool().execute(() -> {
-        future.complete("123"); // Can be Tree or POJO
+        future.complete("123"); // ...or it could be a "Tree" structure
     });
     return future;
 }
@@ -381,11 +382,41 @@ Action action = ctx -> {
 
 There is **no need to synchronize** global variables because the execution of "then" blocks is always sequential in the waterfall logic.
 
-::: tip
+## Use Tree objects instead of Maps
+
+JSON APIs dynamically select which Java object to map to a JSON field during deserialization.
+For example, smaller numbers arriving in JSON (eg. "1234") are usually converted to `Integer`.
+If the number contains a decimal point, it can be `Float`.
+If the number contains more digits, it will become `Double` or `Long`, depending on whether it contains a decimal point.
+Some JSON parsers can convert larger numbers to `BigInteger` or `BigDecimal`.
+The situation is similar with the JSON serializer for Date objects;
+one of the JSON APIs uses the ISO 8601 format or one of the Epoch Time formats to convert Date objects to JSON.
+These differences are automatically handled by the `Tree` API.
+In the example below, the function `params.get.("balance").asDouble()` returns a Double in every case,
+no matter what type the JSOS parser mapped to.
+Either the "date" can be in Epoch Time or ISO format, each type will be a `Date`.
+
+```java{3,4,9,10}
+Action action = ctx -> {
+
+    // Unsafe casting, preferably DO NOT use the solution below,
+    // this can cause ClassCastException error at runtime
+    Map<String, Object> map = (Map<String, Object>) ctx.params.asObject();
+    double balance = (Double) map.get("balance");
+    Date   date    = dateFormat.parse((String) map.get("date"));
+
+    // Safe casting with automatic type conversion,
+    // this is how you get the values from "params" structure
+    double balance = ctx.params.get("balance").asDouble();
+    Date   date    = ctx.params.get("date").asDate();
+};
+```
+
+## Use constants for field names 
 
 Use String constants to avoid misspelled variable names. 
 String constants can be placed in a separate `Interface` so that we can refer to them from multiple `Services`.
-The Code Completion feature of your IDE helps you complete these field names.
+The Code Completion feature of your IDE helps you complete these field names faster and more accurately.
 
 ```java
 public static final String FIELD_NAME    = "name";
@@ -402,4 +433,3 @@ Action action = ctx -> {
     // ...
 };
 ```
-:::
