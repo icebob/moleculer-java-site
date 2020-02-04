@@ -16,9 +16,9 @@ broker.call("$node.list").then(rsp -> {
 
     // Example processing of the response (print IPs of nodes):
     for (Tree nodeInfo: rsp) {
-        System.out.println("Node ID: " + nodeInfo.get("id", ""));
+        logger.info("Node ID: " + nodeInfo.get("id", ""));
         for (Tree ip: nodeInfo.get("ipList")) {
-            System.out.println(" IP address: " + ip.asString());
+            logger.info(" IP address: " + ip.asString());
         }
     }
 });
@@ -74,9 +74,9 @@ broker.call("$node.services").then(rsp -> {
 
     // Example processing of the response (print nodeIDs of Services):
     for (Tree serviceInfo: rsp) {
-        System.out.println("Service: " + serviceInfo.get("name", ""));
+        logger.info("Service: " + serviceInfo.get("name", ""));
         for (Tree nodeID: serviceInfo.get("nodes")) {
-            System.out.println("  Node ID: " + nodeID.asString());
+            logger.info("  Node ID: " + nodeID.asString());
         }
     }
 });
@@ -140,9 +140,9 @@ broker.call("$node.actions").then(rsp -> {
     
     // Example processing of the response (print Actions and some attributes):
     for (Tree actionInfo: rsp) {
-        System.out.println("Action: " + actionInfo.get("name", "") +
-                         ", local: "  + actionInfo.get("hasLocal", false) +
-                         ", count: "  + actionInfo.get("count", 0));
+        logger.info("Action: " + actionInfo.get("name", "") +
+                    ", local: "  + actionInfo.get("hasLocal", false) +
+                    ", count: "  + actionInfo.get("count", 0));
     }    
 });
 ```
@@ -206,9 +206,9 @@ broker.call("$node.events").then(rsp -> {
     // Example processing of the response (print Events and some attributes):
     for (Tree eventInfo: rsp) {
         String subscription = eventInfo.get("name", "");
-        System.out.println("Subscription: " + subscription);
+        logger.info("Subscription: " + subscription);
         for (Tree event: eventInfo.get("event")) {
-            System.out.println(" " + event.getName() + " = " + event.asString());
+            logger.info(" " + event.getName() + " = " + event.asString());
         }
     }
 });
@@ -269,14 +269,14 @@ broker.call("$node.health").then(rsp -> {
     logger.info(rsp);
 
     // Example processing of the response (print IPs and some attributes):
-    System.out.println("IP Addresses:");
+    logger.info("IP Addresses:");
     for (Tree ip: rsp.get("net.ip")) {
-        System.out.println(" " + ip.asString());
+        logger.info(" " + ip.asString());
     }
 
-    System.out.println("CPU cores: " + rsp.get("cpu.cores", 0));
-    System.out.println("OS type: "   + rsp.get("os.type", ""));
-    System.out.println("Homedir: "   + rsp.get("os.user.homedir", ""));
+    logger.info("CPU cores: " + rsp.get("cpu.cores", 0));
+    logger.info("OS type: "   + rsp.get("os.type", ""));
+    logger.info("Homedir: "   + rsp.get("os.user.homedir", ""));
 });
 ```
 

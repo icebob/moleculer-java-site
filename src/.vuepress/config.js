@@ -47,32 +47,32 @@ module.exports = {
 				sidebarDepth: 2,
 				children: [
 					['introduction', 'Introduction'],
-					['concepts', 'Moleculer Concepts']
+					['concepts',     'Moleculer Concepts']
 				]
 			},
 			{
 				title: 'Core',
 				sidebarDepth: 2,
 				children: [
-					['broker', 'Service Broker'],
-					['services', 'Services'],
-					['lifecycle', 'Lifecycle'],
-					['actions', 'Actions'],
-					['middlewares', 'Middlewares'],
-					['caching', 'Caching'],
-					['events', 'Events'],
+					['broker',            'Service Broker'],
+					['services',          'Services'],
+					['lifecycle',         'Lifecycle'],
+					['actions',           'Actions'],
+					['middlewares',       'Middlewares'],
+					['caching',           'Caching'],
+					['events',            'Events'],
 					['internal-services', 'Internal Services'],
-					['logging', 'Logging'],
-					['runner', 'Runner']
+					['logging',           'Logging'],
+					['runner',            'Runner']
 				]
 			},
 			{
 				title: 'Clustering',
 				sidebarDepth: 2,
 				children: [
-					['transporters', 'Transporters'],
-					['serializers', 'Serializers'],
-					['balancing', 'Load Balancing'],
+					['transporters',    'Transporters'],
+					['serializers',     'Serializers'],
+					['balancing',       'Load Balancing'],
 					['fault-tolerance', 'Fault Tolerance']
 				]
 			},
@@ -80,8 +80,11 @@ module.exports = {
 				title: 'Modules',
 				sidebarDepth: 2,
 				children: [				
-					['moleculer-web', 'API Gateway'],
-					['moleculer-repl', 'Moleculer REPL']
+					['moleculer-web',  'Web API Gateway'],
+					['moleculer-repl', 'Moleculer REPL'],
+					['mongo-client',   'MongoDB Client'],
+					['http-client',    'HTTP Client'],
+					['jmx-service',    'JMX Service'],
 				]
 			}
 		]

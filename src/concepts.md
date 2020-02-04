@@ -12,7 +12,7 @@ Local or remote `Services` can be accessed in the same way.
 The `Services` send dynamically generated structured data to each other, mostly in JSON format.
 The resulting data is processed in a non-blocking, asynchronous manner.
 
-## Universal data type
+## Universal data type for structures
 
 The `Services` send packets of structured hierarchical data to each other during communication.
 Data packets are mostly in JSON format, but other data interchange formats can be set.
@@ -189,7 +189,7 @@ Action createNewUser = ctx -> {
 ```
 
 Several Moleculer Modules have been created that work with `Promise` objects
-(for example [MongoDB API for Moleculer](https://moleculer-java.github.io/moleculer-java-mongo/)
+(for example [MongoDB API for Moleculer](mongo-client.html#about-mongodb-client)
 or
 [HTTP Client for Moleculer](https://moleculer-java.github.io/moleculer-java-httpclient/)).
 The following chapters show how to process the responses of asynchronous non-Promise functions using `Promise` logic.

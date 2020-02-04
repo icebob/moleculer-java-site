@@ -1,4 +1,4 @@
-## Introduction to `Service` Broker
+## Introduction to Service Broker
 
 The `ServiceBroker` is the main component of the Moleculer Framework.
 Each Node connected to a Moleculer Cluster has a `ServiceBroker` instance.
@@ -8,7 +8,7 @@ or can be built into a J2EE application server as a standard Web Module.
 Another important feature of `ServiceBroker` is that it is basically designed to not block `Threads`,
 and can handle a large volume of requests in parallel.
 
-## Create a `Service` Broker
+## Create a Service Broker
 
 **Create Broker with default settings**
 
@@ -179,8 +179,8 @@ Use the Moleculer Runner to create, start, stop the `ServiceBroker` simply and r
 This
 [demo project](https://moleculer-java.github.io/moleculer-spring-boot-demo/)
 uses Moleculer runner to run the application
-(in standalone mode or integrated into a J2EE server).  
-[Read more about Moleculer Runner.](runner.html)  
+(in standalone mode or integrated into a J2EE server).
+[Read more about Moleculer Runner.](runner.html#moleculer-runner)  
 :::
 
 ## Configuration options

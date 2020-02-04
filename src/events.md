@@ -283,7 +283,7 @@ ctx.stream.onPacket((bytes, error, closed) -> {
 });
 ```
 
-## `Context`
+## Context
 
 When you emit an event, the `ServiceBroker` creates a `Context` instance which contains all
 request information and passes it to the event handler as a single argument.

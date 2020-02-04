@@ -14,7 +14,6 @@ It is also possible to create **custom commands**. The console can be used via s
         <groupId>com.github.berkesa</groupId>
         <artifactId>moleculer-java-repl</artifactId>
         <version>1.2.1</version>
-        <scope>runtime</scope>
     </dependency>
 </dependencies>
 ```

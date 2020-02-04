@@ -119,11 +119,11 @@ The brief examples illustrate the following:
 
 **Java**
 
-- [High-performance Web API for Moleculer Apps](moleculer-web.html)
-- [Interactive Developer Console](moleculer-repl.html)
-- [JMX Service for Moleculer](https://moleculer-java.github.io/moleculer-java-jmx/)
-- [MongoDB API for Moleculer](https://moleculer-java.github.io/moleculer-java-mongo/)
-- [HTTP Client for Moleculer](https://moleculer-java.github.io/moleculer-java-httpclient/)
+- [High-performance Web API for Moleculer Apps](moleculer-web.html#about-api-gateway)
+- [Interactive Developer Console](moleculer-repl.html#about-the-developer-console)
+- [MongoDB API for Moleculer](mongo-client.html#about-mongodb-client)
+- [HTTP Client for Moleculer](http-client.html#about-the-async-http-client)
+- [JMX Service for Moleculer](jmx-service.html#about-the-jmx-service)
 
 **Node.js**
 

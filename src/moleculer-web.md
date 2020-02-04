@@ -864,7 +864,7 @@ Action html = ctx -> {
     
     // Return data (and the "meta" in it)
     return data;
-}
+};
 ```
 
 The Template Engine used by `ApiGateway` can be specified by the "setTemplateEngine" function of `ApiGateway`.
@@ -914,8 +914,8 @@ factory.setRecursionLimit(10);
 // Enable multilingualism, and language file reloading in development
 // mode (language files can be in YAML or Java Properties format)
 templateEngine.setMessageLoader(new DefaultMessageLoader(
-                                "languages/messages", // Path to messages
-                                "yml", // Use YAML format
+                                "languages/messages", // Path and message file prefix
+                                "yml", // Use YAML format (or use "properties" format)
                                 developmentMode); // Autoreload on/off
 
 // Set the Template Engine of ApiGateway
@@ -989,8 +989,8 @@ engine.setParentScopeResolution(true);
 // Enable multilingualism, and language file reloading in development
 // mode (language files can be in YAML or Java Properties format)
 templateEngine.setMessageLoader(new DefaultMessageLoader(
-                                "languages/messages", // Path to messages
-                                "yml", // Use YAML format
+                                "languages/messages", // Path and message file prefix
+                                "yml", // Use YAML format (or use "properties" format)
                                 developmentMode); // Autoreload on/off
 
 // Set the Template Engine of ApiGateway
@@ -1062,8 +1062,8 @@ engine.setTemplatePreProcessor(new SimpleHtmlMinifier());
 // Enable multilingualism, and language file reloading in development
 // mode (language files can be in YAML or Java Properties format)
 templateEngine.setMessageLoader(new DefaultMessageLoader(
-                                "languages/messages", // Path to messages
-                                "yml", // Use YAML format
+                                "languages/messages", // Path and message file prefix
+                                "yml", // Use YAML format (or use "properties" format)
                                 developmentMode); // Autoreload on/off
 
 // Set the Template Engine of ApiGateway
@@ -1138,8 +1138,8 @@ config.setLogTemplateExceptions(true);
 // Enable multilingualism, and language file reloading in development
 // mode (language files can be in YAML or Java Properties format)
 templateEngine.setMessageLoader(new DefaultMessageLoader(
-                                "languages/messages", // Path to messages
-                                "yml", // Use YAML format
+                                "languages/messages", // Path and message file prefix
+                                "yml", // Use YAML format (or use "properties" format)
                                 developmentMode); // Autoreload on/off
 
 // Set the Template Engine of ApiGateway
@@ -1211,8 +1211,8 @@ config.setMode(Jade4J.Mode.HTML);
 // Enable multilingualism, and language file reloading in development
 // mode (language files can be in YAML or Java Properties format)
 templateEngine.setMessageLoader(new DefaultMessageLoader(
-                                "languages/messages", // Path to messages
-                                "yml", // Use YAML format
+                                "languages/messages", // Path and message file prefix
+                                "yml", // Use YAML format (or use "properties" format)
                                 developmentMode); // Autoreload on/off
 
 // Set the Template Engine of ApiGateway
@@ -1275,8 +1275,8 @@ templateEngine.setDefaultExtension("html"); // Default extension
 // Enable multilingualism, and language file reloading in development
 // mode (language files can be in YAML or Java Properties format)
 templateEngine.setMessageLoader(new DefaultMessageLoader(
-                                "languages/messages", // Path to messages
-                                "yml", // Use YAML format
+                                "languages/messages", // Path and message file prefix
+                                "yml", // Use YAML format (or use "properties" format)
                                 developmentMode); // Autoreload on/off
 
 // Set the Template Engine of ApiGateway
@@ -1348,8 +1348,8 @@ engine.setLinkBuilder(...);
 // Enable multilingualism, and language file reloading in development
 // mode (language files can be in YAML or Java Properties format)
 templateEngine.setMessageLoader(new DefaultMessageLoader(
-                                "languages/messages", // Path to messages
-                                "yml", // Use YAML format
+                                "languages/messages", // Path and message file prefix
+                                "yml", // Use YAML format (or use "properties" format)
                                 developmentMode); // Autoreload on/off
 
 // Set the Template Engine of ApiGateway
@@ -1377,3 +1377,208 @@ gateway.setTemplateEngine(templateEngine);
     </body>
 </html>
 ```
+
+## Internationalization (i18n) 
+
+All template engines that can be used with Moleculer support multilingual interfaces.
+This requires passing an object called `MessageLoader` to `TemplateEngine`.
+You can write your own `MessageLoader` or use the `DefaultMessageLoader` class:
+
+```java
+templateEngine.setMessageLoader(new DefaultMessageLoader(
+                                "languages/messages", // Path and message file prefix
+                                "yml", // Use YAML format (or use "properties" format)
+                                enableReload); // Reloadable (turn off in "production" stage)
+```
+
+In the code snippet above, the `DefaultMessageLoader` loads the message files from the "languages" directory.
+The `DefaultMessageLoader` can load this directory from the classpath or from the file system.
+Each file starts with the "messages" prefix,
+then comes the optional language code (eg. "-en", "-en-uk", "-en-us", etc.) and then the extension (".yml").
+The message file for the default language is "messages.yml".
+The language files are in YAML format, with key-value pairs under the "msg" block:
+
+```
+msg:
+  title: Server-side rendering
+  first: First
+  previous: Previous
+  back: Back to main menu
+```
+
+For example the German language file is named "messages-de.yml",
+located in the same directory as the default language file, and looks like this:
+
+```
+msg:
+  title: Serverseitige rendering
+  first: Erst
+  previous: Vorherigen
+  back: Zurück zum Hauptmenü
+```
+
+Similarly, the structure of the Korean language file ("messages-ko.yml") is as follows:
+
+```
+msg:
+  title: 서버 측 렌더링
+  first: 먼저
+  previous: 이전
+  back: 메인 메뉴로 돌아 가기
+```
+
+The final (used for generating) language file consists of **multiple layers**:
+
+If the language of template is French Canadian ("fr-ca")
+the language file loader will load the default language file ("messages.yml") first.
+If it exists, it loads the French language file ("messages-fr.yml").
+Then, if it exists, it loads the French Canadian language file ("messages-fr-ca.yml").
+Then use the union of the three files (or as many as exist) to generate the template.
+
+Therefore, it is not necessary to copy all message entries in the language files,
+only those that have changed compared to the "higher level" language file.  
+[There are some sample language files in this directory.](https://github.com/moleculer-java/moleculer-spring-boot-demo/tree/master/src/main/resources/languages)
+
+Templates should refer to language constants as a common variable whose name begins with "msg.":
+
+```html
+<html>
+    <body>
+        ...
+        <input type="submit" name="reload" value="#{msg.first}">
+        ...
+    </body>
+</html>
+```
+
+The insertion of variables for each template works according to their own syntax:
+
+- Pebble, Mustache and Handlebars syntax: { {msg.first} }
+- Jade and DataTree syntax: #{msg.first}
+- Thymeleaf and FreeMarker syntax: ${msg.first}
+
+Language files can contain not only name-value pairs but also
+[hierarchical structures](https://github.com/moleculer-java/moleculer-spring-boot-demo/blob/master/src/main/resources/languages/messages.yml#L18)
+(such as the contents of drop-down lists).
+For the language dependent HTML conversion add the "$template" and "$location" values to the "meta" block of the returned `Tree` structure:
+
+```java{10,11}
+Action html = ctx -> {
+
+    // Create response JSON object
+    Tree rsp = new Tree();
+    // ... fill the "rsp" with data ...
+    
+    // The template is "/pages/index.html",
+    // and the language is Canadian French:
+    Tree meta = rsp.getMeta();
+    meta.put("$template", "pages/index");
+    meta.put("$locale",   "ca-fr");
+    return rsp;
+};
+```
+
+## WebSocket handling
+
+WebSocket is a HTTP-based protocol, providing realtime communication between the server and browser.
+The Moleculer API Gateway WebSocket implementation **works the same** on all J2EE servers (Servlet containers) and Netty (in "standalone" run mode).
+The WebSocket communication implemented by Moleculer is **not duplex**,
+it can only send a message from the server to the browser (or other WebSocket client API).
+Reverse (client-to-server) communication is possible **with REST** requests.
+Both ways of communication can pass through HTTP firewalls.
+
+You can send WebSocket messages from anywhere in the application using Moleculer events.
+It is mandatory to insert a "path" and a "data" block in the event.
+The "path" is the URL to which the WebSocket client is connected,
+and "data" is the data block sent to the client.
+The "data" block may contain any structure.
+For example, the following structure is sent to clients that are connected to the URL "http://host:port/ws/chat":
+
+```json{2}
+{
+    "path": "ws/chat",
+    "data": {
+        "type": "command1",
+        "sample": "foo"
+    }
+}
+```
+
+The above WebSocket message can be sent by broadcasting it as a "websocket.send" event:
+
+```java{4}
+Tree packet = new Tree();
+packet.put("path", "ws/chat");
+packet.putMap("data").put("type", "command").put("sample", "foo");
+broker.broadcast("websocket.send", packet);
+```
+
+The "websocket.send" event is monitored by the API Gateway and, when such an event occurs,
+it forwards its content to the appropriate WebSocket clients.
+In the case of a browser, the WebSocket client is
+[this JavaScript module](https://github.com/moleculer-java/moleculer-spring-boot-demo/blob/master/src/main/resources/www/js/websocket.js)
+.
+
+The HTML page must include the WebSocket API ("websocket.js")
+and the "app.js" application that processes incoming messages:
+
+```html
+<html>
+	<head>	
+		<script src="websocket.js"></script>
+		<script src="app.js"></script>
+	</head>
+	<body>
+		<div id="outDiv">WebSocket Sample</div>
+	</body>
+</html>
+```
+
+The structure of "app.js" that processes messages is similar to the following:
+
+```js{6,10}
+// Netty or J2EE WebSocket connection
+var ws;
+
+// Handle connect
+window.addEventListener("load", function(event) {
+	ws = MoleculerWebsocket("ws/chat", function(msg) {
+		
+		// Message received from server;
+		var data = JSON.parse(msg);
+		if (data.type === "command") {
+			var outDiv = document.getElementById("outDiv");
+            outDiv.innerHTML = data.sample;
+		}
+		
+	}, {
+				
+		// Set the WebSocket connection parameters
+		heartbeatInterval: 60 * 1000,
+		heartbeatTimeout:  10 * 1000,
+		debug: true
+		
+	});
+	ws.connect();
+});
+
+// Handle disconnect
+window.addEventListener("unload", function(event) {
+	if (ws) {
+		ws.disconnect();
+		ws = null;
+	}
+});
+```
+
+The first parameter of "MoleculerWebsocket" is the URL that WebSocket will connected to ("ws/chat").
+The use of the "type" parameter is optional,
+but can facilitate the processing of messages.
+For each type of data packet,
+we place different "type" parameter on the server side (eg. "command1", "command2", "command3").
+And in the browser, we can decide what to do by the value of the "type".
+
+The
+[HTTP Client API](http-client.html#receiving-websocket-messages)
+allows a Java Program to connect to the server via WebSocket.
+As with browser communication, this connection works over an HTTP firewall.
