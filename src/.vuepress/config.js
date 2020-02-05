@@ -43,15 +43,15 @@ module.exports = {
 		],
 		sidebar: [
 			{
-				title: 'Getting Started',
+				title: 'Getting started',
 				sidebarDepth: 2,
 				children: [
 					['introduction', 'Introduction'],
-					['concepts',     'Moleculer Concepts']
+					['concepts',     'Moleculer concepts']
 				]
 			},
 			{
-				title: 'Core',
+				title: 'Moleculer core features',
 				sidebarDepth: 2,
 				children: [
 					['broker',            'Service Broker'],
@@ -63,7 +63,8 @@ module.exports = {
 					['events',            'Events'],
 					['internal-services', 'Internal Services'],
 					['logging',           'Logging'],
-					['runner',            'Runner']
+					['runner',            'Runner'],
+					['tasks',             'Background processes']
 				]
 			},
 			{
@@ -72,18 +73,27 @@ module.exports = {
 				children: [
 					['transporters',    'Transporters'],
 					['serializers',     'Serializers'],
-					['balancing',       'Load Balancing'],
-					['fault-tolerance', 'Fault Tolerance']
+					['balancing',       'Load balancing'],
+					['fault-tolerance', 'Fault tolerance']
 				]
 			},
+			{
+				title: 'Performance tips',
+				sidebarDepth: 0,
+				children: [
+					['performance-serialization', 'Serialization and parsing'],
+					['performance-coding',        'Coding style'],
+					['performance-threads',       'Thread pools']
+				]
+			},			
 			{
 				title: 'Modules',
 				sidebarDepth: 2,
 				children: [				
 					['moleculer-web',  'Web API Gateway'],
 					['moleculer-repl', 'Moleculer REPL'],
-					['mongo-client',   'MongoDB Client'],
-					['http-client',    'HTTP Client'],
+					['mongo-client',   'MongoDB client'],
+					['http-client',    'HTTP client'],
 					['jmx-service',    'JMX Service'],
 				]
 			}

@@ -50,7 +50,7 @@ The Molecular core package can be downloaded from the central Maven repository.
 
 ```gradle
 dependencies {
-    compile group: 'com.github.berkesa', name: 'moleculer-java', version: '1.2.4'
+    implementation group: 'com.github.berkesa', name: 'moleculer-java', version: '1.2.4'
 }
 ```
 
@@ -79,7 +79,7 @@ public class Sample {
 ```
 
 To translate the example above,
-you also need the "[moleculer-web](moleculer-web.html)" package because of the Netty-based HTTP server.
+you also need the "[moleculer-web](moleculer-web.html#about-api-gateway)" package because of the Netty-based HTTP server.
 The complete dependency list is as follows:
 
 ```gradle

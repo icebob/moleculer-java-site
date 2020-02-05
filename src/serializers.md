@@ -46,7 +46,7 @@ The values of the "readers" and "writers" parameters are listed below:
 | "gson"    | [Google Gson](https://mvnrepository.com/artifact/com.google.code.gson/gson) |
 | "jackson" | [Jackson JSON](https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind) |
 | "jodd"    | [Jodd Json](https://mvnrepository.com/artifact/org.jodd/jodd-json) |
-| "johnzon" | [Apache Johnzon](https://mvnrepository.com/artifact/org.apache.johnzon/johnzon-normalMapper) |
+| "johnzon" | [Apache Johnzon](https://mvnrepository.com/artifact/org.apache.johnzon/johnzon-mapper) |
 | "jsonio"  | [JsonIO](https://mvnrepository.com/artifact/com.cedarsoftware/json-io) |
 | "nano"    | [NanoJson](https://mvnrepository.com/artifact/com.grack/nanojson) |
 | "simple"  | [JSON.simple](https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple) |

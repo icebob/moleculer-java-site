@@ -433,3 +433,5 @@ Action action = ctx -> {
     // ...
 };
 ```
+
+You can find more suggestions on the [performance tips](performance-coding.html) page.
