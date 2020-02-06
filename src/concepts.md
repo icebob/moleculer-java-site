@@ -1,25 +1,46 @@
-## Moleculer programming concepts
+## Asynchronous programming concepts
 
-Moleculer's central communication module is the `ServiceBroker`.
-The `ServiceBroker` supports the following communication patterns:
+There are basically two kinds of processing; synchronous and asynchronous.
+Synchronous processing blocks the current Thread until processing is complete.
+Asynchronous processing doesn't block the current Thread,
+instead of waiting, Thread will work on other tasks in the mean time.
+Asynchronous applications are more difficult to design,
+but they can handle thousands of parallel requests,
+while synchronous applications are limited by the maximum number of Threads that can be run.
+There are many different forms and implementations of asynchronous processing in Java, such as:
 
-- Publish / subscribe for broadcasting messages
-- Request-response messaging
+- [Quasar](https://github.com/puniverse/quasar): Quasar uses [Lightweight Threads](https://docs.paralleluniverse.co/quasar/) called "Fibers"
+- [Reactor](https://projectreactor.io/): Reactor uses [Reactive Streams](https://github.com/reactive-streams/reactive-streams-jvm)
+- [Vert.x](https://vertx.io/): The core Vert.x components use [Callbacks](https://en.wikipedia.org/wiki/Callback_(computer_programming))
+and there are modules for [RxJava](https://github.com/ReactiveX/RxJava) and Quasar
 
-`ServiceBroker` registers the `Services`,
-which are essentially clustered services (available over the network).
-Local or remote `Services` can be accessed in the same way.
-The `Services` send dynamically generated structured data to each other, mostly in JSON format.
-The resulting data is processed in a non-blocking, asynchronous manner.
+If we would like to briefly summarize the essence of "Moleculer for Java", we could describe this:
 
-## Universal data type for structures
+- [Moleculer](https://moleculer-java.github.io/moleculer-java/): Moleculer uses [Promises](https://berkesa.github.io/datatree-promise/)
+and manages sequential flow controls through "*then().then().then()*" chaining
+
+The Java-based Molecular logical architecture follows the logical structure of the Node.js-based implementation in detail.
+As a result, the Java implementation is more similar to an Node.js application
+in its internal architecture than the Java-based asynchronous frameworks above.
+Some useful things have been integrated from the Java World (such as J2EE and Spring Framework support),
+but most Java objects are copied from JavaScript objects (as much as possible due to differences between the two languages).
+Let's look at how the basic "system building blocks" match in Node.js and Java implementations:
+
+| JavaScript-based Moleculer | Java-based Moleculer |
+| -------------------------- | -------------------- |
+| General JavaScript Object  | `io.datatree.Tree` object |
+| ECMAScript 6 Promise       | `io.datatree.Promise` object that returns with a `Tree` object |
+| Actions and Events are functions | Actions and Events are Functional Interfaces |
+| Runs with the built-in HTTP Server of Node.js | Runs on top of the Netty Server or as a standard Servlet |
+| Actions can have JSON settings (visible from the Java side) | Actions can have Java Annotations (visible from the Node.js side) |
+
+## DataTree API for JavaScript Objects
 
 The `Services` send packets of structured hierarchical data to each other during communication.
-Data packets are mostly in JSON format, but other data interchange formats can be set.
-Because the `Services` can be locally or remotely hosted,
-services also send and receive JSON data during their internal communication.
-In the Node.js-based Moleculer implementation,
-JSON data corresponds to a JavaScript Object inside the `Services`.
+Because the `Services` can be remotely hosted,
+services send and receive JSON data during their communication.
+In the Node.js-based Moleculer implementation, the
+transferable data corresponds to JavaScript Objects.
 A JavaScript Object is a collection of named values, eg.:
 
 ```js
@@ -111,11 +132,18 @@ The `Tree` data type helps in accurate type conversion, even allowing you to spe
 // Input and output data are in "raw" JSON format
 Action action = ctx -> {
 
-    // Process input
+    // Process input:
+    // {
+    //     "key1": "abc",
+    //     "key2": 12345
+    // }
     String value1 = ctx.params.get("key1", "default");
     double value2 = ctx.params.get("key2", 0d);
 
-    // Generate output
+    // Generate output:
+    // {
+    //     "result": "ok"
+    // }
     Tree out = new Tree();
     out.put("result", "ok");
     return out;
@@ -155,8 +183,7 @@ The main difference between Promise-based operation of other systems and Molecul
 is that the Moleculer `Promise` object works with "raw" JSON objects.
 The value of a Moleculer `Promise`, which you get after the asynchronous processing,
 is always a `Tree` object.
-This `Tree` structure may come from other `Services` (including, for example, Node.js-based `Services`)
-or from asynchronous APIs.
+This `Tree` structure may come from other `Services` or from asynchronous APIs.
 
 ```java
 // Sequential "waterfall" processing of Promises
@@ -187,251 +214,3 @@ Action createNewUser = ctx -> {
     });
 }
 ```
-
-Several Moleculer Modules have been created that work with `Promise` objects
-(for example [MongoDB API for Moleculer](mongo-client.html#about-mongodb-client)
-or
-[HTTP Client for Moleculer](https://moleculer-java.github.io/moleculer-java-httpclient/)).
-The following chapters show how to process the responses of asynchronous non-Promise functions using `Promise` logic.
-
-### Converting callback to Promise
-
-Callback-based processing can be converted to Promise-based processing according to the following scheme.
-The structure of the `Callback` interface is as follows:
-
-```java
-public interface Callback {
-    public void onFinised(Object data);
-    public void onError(Throwable error);
-}
-```
-
-And the "callbackMethod" using the `Callback` interface is as follows:
-
-```java{3}
-public void callbackMethod(Object input, Callback callback) {
-    ForkJoinPool.commonPool().execute(() -> {
-        callback.onFinised("123"); // ...or it could be a "Tree" structure
-    });
-}
-```
-
-To convert it to Promise-based method,
-the call must be embedded in the constructor of `Promise`, as follows
-(this manner is similar to the ES6 `Promise` syntax):
-
-```java{3}
-public Promise promiseMethod(Object input) {
-    return new Promise(resolver -> {
-        callbackMethod(input, new Callback() {
-
-            public void onFinised(Object data) {
-                resolver.resolve(data);
-            }
-
-            public void onError(Throwable error) {
-                resolver.reject(error);
-            }
-        });
-    });
-}
-```
-
-Hereinafter we can use the "promiseMethod" in waterfall-like processing:
-
-```java{5}
-Action add = ctx -> {
-    String input = ctx.params.get("input", "default");
-
-    // Waterfall processing of asynchronous events
-    return promiseMethod(input).then(rsp -> {
-        // ...
-    }).catchError(err -> {
-        // ...
-    });
-};
-```
-
-### Converting CompletableFuture to Promise
-
-For a consistent programming style, you should also convert frequently used `CompletableFuture` objects to `Promise`.
-Example function that returns a `CompletableFuture` object:
-
-```java{4}
-public CompletableFuture<String> futureMethod(Object input) {
-    CompletableFuture<String> future = new CompletableFuture<String>();
-    ForkJoinPool.commonPool().execute(() -> {
-        future.complete("123"); // ...or it could be a "Tree" structure
-    });
-    return future;
-}
-```
-
-To convert it to `Promise`-based method,
-simply pass the `CompletableFuture` as a `Promise` constructor parameter:
-
-```java{2}
-public Promise promiseMethod(Object input) {
-    return new Promise(futureMethod(input));
-}
-```
-
-If the `CompletableFuture` returns with a POJO object, you should convert it to a `Tree` object.
-This way, both *remote and local calls* will return with the same `Tree` (~=JSON) object:
-
-```java{2}
-public Promise promiseMethod(Object input) {
-    return new Promise(futureMethod(input)).then(rsp -> {
-        User user = (User) rsp.asObject(); // Convert "User" object to Tree
-        Tree tree = new Tree();
-        tree.put("id", user.getID());
-        tree.put("name", user.getName());
-        return tree;        
-    };
-}
-```
-
-The Promise-based function can be published for other (eg. Node.js-based) `Services` via `Actions`,
-or converted directly into a REST service using the
-[@HttpAlias](moleculer-web.html#about-api-gateway) Annotation:
-
-```java{1}
-@HttpAlias(method = "POST", path = "api/action") 
-Action action = ctx -> {
-    return promiseMethod(ctx.params);
-};
-```
-
-## Visibility of variables
-
-The blocks of waterfall model are executed by separate `Threads`.
-The individual "then" blocks do not reach each other's variables.
-Therefore, sharing local variables between blocks would be problematic.
-Fortunately, the blocks reach request-level "global" variables of the `Action`.
-If any data in the blocks is needed later, it must be stored in this global containers.
-Since these variables must be "final", we cannot use "primitive" types (int, String, etc.), only containers (eg. `Tree`, `AtomicReference`, array, map).
-The following example uses a **single** `Tree` object to store the processing variables of the request:
-
-```java{5}
-Action action = ctx -> {
-
-    // --- GLOBAL VARIABLE CONTAINER OF THE REQUEST ---
-
-    final Tree global = new Tree();
-
-    // --- WATERFALL SEQUENCE ---
-
-    return Promise.resolve().then(rsp -> {
-
-        // Executed using Thread #1
-        global.put("key", 123);
-
-    }).then(rsp -> {
-
-        // Executed using Thread #2
-        int value = global.get("key", 0);
-
-        // Create aggregated response
-        Tree out = new Tree();
-        out.put("num", value * 2);
-        return out;
-    });
-};
-```
-
-There are other solutions besides using a single "global" `Tree` object.
-It might be a good idea to use single-length arrays or store operation variables in multiple Atomic containers:
-
-```java{5,10}
-Action action = ctx -> {
-
-    // --- GLOBAL VARIABLE CONTAINERS OF THE REQUEST ---
-
-    // Method #1: Variables in single-length arrays
-    final String[]  var1 = new String[1];        
-    final Tree[]    var2 = new Tree[1];
-    final boolean[] var3 = new boolean[1];
-
-    // Method #2: Variables in Atomic containers
-    final AtomicReference<Tree> var4 = new AtomicReference<>();
-    final AtomicLong            var5 = new AtomicLong();
-    final AtomicBoolean         var6 = new AtomicBoolean();
-
-    // --- WATERFALL SEQUENCE ---
-
-    return Promise.resolve().then(rsp -> {
-
-        // Executed using Thread #1
-        var1[0] = rsp.get("var1", "");
-        var2[0] = rsp.get("var2");
-        var4.set(rsp);
-        var5.set(rsp.get("var5", 0));
-        // ...
-
-    }).then(rsp -> {
-
-        // Executed using Thread #2
-        String val1 = var1[0];
-        Tree   val4 = var4.get();
-        long   val5 = var5.get();
-        // ...
-
-    });
-};
-```
-
-There is **no need to synchronize** global variables because the execution of "then" blocks is always sequential in the waterfall logic.
-
-## Use Tree objects instead of Maps
-
-JSON APIs dynamically select which Java object to map to a JSON field during deserialization.
-For example, smaller numbers arriving in JSON (eg. "1234") are usually converted to `Integer`.
-If the number contains a decimal point, it can be `Float`.
-If the number contains more digits, it will become `Double` or `Long`, depending on whether it contains a decimal point.
-Some JSON parsers can convert larger numbers to `BigInteger` or `BigDecimal`.
-The situation is similar with the JSON serializer for Date objects;
-one of the JSON APIs uses the ISO 8601 format or one of the Epoch Time formats to convert Date objects to JSON.
-These differences are automatically handled by the `Tree` API.
-In the example below, the function `params.get.("balance").asDouble()` returns a Double in every case,
-no matter what type the JSOS parser mapped to.
-Either the "date" can be in Epoch Time or ISO format, each type will be a `Date`.
-
-```java{3,4,9,10}
-Action action = ctx -> {
-
-    // Unsafe casting, preferably DO NOT use the solution below,
-    // this can cause ClassCastException error at runtime
-    Map<String, Object> map = (Map<String, Object>) ctx.params.asObject();
-    double balance = (Double) map.get("balance");
-    Date   date    = dateFormat.parse((String) map.get("date"));
-
-    // Safe casting with automatic type conversion,
-    // this is how you get the values from "params" structure
-    double balance = ctx.params.get("balance").asDouble();
-    Date   date    = ctx.params.get("date").asDate();
-};
-```
-
-## Use constants for field names 
-
-Use String constants to avoid misspelled variable names. 
-String constants can be placed in a separate `Interface` so that we can refer to them from multiple `Services`.
-The Code Completion feature of your IDE helps you complete these field names faster and more accurately.
-
-```java
-public static final String FIELD_NAME    = "name";
-public static final String FIELD_AGE     = "age";
-public static final String FIELD_BALANCE = "balance";
-public static final String FIELD_VIP     = "vip";
-// ...
-
-Action action = ctx -> {
-    String  name    = ctx.params.get(FIELD_NAME,    "");
-    int     age     = ctx.params.get(FIELD_AGE,     0);
-    double  balance = ctx.params.get(FIELD_BALANCE, 0d);
-    boolean isVip   = ctx.params.get(FIELD_VIP,     false);
-    // ...
-};
-```
-
-You can find more suggestions on the [performance tips](performance-coding.html) page.

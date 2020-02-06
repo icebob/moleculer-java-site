@@ -51,7 +51,7 @@ module.exports = {
 				]
 			},
 			{
-				title: 'Moleculer core features',
+				title: 'Moleculer core',
 				sidebarDepth: 2,
 				children: [
 					['broker',            'Service Broker'],
@@ -64,7 +64,8 @@ module.exports = {
 					['internal-services', 'Internal Services'],
 					['logging',           'Logging'],
 					['runner',            'Runner'],
-					['tasks',             'Background processes']
+					['tasks',             'Background processes'],
+					['performance-tips',  'Performance tips']
 				]
 			},
 			{
@@ -77,15 +78,6 @@ module.exports = {
 					['fault-tolerance', 'Fault tolerance']
 				]
 			},
-			{
-				title: 'Performance tips',
-				sidebarDepth: 0,
-				children: [
-					['performance-serialization', 'Serialization and parsing'],
-					['performance-coding',        'Coding style'],
-					['performance-threads',       'Thread pools']
-				]
-			},			
 			{
 				title: 'Modules',
 				sidebarDepth: 2,

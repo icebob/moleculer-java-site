@@ -157,7 +157,7 @@ to the calling `Service` when it has completed processing the request.
 The code is almost the same,
 the biggest difference being that the "enqueue" function returns an incompleted `Promise`.
 Then put this `Promise` - along with the request - in the queue.
-We created a `RequestResponse` class to store the two objects.
+We created a `RequestResponsePair` class to store the two objects.
 When the separate thread completes the task, it closes the `Promise` with the "complete" method:
 
 ```java{39-47,65}
@@ -166,7 +166,7 @@ public class TaskService extends Service {
 
     // --- QUEUE OF REQUESTS/RESPONSES ---
 
-    private BlockingQueue<RequestResponse> queue = new LinkedBlockingDeque<>();
+    private BlockingQueue<RequestResponsePair> queue = new LinkedBlockingDeque<>();
 
     // --- EXECUTOR OF QUEUE ---
 
@@ -204,7 +204,7 @@ public class TaskService extends Service {
 
         // Add request and response to the queue,
         // and complete the Promise later
-        queue.put(new RequestResponse(ctx.params, response));
+        queue.put(new RequestResponsePair(ctx.params, response));
 
         // Return the incompleted Promise
         return response;
@@ -219,7 +219,7 @@ public class TaskService extends Service {
             while (true) {
 
                 // Get request and response Promise
-                RequestResponse pair = queue.take();
+                RequestResponsePair pair = queue.take();
                 Tree request = pair.request;
                 Promise response = pair.response;                
 
@@ -235,12 +235,12 @@ public class TaskService extends Service {
 
     // --- REQUEST / RESPONSE CONTAINER ---
 
-    private static class RequestResponse {
+    private static class RequestResponsePair {
 
         private final Tree request;
         private final Promise response;
 
-        RequestResponse(Tree request, Promise response) {
+        RequestResponsePair(Tree request, Promise response) {
             this.request = request;
             this.response = response;
         }

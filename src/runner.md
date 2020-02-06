@@ -1,4 +1,4 @@
-## Moleculer Runner
+## Types of Moleculer Runners
 
 Moleculer Runner is a helper object that helps you start and stop Spring-based Moleculer applications.
 The Spring-based application can be a "classic" XML-based Spring application or an XML-less Spring Boot application.
@@ -7,9 +7,9 @@ There are two sub-types of Molecular Runner:
 - Standalone runtime, with Netty Server (it's the `services.moleculer.config.MoleculerRunner`)
 - Servlet-based J2EE runtime (implemented in `services.moleculer.web.servlet.MoleculerServlet`)
 
-### Standalone runtime
+## Standalone runtime
 
-XML-based Spring application example (startup):
+XML-based Spring application example (starter command / BAT file):
 
 ```{4}
 java.exe -classpath <all JARS>
@@ -20,7 +20,7 @@ java.exe -classpath <all JARS>
          secret123                                 // Stop password (optional)
 ```
 
-Spring Boot application example (startup):  
+Spring Boot application example (starter command / BAT file):  
 [Source of a complete BAT file to start service](https://github.com/moleculer-java/moleculer-spring-boot-demo/blob/master/installer/bin/development-start.bat)
 
 ```{5}
@@ -57,7 +57,7 @@ See the
 [previous section](logging.html#logging-in-standalone-runtime-mode)
 for more information about logger configuration in standalone mode.
 
-### Servlet-based runtime
+## Servlet-based runtime
 
 The Moleculer Servlet can also load an XML-based or Spring Boot-based application.
 It's built on the standard Servlet v3.1 API, but it also includes a fallback implementation for older servers.
