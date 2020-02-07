@@ -3,9 +3,9 @@
 `Middleware` functions are functions that have access to the request `Context` ("ctx"),
 the configuration of the `Action` ("config"),
 and the next `Action` (or `Middleware`) function in the application’s request-response cycle ("action"):
-The "config" contains all
-[Annotations](actions.html#converting-java-annotations-to-platform-independent-properties)
-of the `Action`, converted to a `Tree` (~= JSON) object.
+The "config" contains all annotations of the `Action`,
+[converted](actions.html#converting-java-annotations-to-platform-independent-properties)
+to a `Tree` (~= JSON) object.
 
 ```java
 public class MyMiddleware extends Middleware {
@@ -143,3 +143,10 @@ The actual implementation of the `Cacher` can be local or distributed.
 There is another kind of middleware in the Molecular Framework; the `HttpMiddleware`.
 An HTTP Middleware is similar to Middleware, but HTTP Middleware processes HTTP requests instead of internal `Action` calls.  
 [Read more about HTTP Middlewares](moleculer-web.html#http-middlewares)
+
+If you are interested in
+[compression](serializers.html#compressing-messages)
+or
+[encryption](serializers.html#message-level-encryption),
+you should not do it with Middleware, but with
+[Serializers](serializers.html#about-data-serialization).

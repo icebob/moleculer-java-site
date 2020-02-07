@@ -2,15 +2,15 @@
 
 The `Service` is a basic component in the Moleculer Ecosystem.
 `Services` may have `Actions` that other `Services` can invoke locally or over the network.
-`Services` can also define Event `Listeners` that can react to events created in the Moleculer Cluster.
+`Services` can also define event `Listeners` that can react to events created in the Moleculer Cluster.
 Using the Moleculer Framework, `Services` written in
 [different languages](https://github.com/moleculerjs/awesome-moleculer#polyglot-implementations)
 can work effectively with each other.
 
-Moleculer can be integrated with the Spring Framework.
+Moleculer can be integrated with the [Spring Framework](https://spring.io/).
 In the Spring Environment, Moleculer `Services` and `ServiceBroker` are Spring Beans.
 This will allow Moleculer `Services` to access the other Spring Components
-(eg. DAO classes for access the backend).
+(eg. [DAO](https://en.wikipedia.org/wiki/Data_access_object) classes for access the backend).
 
 The [WEB API Gateway](moleculer-web.html#about-api-gateway)
 module enables the Moleculer `Services` to function as REST/HTML services
@@ -20,7 +20,7 @@ In addition, they can receive / send large files or send WebSocket packets to br
 ## Actions
 
 The actions are the callable/public methods of a `Service`.
-They are callable with "broker.call" or "ctx.call" methods.
+They are callable with "broker.call()" or "ctx.call()" methods.
 
 **Example**
 
@@ -49,8 +49,9 @@ The algorithm used to create `Services` names is similar to when Spring register
 the first letter will be lowercase, the rest will not change
 (for example, `MathService` registers as "mathService").
 This rule also applies to `Action` names;
-you can specify the name with the "@Name" attribute;
+you can specify the name with the "@Name" annotation;
 if missing, the Java field name will be the action name (eg. "add" `Action` registers as "add").
+
 To register the `MathService` in a MessageBroker, use the "createService" method:
 
 ```java{2}
@@ -102,9 +103,9 @@ Via [WEB API Gateway](moleculer-web.html#about-api-gateway), make a request to G
 
 ## Events
 
-`Services` can monitor Events.
+`Services` can monitor events.
 Events can come from local but also from remote nodes.
-The content of the Event is a "JSON structure" (ctx.params) inside a `Context` object.
+The content of the event is a "JSON structure" (ctx.params) inside a `Context` object.
 
 **Example**
 
@@ -143,7 +144,7 @@ public class TestService extends Service {
 These are called when `ServiceBroker` starts or stops the `Services`.  
 [Read more about lifecycle of Services.](lifecycle.html)
 
-Other system-level events can be handled by Event `Listeners`
+Other system-level events can be handled by event `Listeners`
 (eg. another Node joining the cluster or a change in the `Service` list).  
 [Read more about internal events.](events.html)
 
@@ -186,3 +187,8 @@ broker.waitForServices(10 * 1000, "accounts").then(rsp -> {
     // Called if the wait time is more than 10 seconds
 });
 ```
+
+::: warning
+Do not use the "waitForServices" method to block the Spring initialization process (for example, while creating Beans).
+`ServiceBroker` starts completely after Spring initialization is complete.
+:::

@@ -1,10 +1,10 @@
 ## About Actions
 
-`Actions` are the callable/public methods of the `Services`.
-The action calling represents a remote-procedure-call (RPC).
-It has request parameters and returns a response like an HTTP service.
+`Actions` are the published and callable methods of the `Services`.
+The action calling represents a Remote Procedure Call.
+It has request parameters and always returns a response.
 If there are multiple instances of `Services`, the `ServiceBroker`
-invokes instances according to the specified call strategy.
+invokes instances according to the specified call strategy.  
 [Read more about balancing](balancing.html).
 
 <div align="center">
@@ -13,9 +13,10 @@ invokes instances according to the specified call strategy.
 
 ## Calling Actions
 
-To call an `Action`, use the broker.call method.
+To call an `Action`, use the "broker.call()" method.
 The broker looks for the `Service` (and the node) that has the `Action` and calls it.
-The `Action` returns a [Promise](https://berkesa.github.io/datatree-promise/).
+The `Action` call returns with a [Promise](https://berkesa.github.io/datatree-promise/).
+`Promise` content will either be a `Tree` or a `Throwable`.
 
 ```java
 Promise res = broker.call(actionName, params, opts);
@@ -44,12 +45,12 @@ Promise promise = broker.call("service.action", params, opts);
 
 promise.then(rsp -> {
 
-    // The response is also a Tree Object
+    // The "rsp" response is always a Tree object
     logger.info("Response: " + rsp);
     
 }).catchError(err -> {
 
-    // The 'err' is a 'Throwable'
+    // The "err" is a Throwable
     logger.error("Error!", err);
     
 });
@@ -68,7 +69,10 @@ broker.call("service.action",
             ).then(rsp -> {
                 logger.info("Response: " + rsp);
             }).catchError(err -> {
-                logger.error("Error!", err);            
+                logger.error("Error!", err);
+                return 123; // Handle error
+            ).then(rsp -> {
+                // Continue waterfall sequence...
             });
 ```
 
@@ -101,7 +105,8 @@ broker.call("user.get", "id", 3).then(rsp -> {
 **Blocking style calling**
 
 ```java
-Tree rsp = broker.call("user.get", "id", 3).waitFor();
+Tree rsp = broker.call("user.get", "id", 3)
+                 .waitFor(10, TimeUnit.SECONDS);
 logger.info("User: ", rsp);
 ```
 
@@ -110,7 +115,7 @@ The "waitFor" is a blocking operation (temporarily pauses the running `Thread`),
 do not use this method unless it is absolutely necessary for something
 (eg. for testing or using Thread-bound API, like Hibernate or Spring Transactions).
 Preferably "then()" and "catchError()" non-blocking methods should be used.
-Asynchronous operations can be organized into a Waterfall Sequence using these methods.
+Asynchronous operations can be organized into a "waterfall sequence" using these methods.
 :::
 
 **Call with options**
@@ -123,7 +128,7 @@ broker.call("user.recommendation",
                logger.info("User: ", rsp));
             });
 
-// Invocation in a Waterfall Sequence
+// Execution in a waterfall sequence
 return Promise.resolve().then(rsp -> {
     Options opts = CallOptions.retryCount(3);
     return broker.call("user.recommendation", "limit", 5, opts);
@@ -279,7 +284,7 @@ stream.transferFrom(new File("avatar-123.jpg")).then(rsp -> {
 public class StorageService extends Service {
     public Action save = ctx -> {
 
-        // Waterfall Sequence
+        // Waterfall sequence
         Promise.resolve().then(rsp -> {
             String filename = ctx.params.getMeta().get("filename", "");
             return ctx.stream.transferTo(new File(filename));
@@ -322,7 +327,7 @@ broker.call("storage.get", "filename", filename).then(rsp -> {
 
 }).catchError(err -> {
 
-    // Downloading failed
+    // Download failed
     logger.error("Failed!", err);
 
 });
@@ -432,19 +437,21 @@ public class DeprecationChecker extends Middleware {
 
     public Action install(Action action, Tree config) {
 
-        // Get value of the property (false = default value)
+        // Get value of the property (default value is "false")
         boolean deprecated = config.get("deprecated", false);
 
         // Print warning if the Action is deprecated 
         if (deprecated) {
             logger.warn(config.get("name", "") + " action is deprecated!");
         }
+
+        // We just checked the annotations, we didn't install anything
         return null;
     }
 }
 ```
 
-To install the above [Middleware](middlewares.html), call the `ServiceBroker` "use" function:
+To invoke the "install" method of the above [Middleware](middlewares.html), call the `ServiceBroker` "use" function:
 
 ```java
 broker.use(new DeprecationChecker());

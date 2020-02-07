@@ -29,38 +29,15 @@ common platform for modules written in different languages.
 
 Moleculer Java requires Java 8.
 
-## Download
+## REST service example
 
-The Molecular core package can be downloaded from the central Maven repository.
-
-**Maven**
-
-```xml
-<dependencies>
-    <dependency>
-        <groupId>com.github.berkesa</groupId>
-        <artifactId>moleculer-java</artifactId>
-        <version>1.2.4</version>
-        <scope>runtime</scope>
-    </dependency>
-</dependencies>
-```
-
-**Gradle**
-
-```gradle
-dependencies {
-    implementation group: 'com.github.berkesa', name: 'moleculer-java', version: '1.2.4'
-}
-```
-
-## Short Example
-
-The simplest way to create a REST service using Moleculer is the following:
+Here's how to create a REST service using Moleculer:
 
 ```java
-import services.moleculer.*;
-import services.moleculer.service.*;
+import services.moleculer.ServiceBroker;
+import services.moleculer.service.Action;
+import services.moleculer.service.Service;
+import services.moleculer.web.ApiGateway;
 import services.moleculer.web.netty.NettyServer;
 
 public class Sample {
@@ -78,17 +55,6 @@ public class Sample {
 }
 ```
 
-To translate the example above,
-you also need the "[moleculer-web](moleculer-web.html#about-api-gateway)" package because of the Netty-based HTTP server.
-The complete dependency list is as follows:
-
-```gradle
-dependencies {
-    implementation group: 'com.github.berkesa', name: 'moleculer-java',     version: '1.2.4'
-    implementation group: 'com.github.berkesa', name: 'moleculer-java-web', version: '1.2.6' 
-}
-```
-
 After starting the program, enter the following URL into your browser:  
 `http://localhost:8080/math/add?a=3&b=6`
 
@@ -96,6 +62,43 @@ The response will be "9" (because 3 and 6 are the values of the "a" and "b" para
 The above service can also be invoked using a POST method.
 To do this, submit the {"a":3,"b":5} JSON (as POST body) to this URL:  
 `http://localhost:8080/math/add`
+
+## Dependencies of the example
+
+The Molecular packages can be downloaded from the central
+[Maven repository](https://mvnrepository.com/artifact/com.github.berkesa/moleculer-java).
+
+**Gradle**
+
+```gradle
+dependencies {
+    implementation group: 'org.slf4j',          name: 'slf4j-jdk14',        version: '1.7.30'
+    implementation group: 'com.github.berkesa', name: 'moleculer-java',     version: '1.2.6'
+    implementation group: 'com.github.berkesa', name: 'moleculer-java-web', version: '1.2.7' 
+}
+```
+
+**Maven**
+
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-jdk14</artifactId>
+        <version>1.7.30</version>
+    </dependency>
+    <dependency>
+        <groupId>com.github.berkesa</groupId>
+        <artifactId>moleculer-java</artifactId>
+        <version>1.2.6</version>
+    </dependency>
+    <dependency>
+        <groupId>com.github.berkesa</groupId>
+        <artifactId>moleculer-java-web</artifactId>
+        <version>1.2.7</version>
+    </dependency>
+</dependencies>
+```
 
 ## Detailed Example
 

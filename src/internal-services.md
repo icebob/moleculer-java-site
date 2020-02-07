@@ -2,7 +2,13 @@
 
 The `ServiceBroker` contains some internal `Services` to check the node health or get some registry information.
 These services can be disabled by setting "internalServices" parameter to "false" in
-[ServiceBrokerConfig](broker.html#create-a-service-broker).
+[ServiceBrokerConfig](broker.html#create-a-service-broker):
+
+```java{2}
+ServiceBrokerConfig cfg = new ServiceBrokerConfig();
+cfg.setInternalServices(false); // Disable Internal Services
+ServiceBroker broker = new ServiceBroker(cfg);
+```
 
 ## List of nodes
 

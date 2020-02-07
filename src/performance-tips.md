@@ -12,9 +12,9 @@ There is quite a difference in speed between the various JSON and binary APIs.
 
 The graph below shows the speed of the various JSON parsers.
 The vertical axis is the parsed/deserialized JSON packets per second per CPU core.
-The highest value is better.
-There is more than a 10-fold difference between the slowest and fastest APIs.
-The three fastest APIs are "**Boon**", "**Jodd**" and "**Jackson**" parsers:
+A higher value means a faster parser.
+There is more than a 10-fold difference between the slowest and the fastest APIs.
+The fastest three APIs are "**Boon**", "**Jodd**" and "**Jackson**":
 
 <div align="center">
     <img src="perf/json-readers.png" alt="JSON Parsers / Deserializers" />
@@ -24,9 +24,9 @@ The three fastest APIs are "**Boon**", "**Jodd**" and "**Jackson**" parsers:
 
 The graph below shows the speed of the various JSON writers.
 The vertical axis is the generated/serialized JSON packets per second per CPU core.
-The highest value is better.
-There is more than a 6x difference between the slowest and fastest APIs.
-The two fastest APIs are "**Jackson**" and "**FastJson**" serializators:
+A higher value means a faster generator.
+There is more than a 6x difference between the slowest and the fastest APIs.
+The fastest two APIs are "**Jackson**" and "**FastJson**":
 
 <div align="center">
     <img src="perf/json-writers.png" alt="JSON Generators / Serializers" />
@@ -100,6 +100,8 @@ cfg.setTransporter(...);
 ServiceBroker broker = new ServiceBroker(cfg);
 ```
 
+One [NioEventLoopGroup](https://netty.io/4.0/api/io/netty/channel/nio/NioEventLoopGroup.html)
+can be specified for both executors (same for "Executor" and "Scheduler").
 Experience has shown that an **outsized pool is slower** than a pool that is exactly the size of the load.
 There are several graphical utilities to match the pool type and size.
 One of these is
@@ -244,7 +246,7 @@ Action action = ctx -> {
 };
 ```
 
-### Don't repeat
+### Don't repeat queries
 
 If you need to get the same field **more than once** from a `Tree` structure,
 you should rather assign it to a local variable.

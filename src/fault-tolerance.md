@@ -2,7 +2,8 @@
 
 `ServiceBroker` protects against circular function calls.
 It also manages call-level timeout and has a retry logic handler.
-In addition, there is a built-in Circuit Breaker solution in Moleculer.
+In addition, Moleculer has a built-in
+[Circuit Breaker](https://en.wikipedia.org/wiki/Circuit_breaker_design_pattern) feature.
 A Circuit Breaker does the `Action` calls and it monitors the service health. Once it gets some issue,
 it trips and all further calls goto another node and finally restores automatically once the `Service` came back.
 

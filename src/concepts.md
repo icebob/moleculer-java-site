@@ -214,3 +214,5 @@ Action createNewUser = ctx -> {
     });
 }
 ```
+
+[More coding suggestions can be found here.](performance-tips.html#coding-style)

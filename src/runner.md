@@ -1,10 +1,14 @@
 ## Types of Moleculer Runners
 
-Moleculer Runner is a helper object that helps you start and stop Spring-based Moleculer applications.
-The Spring-based application can be a "classic" XML-based Spring application or an XML-less Spring Boot application.
+Moleculer Runner is a helper object that helps you start and stop
+[Spring-based](https://spring.io/) Moleculer applications.
+The Spring-based application can be a "classic"
+[XML-based](https://docs.spring.io/spring/docs/4.2.x/spring-framework-reference/html/xsd-configuration.html)
+Spring application or an XML-less
+[Spring Boot](https://spring.io/projects/spring-boot) application.
 There are two sub-types of Molecular Runner:
 
-- Standalone runtime, with Netty Server (it's the `services.moleculer.config.MoleculerRunner`)
+- Standalone runtime, with (optional) Netty Server (it's the `services.moleculer.config.MoleculerRunner`)
 - Servlet-based J2EE runtime (implemented in `services.moleculer.web.servlet.MoleculerServlet`)
 
 ## Standalone runtime

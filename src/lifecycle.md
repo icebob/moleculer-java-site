@@ -12,12 +12,11 @@ It starts all the `Services` first (calls the "started" handler)
 and then publishes the service list to the other nodes.
 Hence remote nodes send requests only after all local service are started properly.
 
-::: warning Avoid deadlocks
+::: warning Circular references
 Dead-locks can be made when two services wait for each other.
-For example "users" service has `@Dependencies({"posts"})` and "posts" service has `@Dependencies({"users"})`.
-To avoid it, remove the concerned service from "@Dependencies" and use
-[waitForServices](services.html#wait-for-services-via-servicebroker)
-method in "started" handler.
+For example "users" service has a dependency to "posts" service and "posts" has a dependency to "users".
+Three or more services can cause deadlock at startup when referenced to each other circularly.
+Circular references cannot be automatically blocked by `ServiceBroker`, so the startup sequence must be well planned.
 :::
 
 ### Stopping logic
@@ -115,25 +114,26 @@ public class TestService extends Service {
         // 1.) The constructor is called first
     }
 
-    @PostConstruct
-    public void init() throws Exception {
-
-        // 2.) This invoked before the "started" method
-    }
-
     @Override
     public void started(ServiceBroker broker) throws Exception {
         super.started(broker);
 
-        // 3.) Initialize service...
+        // 2.) Initialize service - all local Services are
+        // registered but only some of them have been started
+
+        // Registered Services are accessible as follows:
+        // xyzService = (XyzService) broker.getLocalService("xyz");
     }
 
     // --- RUNNING SERVICE ---
     
     public Action action = ctx -> {
 
-        // 4.) This Action is called by other Actions
+        // 3.) This Action is called by other Actions
+        // Request: { "foo": 5 }
         int foo = ctx.params.get("foo", 0)
+
+        // Response: { "result": 8 }
         return new Tree().put("result", foo + 3);
     };
 
@@ -142,19 +142,13 @@ public class TestService extends Service {
     @Override
     public void stopped() {
 
-        // 5.) Invoked by the Service Broker
-    }
-
-    @PreDestroy
-    public void destroy() throws Exception {
-
-        // 6.) Invoked by Spring after the "stopped" method
+        // 4.) Invoked by the Service Broker before the shutdown
     }
 
     @Override
     protected void finalize() throws Throwable {
 
-        // 7.) This called last by the Garbage Collector
+        // 5.) This called last by the Garbage Collector
     }
 }
 ```

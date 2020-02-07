@@ -1,9 +1,9 @@
 ## About load balancing
 
-Moleculer has several built-in load balancing `Strategies`.
+Moleculer has several built-in load balancing strategies.
 If a `Service` has **multiple running instances**,
-`ServiceRegistry` uses these `Strategies` to select a node from all available nodes.
-The default (pre-set) invocation mode is the Round-Robin `Strategy`.
+`ServiceRegistry` uses these strategies to select a node from all available nodes.
+The default (pre-set) invocation mode is the `RoundRobinStrategy`.
 
 <div align="center">
     <img src="action-balancing.gif" alt="Action balancing diagram" />

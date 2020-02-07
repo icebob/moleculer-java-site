@@ -9,7 +9,8 @@ There are two types of `Transporter`:
 
 `Transporter` communicates with other nodes, transfers events, calls requests and processes responses.
 If a `Service` runs on multiple instances on different nodes, the requests will be load-balanced among live nodes.
-Each `Transporter` can be assigned a `Serializer`. `Serializers` convert messages into bytes and vice versa.
+Each `Transporter` can be assigned a [Serializer](serializers.html#about-data-serialization).
+`Serializers` convert messages into bytes and vice versa.
 There are several built-in `Transporters` in Moleculer Framework.
 
 ## Centralized `Transporters`
@@ -389,7 +390,7 @@ So all nodes must know only the gossiper node address to be able to communicate 
 ### Internal Transporter
 
 Internal `Transporter` is a built-in message bus that can connect multiple `ServiceBrokers` running in the same JVM.
-This `Transporter` is primarily used for testing purposes (eg. for testing `Serializers`, `Listeners` or `Actions`).
+This `Transporter` is primarily used for **testing purposes** (eg. for testing `Serializers`, `Listeners` or `Actions`).
 The calls are made in separate `Threads`, so call timeouts can be used.
 
 Using the shared (static) communication group:

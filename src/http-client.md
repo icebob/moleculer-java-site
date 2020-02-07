@@ -2,9 +2,11 @@
 
 The "moleculer-java-httpclient" is an asynchronous HTTP client API,
 specially designed for Java-based Moleculer Ecosystem.
-The client can receive WebSocket messages from the server.
+The client is suitable for handling large numbers of REST requests,
+and it can receive WebSocket messages from a Netty/J2EE-based Moleculer application.
 The built-in Heartbeat function automatically checks if a connection has been lost.
 If a connection is lost, the client automatically rebuilds the connection.
+
 
 ## Download
 
