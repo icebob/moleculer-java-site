@@ -379,13 +379,9 @@ TcpTransporter transporter = new TcpTransporter(new URL("file:///nodes.json"));
 ]
 ```
 
-::: tip Serviceless node
-Please note, you don't need to list all remote nodes.
-It's enough at least one online node.
-For example, create a "serviceless" gossiper node, which does nothing,
-just shares other remote nodes addresses by gossip messages.
-So all nodes must know only the gossiper node address to be able to communicate with all other nodes.
-:::
+<div align="center">
+    <img src="cluster/cluster-1581160126449.gif" alt="Visualistation of Moleculer's Gossip Protocol" class="zoom" />
+</div>
 
 ### Internal Transporter
 
