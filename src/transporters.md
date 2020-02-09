@@ -264,15 +264,19 @@ participating in a Moleculer Cluster. In Moleculer's P2P architecture all
 nodes are equal, there is no "leader" or "controller" node, so the cluster is
 truly horizontally scalable. This `Transporter` aims to run on top of an
 infrastructure of hundreds of nodes.
- 
-It contains an integrated UDP discovery feature to detect new and disconnected nodes on the network.
-If the UDP is prohibited on your network, use "urls" option.
-It is a list of remote endpoints (host/ip, port, nodeID).
-It can be a static list in your configuration or a file path which contains the list.
 TCP `Transporter` provides the highest speed data transfer between Moleculer
 Nodes - hundred thousand packets per second can be transmitted from one node to another over a high-speed LAN.
+There are two ways for TCP `Transporter` to find other nodes on the network:
+
+- UDP multicast / broadcast discovery
+- Based on a preset host list
+
+It contains an integrated UDP discovery feature to detect new and disconnected nodes on the network.
+If the UDP is prohibited on your network, use "urls" option to list the hosts.
+The list contains remote endpoints; host/ip, port and nodeID.
+The list can be static or a file path/URL which contains the list.
  
-Use TCP `Transporter` with default options:
+Example of using TCP `Transporter` with default settings with UDP discovery:
 
 ```java
 // Create Transporter
@@ -298,58 +302,6 @@ broker.createService(new Service("testService") {
 broker.start();
 ```
 
-Detailed example:
-
-```java
-TcpTransporter transporter = new TcpTransporter();
-
-// TCP port (used by the Transporter and Gossiper services).
-// A port number of zero will let the system pick up an ephemeral port in a bind operation.
-transporter.setPort(0);
-
-// Gossiping period time, in SECONDS.
-transporter.setGossipPeriod(2);
-
-// Max number of keep-alive connections (-1 = unlimited, 0 = disable keep-alive connections).
-transporter.setMaxConnections(32);
-
-// Max enable packet size (BYTES).
-transporter.setMaxPacketSize(1024 * 1024);
-
-// List of URLs ("tcp://host:port/nodeID" or "host:port/nodeID"
-// or "host/nodeID"), when UDP discovery is disabled.
-transporter.setUrls(null);
-
-// Use hostnames instead of IP addresses As the DHCP environment is dynamic,
-// any later attempt to use IPs instead hostnames would most likely yield
-// false results. Therefore, use hostnames if you are using DHCP.
-transporter.setUseHostname(true);
-
-// UDP broadcast/multicast port
-transporter.setUdpPort(4445);
-
-// UDP bind address (null = autodetect)
-transporter.setUdpBindAddress(null);
-
-// UDP broadcast/multicast period in SECONDS
-transporter.setUdpPeriod(30);
-
-// Resuse addresses
-transporter.setUdpReuseAddr(true);
-
-// Maximum number of outgoing multicast packets (0 = runs forever)
-transporter.setUdpMaxDiscovery(0);
-
-// UDP multicast address of automatic discovery service.
-transporter.setUdpMulticast("239.0.0.0");
-
-// TTL of UDP multicast packets
-transporter.setUdpMulticastTTL(1);
-
-// Use UDP broadcast WITH UDP multicast (false = use UDP multicast only)
-transporter.setUdpBroadcast(false);
-```
-
 TCP `Transporter` with static endpoint list:
 
 ```java
@@ -362,7 +314,7 @@ ServiceBroker broker = ServiceBroker.builder()
                                     .build();
 ```
 
-_You don't need to set "port" because it find & parse the self TCP port from URL list._
+> You don't need to set "port" because it find & parse the self TCP port from URL list.
 
 TCP `Transporter` with static endpoint list file:
 
@@ -379,9 +331,49 @@ TcpTransporter transporter = new TcpTransporter(new URL("file:///nodes.json"));
 ]
 ```
 
+Network traffic is approximately constant when using TCP Transporter.
+During operation, each node talks to another random node from time to time.
+They communicate statements about what they know about other nodes of the cluster.
+If they have conflicting information about another node, they decide which statement is true based on the "sequence number" in the information.
+This "sequence number" continues to increase by one as the information changes.
+New information is spreading at an increasing rate within the cluster;
+the number of nodes that have new information may double every period.
+(1, then 2, then 4, 8, 16, 32, etc.).
+Thus, the spread of information is **not immediate**, but fast enough.
+
 <div align="center">
     <img src="cluster/cluster-1581160126449.gif" alt="Visualistation of Moleculer's Gossip Protocol" class="zoom" />
 </div>
+
+The above visualization shows the communication of 50 nodes. Speed is five times the real speed.
+During the simulation, nodes are randomly turned on and off.
+The red squares indicate that one node knows that another node is off.
+Green squares mean that one node knows that another node is on.
+Dark-green means new information, light-green means older information
+("old" information will be "new" when the node get information about another node).
+The numbers represent the sequence number.
+Not only the on / off status is distributed over the network in this way,
+but also the list of `Services` and their properties.
+
+**Options of TCP Transporter**
+
+| Name | Type | Default | Description |
+| ---- | ---- | --------| ----------- |
+| port | int | 0 | TCP port (used by the Transporter and Gossiper services). A port number of zero will let the system pick up an ephemeral port in a bind operation. |
+| gossipPeriod | int | 3| Gossiping period time, in SECONDS. |
+| maxConnections | int | 32 | Max number of keep-alive connections (-1 = unlimited, 0 = disable keep-alive connections). |
+| maxPacketSize | int | 1MB | Max enable packet size (BYTES). |
+| urls | String[] | null | List of URLs ("tcp://host:port/nodeID" or "host:port/nodeID" or "host/nodeID"), when UDP discovery is disabled. |
+| useHostName | boolean | true | Use hostnames instead of IP addresses As the DHCP environment is dynamic, any later attempt to use IPs instead hostnames would most likely yield false results. Therefore, use hostnames if you are using DHCP. |
+| udpPort | int | 4445 | UDP broadcast/multicast port. |
+| udpBindAddress | int | null | UDP bind address (null = autodetect) |
+| udpPeriod | int | 30 | UDP broadcast/multicast period in SECONDS. |
+| udpReuseAddr | boolean | true | Resuse addresses (UDP). |
+| udpMaxDiscovery | int | 0 | Maximum number of outgoing multicast packets (0 = runs forever). |
+| udpMulticast | String | "239.0.0.0" | UDP multicast address of automatic discovery service. |
+| udpMulticastTTL | int | 1 | TTL of UDP multicast packets. |
+| udpBroadcast | boolean | false | Use UDP broadcast WITH UDP multicast (false = use UDP multicast only). |
+| udpMaxDiscovery | int | 0 | Maximum number of outgoing multicast packets (0 = runs forever). |
 
 ### Internal Transporter
 

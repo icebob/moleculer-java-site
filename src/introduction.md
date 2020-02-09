@@ -130,10 +130,11 @@ The brief examples illustrate the following:
 
 **Node.js**
 
-Node.js-based Moleculer `Services` can be used in Java-based applications as well as local `Services`.
-This requires a
+Node.js-based Moleculer `Services` can be used in Java-based applications as well as local `Services`
+(in order for Node.js and Java Moleculer applications to communicate with each other,
+they must both configure a
 [Transporter](transporters.html#types-of-transporters)
-for both implementations.
+of the same type).
 
 - [List of Node.js-based Moleculer Modules](https://moleculer.services/modules.html)
 
