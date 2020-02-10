@@ -9,32 +9,34 @@ but they can handle thousands of parallel requests,
 while synchronous applications are limited by the maximum number of Threads that can be run.
 There are many different forms and implementations of asynchronous processing in Java, such as:
 
-- [Quasar](https://github.com/puniverse/quasar): Quasar uses [Lightweight Threads](https://docs.paralleluniverse.co/quasar/) called "Fibers"
-- [Reactor](https://projectreactor.io/): Reactor uses [Reactive Streams](https://github.com/reactive-streams/reactive-streams-jvm)
+- [Quasar](https://github.com/puniverse/quasar): Quasar uses non-blocking [Lightweight Threads](https://docs.paralleluniverse.co/quasar/) called "Fibers"
+- [Reactor](https://projectreactor.io/): Reactor uses [Reactive Streams](https://github.com/reactive-streams/reactive-streams-jvm) for building reactive applications
 - [Vert.x](https://vertx.io/): The core Vert.x components use [Callbacks](https://en.wikipedia.org/wiki/Callback_(computer_programming))
 and there are modules for [RxJava](https://github.com/ReactiveX/RxJava) and Quasar
 
-If we would like to briefly summarize the essence of "Moleculer for Java", we could describe this:
+To summarize the essence of "Molecular for Java" in a similar way, we could describe this:
 
 - [Moleculer](https://moleculer-java.github.io/moleculer-java/): Moleculer uses [Promises](https://berkesa.github.io/datatree-promise/)
-and manages sequential flow controls through "*then().then().then()*" chaining
+and manages sequential flow controls through "*then().then().then()*"
+[chaining](concepts.html#non-blocking-json-processing) of Promises
 
-The Java-based Molecular logical architecture follows the logical structure of the Node.js-based implementation in detail.
-As a result, the Java implementation is more similar to an Node.js application
-in its internal architecture than the Java-based asynchronous frameworks above.
-Some useful things have been integrated from the Java World (such as J2EE and Spring Framework support),
-but most Java objects are copied from JavaScript objects (as much as possible due to differences between the two languages).
-Let's look at how the basic "system building blocks" match in Node.js and Java implementations:
+## JavaScript and Java parallels
+
+Java and Node.js-based Moleculer have the **same internal architecture** as possible for these two languages.
+Most internal objects and properties have the same names in both implementations.
+This allows Moleculer basics to be learned once by a programmer who knows at least one of the two languages.
+After a relatively short period of time, Java programmers understand the codes of Node.js-based Moleculer `Services` and vice versa.
+The similarities between the two implementations help
+to increase the skills of the programmers and make their collaboration more efficient.
+
+The following table shows which Java objects correspond to objects in the Node.js environment:
 
 | JavaScript-based Moleculer | Java-based Moleculer |
 | -------------------------- | -------------------- |
 | General JavaScript Object  | `io.datatree.Tree` object |
 | ECMAScript 6 Promise       | `io.datatree.Promise` object that returns with a `Tree` object |
-| Actions and Events are functions | Actions and Events are Functional Interfaces |
-| Runs with the built-in HTTP Server of Node.js | Runs on top of the Netty Server or as a standard Servlet |
-| Actions can have JSON settings (visible from the Java side) | Actions can have Java Annotations (visible from the Node.js side) |
 
-## DataTree API for JavaScript Objects
+## DataTree API for JavaScript objects
 
 The `Services` send packets of structured hierarchical data to each other during communication.
 Because the `Services` can be remotely hosted,
