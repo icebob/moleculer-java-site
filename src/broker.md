@@ -180,7 +180,7 @@ This
 [demo project](https://moleculer-java.github.io/moleculer-spring-boot-demo/)
 uses Moleculer runner to run the application
 (in standalone mode or integrated into a J2EE server).
-[Read more about Moleculer Runner.](runner.html#moleculer-runner)  
+[Read more about Moleculer Runner.](runner.html#types-of-moleculer-runners)  
 :::
 
 ## Configuration options

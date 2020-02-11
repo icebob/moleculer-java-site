@@ -14,7 +14,7 @@ There are many different forms and implementations of asynchronous processing in
 - [Vert.x](https://vertx.io/): The core Vert.x components use [Callbacks](https://en.wikipedia.org/wiki/Callback_(computer_programming))
 and there are modules for [RxJava](https://github.com/ReactiveX/RxJava) and Quasar
 
-To summarize the essence of "Molecular for Java" in a similar way, we could describe this:
+To summarize the essence of "Moleculer for Java" in a similar way, we could describe this:
 
 - [Moleculer](https://moleculer-java.github.io/moleculer-java/): Moleculer uses [Promises](https://berkesa.github.io/datatree-promise/)
 and manages sequential flow controls through "*then().then().then()*"
@@ -24,17 +24,19 @@ and manages sequential flow controls through "*then().then().then()*"
 
 Java and Node.js-based Moleculer have the **same internal architecture** as possible for these two languages.
 Most internal objects and properties have the same names in both implementations.
-This allows Moleculer basics to be learned once by a programmer who knows at least one of the two languages.
-After a relatively short period of time, Java programmers understand the codes of Node.js-based Moleculer `Services` and vice versa.
-The similarities between the two implementations help
-to increase the skills of the programmers and make their collaboration more efficient.
+After a relatively short period of time, Java programmers understand the code of a Node.js-based Moleculer service and vice versa.
+This help to increase the skills of the programmers and make their collaboration more efficient.
 
-The following table shows which Java objects correspond to objects in the Node.js environment:
-
-| JavaScript-based Moleculer | Java-based Moleculer |
-| -------------------------- | -------------------- |
-| General JavaScript Object  | `io.datatree.Tree` object |
-| ECMAScript 6 Promise       | `io.datatree.Promise` object that returns with a `Tree` object |
+Most Moleculer modules do not require any specific explanation, they are quite similar in use in the two programming languages
+(such modules include
+[Cachers](caching.html#caching-action-calls),
+[Transporters](transporters.html#types-of-transporters),
+[Serializers](serializers.html#about-data-serialization)
+and other high-level "building blocks").
+However, a low-level "building block", the dynamic *JavaScript object*,
+cannot be easily implemented in a statically-typed language.
+The next chapter is about how to effectively handle the JavaScript/JSON data structures in Moleculer Java,
+and how to organize asynchronous "JSON functions" into a workflow.
 
 ## DataTree API for JavaScript objects
 
@@ -42,8 +44,8 @@ The `Services` send packets of structured hierarchical data to each other during
 Because the `Services` can be remotely hosted,
 services send and receive JSON data during their communication.
 In the Node.js-based Moleculer implementation, the
-transferable data corresponds to JavaScript Objects.
-A JavaScript Object is a collection of named values, eg.:
+transferable data corresponds to JavaScript objects.
+A JavaScript object is a collection of named values, eg.:
 
 ```js
 // JavaScript code
@@ -95,13 +97,13 @@ In addition, the `Tree` API provides some useful features:
 - Recursive deep cloning (`Tree copy = tree.clone()`)
 - Support for all Java types of Appache Cassandra (`BigDecimal`, `UUID`, `InetAddress`, etc.)
 - Support for all Java types of MongoDB (`BsonNumber`, `BsonNull`, `BsonString`, `BsonBoolean`, etc.)
-- Root and parent pointers, methods to traverse the data structure
+- Root and parent pointers, methods to traverse the data structure (`tree.getParent()` or `tree.getRoot()`)
 - Methods for type-check (`Class valueClass = tree.getType()`)
 - Methods for modify the type of the underlying Java value (`tree.setType(String.class)`)
 - Method chaining (`tree.put("name1", "value1").put("name2", "value2")`)
 - Merging, filtering structures (`tree.copyFrom(source)`, `tree.find(condition)`, etc.)
 
-In summary, Node.js-based Moleculer `Services` sends and receives JavaScript Objects.
+In summary, Node.js-based Moleculer `Services` sends and receives JavaScript objects.
 The equivalent is the `Tree` object in the Java-based Moleculer.
 
 ## Avoid reflection
@@ -122,7 +124,7 @@ Listener listener = ctx -> { ... };
 
 ## No object mapping
 
-For the sake of simplicity, and similarity to Node.js version, Moleculer does not use Java Object Mappers.
+For the sake of simplicity, and similarity to Node.js version, Moleculer does not use *Java Object Mappers*.
 The data is received, processed and returned in "raw" JSON format.
 Object Mapper's are useful when starting the system,
 and we process configuration files using the Spring Framework, for example.
@@ -169,7 +171,7 @@ The output can be one of the following:
 - `java.net.InetAddress`
 - `Tree` object (hierarchical data structure from the above types)
 - `Promise` object (it's like an asynchronous `Tree`)
-- `PacketStream` object (when transferring large, binary files)
+- `PacketStream` object (for transferring large, binary files)
 
 ## Non-blocking JSON processing
 
@@ -189,32 +191,34 @@ This `Tree` structure may come from other `Services` or from asynchronous APIs.
 
 ```java
 // Sequential "waterfall" processing of Promises
-Action createNewUser = ctx -> {
+Action anAction = ctx -> {
 
-    // Validate user name
-    return httpClient.get("http://acl/check").then(rsp -> {
+    // Invoke the firs async method; this method returns a Promise,
+    // the "next" is called when the Promise value is assigned
+    return callAsyncMethod1(ctx)
+      .then(rsp -> { // Response of previous call (in a "Tree" object)
 
-        // Save new user
-        return userDAO.createNewUser(rsp);
+        // Process response and call next async method
+        return callAsyncMethod2(rsp);
 
-    }).then(rsp -> {
+    }).then(rsp -> { // Response of previous call
 
-        // Log info
-        String id = rsp.get("_id", "");
-        logger.info("New user record: " + rsp);
+        // Process response and call next async method
+        return callAsyncMethod3(rsp);
 
-    }).then(rsp -> {
+    }).catchError(err -> { // Throwable of previous calls
 
-        // Find email address
-        return ctx.call("email.findByID", rsp);
+        // Handle error and call next async method
+        return callAsyncMethod4(err);
 
-    }).then(rsp -> {
+    }).then(rsp -> { // Response of previous call
 
-        // Send email to user
-        return ctx.call("email.sendVerification", rsp);
-
+        // Process response and call last async method
+        return callAsyncMethod5(rsp);
     });
 }
 ```
 
-[More coding suggestions can be found here.](performance-tips.html#coding-style)
+[Read more about Promises](performance-tips.html#use-non-blocking-apis)
+or continue to the
+[next](broker.html#introduction-to-service-broker) chapter.

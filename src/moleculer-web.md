@@ -280,7 +280,7 @@ The chain of the `Route` can be terminated if you do not call "next.service" but
 [GitHub page](https://github.com/moleculer-java/moleculer-java-web/tree/master/src/main/java/services/moleculer/web/middleware)
 of the API Gateway project has many examples of HTTP `Middlewares`.
 
-There is another kind of middleware in the Molecular Framework; the `Middleware`.
+There is another kind of middleware in the Moleculer Framework; the `Middleware`.
 The `Middleware` is similar to `HttpMiddleware`, but it processes internal `Action` calls instead of HTTP requests.  
 [Read more about Middlewares](middlewares.html#about-middlewares)
 
@@ -843,13 +843,24 @@ then creates a table and then converts this data with "test.html" template:
 ```java
 Action html = ctx -> {
 
-    // Add some value to "raw" JSON data
+    // Add some value to "raw" JSON data,
+    // then create table (10 rows, 3 columns):
+    // {
+    //     "a": 1,
+    //     "b": true,
+    //     "c": "xyz",
+    //     "table": [
+    //         { "first": "some text", "second": false, "third": 0 },
+    //         { "first": "some text", "second": false, "third": 1 },
+    //         { "first": "some text", "second": false, "third": 2 },
+    //         ...
+    //     ]
+    // }
     Tree data = new Tree();
     data.put("a", 1);
     data.put("b", true);
     data.put("c", "xyz");
 
-    // Create table (10 rows, 3 columns)
     Tree table = data.putList("table");
     for (int i = 0; i < 10; i++) {
         Tree row = table.addMap();

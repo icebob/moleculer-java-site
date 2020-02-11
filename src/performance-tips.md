@@ -294,7 +294,7 @@ String address   = personalProperties.get("address",   "");
 
 ### Cache the responses
 
-Take some time to learn about Molecular's [caching capabilities](caching.html#caching-action-calls).
+Take some time to learn about Moleculer's [caching capabilities](caching.html#caching-action-calls).
 Well-designed caching, using cache keys, can multiply the performance of a `Service` with magnitudes.
 
 ### Use local methods if possible

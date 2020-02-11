@@ -1,7 +1,3 @@
----
-title: Logging
----
-
 ## Moleculer logging basics
 
 Moleculer uses [SLF4J](https://www.slf4j.org) for logging.
@@ -67,7 +63,7 @@ java -Dlogging.config="classpath:logging.properties"
 
 [Example of a BAT file that starts in "development" stage](https://github.com/moleculer-java/moleculer-spring-boot-demo/blob/master/installer/bin/development-start.bat)
 
-By default, Molecular uses `services.moleculer.logger.AsyncFileLogger` to write log files in standalone mode.
+By default, Moleculer uses `services.moleculer.logger.AsyncFileLogger` to write log files in standalone mode.
 This logger writes files from a **separate Thread** and creates a **new file every day**.
 It can **compress** and/or **delete** old log files (see the "compressAfter" and "deleteAfter" properties).
 Setting the "logToConsole" parameter to "true" writes a **colored** log to `System.out`

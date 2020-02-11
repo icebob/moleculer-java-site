@@ -65,7 +65,7 @@ To do this, submit the {"a":3,"b":5} JSON (as POST body) to this URL:
 
 ## Dependencies of the example
 
-The Molecular packages can be downloaded from the central
+The Moleculer packages can be downloaded from the central
 [Maven repository](https://mvnrepository.com/artifact/com.github.berkesa/moleculer-java).
 
 **Gradle**
