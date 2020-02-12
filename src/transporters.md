@@ -19,7 +19,7 @@ Centralized `Transporters` connect to a central `MessageBroker` that provide a r
 These brokers use publish/subscribe messaging pattern to deliver data packets.
 
 <div align="center">
-    <img src="networking.svg" alt="Networking diagram" class="zoom" />
+    <img src="networking-centralized.svg" alt="Centralized topology" class="zoom" />
 </div>
 
 ### NATS Transporter
@@ -253,6 +253,10 @@ ServiceBroker broker = ServiceBroker.builder()
 ```
 
 ## Decentralized, Peer-to-Peer Transporters
+
+<div align="center">
+    <img src="networking-decentralized.svg" alt="Decentralized topology" class="zoom" />
+</div>
 
 ### TCP Transporter
 

@@ -25,6 +25,20 @@ Moleculer API Gateway provides full support for high-load **React**, **Angular**
 API Gateway may work with other servers (it's built on the standard Servlet v3.1 API,
 but it also includes a fallback implementation for older servers). 
 
+<div align="center">
+    <img src="web-runtimes.svg" alt="Runtimes" class="zoom" />
+</div>
+
+It is also possible to implement a design where only the *API Gateway* and *NettyServer* services are present in the Moleculer nodes.
+Within Moleculer nodes, HTTP requests can be distributed through a *HTTP Load Balancer*.
+These Moleculer nodes perform static HTTP servicing and, if necessary, HTML transforms.
+REST requests are transmitted through a Message Broker (or directly via TCP Transporter) to multiple nodes running in the background.
+The number of servers (Moleculer nodes) can vary depending on the load.
+
+<div align="center">
+    <img src="web-cluster.svg" alt="Clustered runtime" class="zoom" />
+</div>
+
 ### Download
 
 **Maven**
@@ -247,6 +261,10 @@ route.use(new SecondMiddleware());
 route.use(new FirstMiddleware()); // Executed FIRST
 ```
 
+<div align="center">
+    <img src="middlewares.svg" alt="Calling flow" class="zoom" />
+</div>
+
 Moleculer's HTTP `Middlewares` use very similar logic to
 [Middlewares of Express.js](https://expressjs.com/en/guide/using-middleware.html).
 The following example implements an "empty" `Middleware` that passes the request without modification:
@@ -310,6 +328,10 @@ staticRoute.use(new ServeStatic("/", "/www"));
 staticRoute.use(new Favicon("/www/img/favicon.ico"));
 staticRoute.use(new Redirector("/", "index.html", 307));
 ```
+
+<div align="center">
+    <img src="web-routes.svg" alt="Web routes" class="zoom" />
+</div>
 
 ## Route hooks
 

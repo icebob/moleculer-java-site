@@ -6,6 +6,12 @@ and the next `Action` (or `Middleware`) function in the application’s request-
 The "config" contains all annotations of the `Action`,
 [converted](actions.html#converting-java-annotations-to-platform-independent-properties)
 to a `Tree` (~= JSON) object.
+`Middleware` functions can perform the following tasks:
+
+- Execute any code.
+- Make changes to the request and the response objects.
+- End the request-response cycle.
+- Call the next **local or remote** `Action` or `Middleware` in the stack.
 
 ```java
 public class MyMiddleware extends Middleware {
@@ -40,13 +46,6 @@ Use the "use" function of `ServiceBroker` to install the `Middleware`:
 broker.use(new MyMiddleware());
 ```
 
-`Middleware` functions can perform the following tasks:
-
-- Execute any code.
-- Make changes to the request and the response objects.
-- End the request-response cycle.
-- Call the next `Action` or `Middleware` in the stack.
-
 `Middlewares` is executed in **reverse order** as they are added to `ServiceBroker`:
 
 ```java
@@ -55,6 +54,10 @@ broker.use(new ThirdMiddleware());
 broker.use(new SecondMiddleware());
 broker.use(new FirstMiddleware()); // Installed and/or executed FIRST
 ```
+
+<div align="center">
+    <img src="middlewares.svg" alt="Calling flow" class="zoom" />
+</div>
 
 ## Example of Middleware-based pre-processing
 
