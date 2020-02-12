@@ -122,7 +122,7 @@ Each `Route` can have one or more `Middlewares`, which are executed when the `Ro
 When a request arrives the API Gateway will step through each `Route`,
 and examines whether the `Route` handles the request.
 If the `Route` handles the request, the API Gateway does not call the next `Route`.
-The following code is an example of a very basic `Route`:
+The following code is an example of a basic `Route`:
 
 ```java
 // Create then add a Route to API Gateway
@@ -147,8 +147,8 @@ Route route = gateway.addRoute(new Route(MappingPolicy.RESTRICT));
 route.addAlias("POST", "add", "math.add");
 ```
 
-In this case, you can't call `Action` at URLs "/math.add" or "/math/add",
-just at "/add" via "POST" method.
+In this case, `Action` can only be called on the "/add" path using the "POST" method.
+This `Action` is not available with another URL or method.
 
 ## Whitelist
 
@@ -316,6 +316,7 @@ and returns a "404 Not Found" message if the requested file is not exists:
 // Create Route for REST services:
 Route restRoute = gateway.addRoute(new Route());
 restRoute.use(new CorsHeaders());
+restRoute.setCallOptions(CallOptions.retryCount(3));
 restRoute.addAlias("GET", // Allowed HTTP method
                    "api/hello/:name", // Path alias
                    "greeter.hello");  // Action
