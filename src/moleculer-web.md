@@ -425,7 +425,8 @@ the status code of the response and add any HTTP header to the response.
 
 The "Content-Type" value, status code and other HTTP headers
 can be changed even if the answer is a **Moleculer Stream**.
-Since `PacketStream` has no "meta", it needs to be wrapped in a `Tree` object:
+Since `PacketStream` has no "meta", it needs to be wrapped in a
+[Tree](https://berkesa.github.io/datatree/) object:
 
 ```java
  Action list = ctx -> {

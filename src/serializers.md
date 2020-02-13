@@ -9,7 +9,8 @@ can convert messages into MessagePack, BSON, CBOR, SMILE, Amazon ION or other bi
 
 ![](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)  
 This is the built-in default `Serializer`.
-It serializes the packets to JSON string and deserializes the received JSON bytes to `Tree` objects.
+It serializes the packets to JSON string and deserializes the received JSON bytes to
+[Tree](https://berkesa.github.io/datatree/) objects.
 The performance of JSON `Serializers` in Java and JavaScript is very good,
 JSON serialization is usually faster than most binary `Serializers`.
 This `Serializer` is compatible with the JavaScript/Go version of Moleculer.

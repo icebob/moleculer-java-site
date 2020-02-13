@@ -35,7 +35,7 @@ module.exports = {
 		docsRepo:  'moleculer-java/site',
 		docsDir:   'src',
 		editLinks: true,
-		editLinkText: 'Edit this page',
+		editLinkText: 'Edit this page on GitHub',
 		lastUpdated:  'Last Updated',		
 		nav: [
 			{ text: 'Home', link: '/' },

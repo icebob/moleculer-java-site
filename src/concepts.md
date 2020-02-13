@@ -113,7 +113,8 @@ With the API, the Java program can create an object or call a method on the fly.
 From execution prospective, the calls to reflection API are quite expensive,
 it could have a performance impact on the applications.
 Because of this, Moleculer uses the reflection API in very few cases. For example
-`Actions` and event `Listeners` are not methods but Functional Interfaces.
+[Actions](actions.html#about-actions) and event [Listeners](events.html#types-of-event-broadcasts)
+are not methods but Functional Interfaces.
 Calling them is much faster than calling methods using the Reflection API.
 
 ```java
@@ -130,7 +131,8 @@ Object Mapper's are useful when starting the system,
 and we process configuration files using the Spring Framework, for example.
 However, it is faster at runtime if the incoming data packet is received immediately
 after parsing it from the binary (JSON, MessagePack, etc.) format.
-The `Tree` data type helps in accurate type conversion, even allowing you to specify default values.
+The [Tree](https://berkesa.github.io/datatree/)
+data type helps in accurate type conversion, even allowing you to specify default values.
 
 ```java
 // Input and output data are in "raw" JSON format

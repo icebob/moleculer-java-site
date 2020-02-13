@@ -107,13 +107,13 @@ demonstrating the basic capabilities of a Moleculer-based web application.
 The project can be imported into the Eclipse IDE or IntelliJ IDEA.
 The brief examples illustrate the following:
 
-- Integration of Moleculer API into the Spring Boot Framework
-- Configuring HTTP Routes and `Middlewares`
-- Creating non-blocking Moleculer `Services`
-- Publishing and invoking Moleculer `Services` as REST `Services`
-- Generating HTML pages in multiple languages using Template Engines
-- Using WebSockets (sending real-time server-side events to browsers)
-- Using file upload and download
+- Integration of Moleculer API into the [Spring Boot Framework](broker.html#create-a-service-broker)
+- Configuring HTTP [Routes](moleculer-web.html#routes) and [Middlewares](moleculer-web.html#http-middlewares)
+- Creating non-blocking Moleculer [Services](services.html#about-moleculer-services)
+- Publishing and invoking Moleculer `Services` as [REST Services](moleculer-web.html#aliases)
+- Generating HTML pages in multiple languages using [Template Engines](moleculer-web.html#template-engines)
+- Using [WebSockets](moleculer-web.html#websocket-handling) (sending real-time server-side events to browsers)
+- Using file upload and [download](moleculer-web.html#response-type-status-code)
 - Video streaming and server-side image generation
 - Creating a WAR from the finished project (Servlet-based runtime)
 - Run code without any changes in "standalone mode" (Netty-based runtime)

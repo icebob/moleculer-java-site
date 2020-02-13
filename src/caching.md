@@ -3,8 +3,8 @@
 Moleculer has a built-in caching solution to accelerate **responses of service actions**.
 There are two types of caches:
 
-- Local cache (eg. MemoryCacher, Off-Heap Cacher, some JCache implementations)
-- Distributed cache (eg. Redis Cacher, some implementations of JCache are distributed)
+- [Local](caching.html#local-cachers) cache (eg. MemoryCacher, Off-Heap Cacher, some JCache implementations)
+- [Distributed](caching.html#distributed-cachers) cache (eg. Redis Cacher, some implementations of JCache are distributed)
 
 Local caches store data per node locally.
 These are the fastest caches, but the programmer
@@ -296,6 +296,10 @@ The above code could be optimized to not delete the entire cache region but just
 
 ## Local cachers
 
+<div align="center">
+    <img src="local-cacher.svg" alt="Local Cachers" class="zoom" />
+</div>
+
 ### Memory cacher
 
 ![](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)  
@@ -369,6 +373,10 @@ ServiceBroker broker = ServiceBroker.builder()
 | compressionLevel | int | 1 | Compression level (best speed = 1, best compression = 9) |
 
 ## Distributed cachers
+
+<div align="center">
+    <img src="distributed-cacher.svg" alt="Local Cachers" class="zoom" />
+</div>
 
 ### Redis cacher
 
