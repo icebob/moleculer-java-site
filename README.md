@@ -1,3 +1,3 @@
-## (WIP) Moleculer Documentation
+## Moleculer for Java
 
-This project is the partially completed documentation for the Java based Moleculer implementation.
+[![Documentation](https://raw.githubusercontent.com/moleculer-java/site/master/docs/docs-button.png)](https://moleculer-java.github.io/site/introduction.html)
