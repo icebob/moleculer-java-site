@@ -48,7 +48,7 @@ The number of servers (Moleculer nodes) can vary depending on the load.
     <dependency>
         <groupId>com.github.berkesa</groupId>
         <artifactId>moleculer-java-web</artifactId>
-        <version>1.2.6</version>
+        <version>1.2.8</version>
         <scope>runtime</scope>
     </dependency>
 </dependencies>
@@ -58,7 +58,7 @@ The number of servers (Moleculer nodes) can vary depending on the load.
 
 ```gradle
 dependencies {
-    implementation group: 'com.github.berkesa', name: 'moleculer-java-web', version: '1.2.6' 
+    implementation group: 'com.github.berkesa', name: 'moleculer-java-web', version: '1.2.8' 
 }
 ```
 
@@ -1065,7 +1065,7 @@ The template engine works with hierarchical collection structures - similar to t
 
 ::: warning DataTreeTemplates dependencies
 To use DataTree Template Engine, add the following dependency to the build script:  
-[group: 'com.github.berkesa', name: 'datatree-templates', version: '1.1.3'](https://mvnrepository.com/artifact/com.github.berkesa/datatree-templates)
+[group: 'com.github.berkesa', name: 'datatree-templates', version: '1.1.4'](https://mvnrepository.com/artifact/com.github.berkesa/datatree-templates)
 :::
 
 **Simple example**
@@ -1140,7 +1140,7 @@ Templates are written in the FreeMarker Template Language (FTL), which is a simp
 
 ::: warning FreeMarker dependencies
 To use FreeMarker Template Engine, add the following dependency to the build script:  
-[group: 'org.freemarker', name: 'freemarker', version: '2.3.28'](https://mvnrepository.com/artifact/org.freemarker/freemarker)
+[group: 'org.freemarker', name: 'freemarker', version: '2.3.29'](https://mvnrepository.com/artifact/org.freemarker/freemarker)
 :::
 
 **Simple example**
@@ -1213,7 +1213,7 @@ while being fully compatible with the original Jade syntax.
 
 ::: warning Jade dependencies
 To use Jade Template Engine, add the following dependency to the build script:  
-[group: 'de.neuland-bfi', name: 'jade4j', version: '1.2.7'](https://mvnrepository.com/artifact/de.neuland-bfi/jade4j)
+[group: 'de.neuland-bfi', name: 'jade4j', version: '1.3.0'](https://mvnrepository.com/artifact/de.neuland-bfi/jade4j)
 :::
  
 **Simple example**

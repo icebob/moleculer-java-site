@@ -110,7 +110,7 @@ transporter.setSerializer(new CborSerializer());
 
 ::: warning CBOR dependencies
 To use CBOR `Serializer`, add the following dependency to the build script:  
-[group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-cbor', version: '2.10.0'](https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-cbor)
+[group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-cbor', version: '2.10.1'](https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-cbor)
 :::
 
 ## Amazon ION Serializer
@@ -145,7 +145,7 @@ transporter.setSerializer(new SmileSerializer());
 
 ::: warning SMILE dependencies
 To use SMILE `Serializer`, add the following dependency to the build script:  
-[group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-smile', version: '2.10.0'](https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-smile)
+[group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-smile', version: '2.10.1'](https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-smile)
 :::
 
 ## Custom Serializer
