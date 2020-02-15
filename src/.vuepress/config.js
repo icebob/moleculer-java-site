@@ -40,6 +40,7 @@ module.exports = {
 		nav: [
 			{ text: 'Home', link: '/' },
 			{ text: 'Documentation', link: 'introduction' },
+			{ text: 'Donate', link: 'https://www.patreon.com/moleculer_java' },
 		],
 		sidebar: [
 			{
