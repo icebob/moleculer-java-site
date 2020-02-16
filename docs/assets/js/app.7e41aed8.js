@@ -1242,25 +1242,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   "v-41ddd63d": () => __webpack_require__.e(/*! import() */ 3).then(__webpack_require__.bind(null, /*! ./README.md */ "./README.md")),
   "v-0cd7fa44": () => __webpack_require__.e(/*! import() */ 5).then(__webpack_require__.bind(null, /*! ./balancing.md */ "./balancing.md")),
-  "v-3381debe": () => __webpack_require__.e(/*! import() */ 10).then(__webpack_require__.bind(null, /*! ./fault-tolerance.md */ "./fault-tolerance.md")),
   "v-3a8e757e": () => __webpack_require__.e(/*! import() */ 11).then(__webpack_require__.bind(null, /*! ./http-client.md */ "./http-client.md")),
   "v-443df284": () => __webpack_require__.e(/*! import() */ 12).then(__webpack_require__.bind(null, /*! ./internal-services.md */ "./internal-services.md")),
   "v-e5cc7594": () => __webpack_require__.e(/*! import() */ 13).then(__webpack_require__.bind(null, /*! ./introduction.md */ "./introduction.md")),
+  "v-3381debe": () => __webpack_require__.e(/*! import() */ 10).then(__webpack_require__.bind(null, /*! ./fault-tolerance.md */ "./fault-tolerance.md")),
   "v-663ce51e": () => __webpack_require__.e(/*! import() */ 14).then(__webpack_require__.bind(null, /*! ./jmx-service.md */ "./jmx-service.md")),
   "v-d7f92984": () => __webpack_require__.e(/*! import() */ 15).then(__webpack_require__.bind(null, /*! ./lifecycle.md */ "./lifecycle.md")),
   "v-95eff644": () => __webpack_require__.e(/*! import() */ 16).then(__webpack_require__.bind(null, /*! ./logging.md */ "./logging.md")),
   "v-3a5bf19e": () => __webpack_require__.e(/*! import() */ 17).then(__webpack_require__.bind(null, /*! ./middlewares.md */ "./middlewares.md")),
   "v-73b1a8ec": () => __webpack_require__.e(/*! import() */ 22).then(__webpack_require__.bind(null, /*! ./runner.md */ "./runner.md")),
-  "v-130048ae": () => __webpack_require__.e(/*! import() */ 24).then(__webpack_require__.bind(null, /*! ./services.md */ "./services.md")),
-  "v-482c37be": () => __webpack_require__.e(/*! import() */ 25).then(__webpack_require__.bind(null, /*! ./tasks.md */ "./tasks.md")),
-  "v-0848db9e": () => __webpack_require__.e(/*! import() */ 4).then(__webpack_require__.bind(null, /*! ./actions.md */ "./actions.md")),
   "v-11bf1690": () => __webpack_require__.e(/*! import() */ 6).then(__webpack_require__.bind(null, /*! ./broker.md */ "./broker.md")),
+  "v-0848db9e": () => __webpack_require__.e(/*! import() */ 4).then(__webpack_require__.bind(null, /*! ./actions.md */ "./actions.md")),
   "v-1fbc7714": () => __webpack_require__.e(/*! import() */ 8).then(__webpack_require__.bind(null, /*! ./concepts.md */ "./concepts.md")),
   "v-97f87b90": () => __webpack_require__.e(/*! import() */ 9).then(__webpack_require__.bind(null, /*! ./events.md */ "./events.md")),
-  "v-9198abec": () => __webpack_require__.e(/*! import() */ 18).then(__webpack_require__.bind(null, /*! ./moleculer-repl.md */ "./moleculer-repl.md")),
-  "v-95268f3c": () => __webpack_require__.e(/*! import() */ 20).then(__webpack_require__.bind(null, /*! ./mongo-client.md */ "./mongo-client.md")),
   "v-63dbd780": () => __webpack_require__.e(/*! import() */ 21).then(__webpack_require__.bind(null, /*! ./performance-tips.md */ "./performance-tips.md")),
+  "v-95268f3c": () => __webpack_require__.e(/*! import() */ 20).then(__webpack_require__.bind(null, /*! ./mongo-client.md */ "./mongo-client.md")),
   "v-43ef1cc4": () => __webpack_require__.e(/*! import() */ 23).then(__webpack_require__.bind(null, /*! ./serializers.md */ "./serializers.md")),
+  "v-130048ae": () => __webpack_require__.e(/*! import() */ 24).then(__webpack_require__.bind(null, /*! ./services.md */ "./services.md")),
+  "v-482c37be": () => __webpack_require__.e(/*! import() */ 25).then(__webpack_require__.bind(null, /*! ./tasks.md */ "./tasks.md")),
+  "v-9198abec": () => __webpack_require__.e(/*! import() */ 18).then(__webpack_require__.bind(null, /*! ./moleculer-repl.md */ "./moleculer-repl.md")),
   "v-66d4fe44": () => __webpack_require__.e(/*! import() */ 7).then(__webpack_require__.bind(null, /*! ./caching.md */ "./caching.md")),
   "v-f7e33820": () => __webpack_require__.e(/*! import() */ 26).then(__webpack_require__.bind(null, /*! ./transporters.md */ "./transporters.md")),
   "v-2d16df1e": () => __webpack_require__.e(/*! import() */ 19).then(__webpack_require__.bind(null, /*! ./moleculer-web.md */ "./moleculer-web.md")) 
@@ -1342,14 +1342,6 @@ const routes = [
     },
   },
   {
-    name: "v-3381debe",
-    path: "/fault-tolerance.html",
-    component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-    beforeEnter: (to, from, next) => {
-      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-3381debe").then(next)
-    },
-  },
-  {
     name: "v-3a8e757e",
     path: "/http-client.html",
     component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
@@ -1371,6 +1363,14 @@ const routes = [
     component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     beforeEnter: (to, from, next) => {
       Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-e5cc7594").then(next)
+    },
+  },
+  {
+    name: "v-3381debe",
+    path: "/fault-tolerance.html",
+    component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    beforeEnter: (to, from, next) => {
+      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-3381debe").then(next)
     },
   },
   {
@@ -1414,19 +1414,11 @@ const routes = [
     },
   },
   {
-    name: "v-130048ae",
-    path: "/services.html",
+    name: "v-11bf1690",
+    path: "/broker.html",
     component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     beforeEnter: (to, from, next) => {
-      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-130048ae").then(next)
-    },
-  },
-  {
-    name: "v-482c37be",
-    path: "/tasks.html",
-    component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-    beforeEnter: (to, from, next) => {
-      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-482c37be").then(next)
+      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-11bf1690").then(next)
     },
   },
   {
@@ -1435,14 +1427,6 @@ const routes = [
     component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     beforeEnter: (to, from, next) => {
       Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-0848db9e").then(next)
-    },
-  },
-  {
-    name: "v-11bf1690",
-    path: "/broker.html",
-    component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-    beforeEnter: (to, from, next) => {
-      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-11bf1690").then(next)
     },
   },
   {
@@ -1462,11 +1446,11 @@ const routes = [
     },
   },
   {
-    name: "v-9198abec",
-    path: "/moleculer-repl.html",
+    name: "v-63dbd780",
+    path: "/performance-tips.html",
     component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     beforeEnter: (to, from, next) => {
-      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-9198abec").then(next)
+      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-63dbd780").then(next)
     },
   },
   {
@@ -1478,19 +1462,35 @@ const routes = [
     },
   },
   {
-    name: "v-63dbd780",
-    path: "/performance-tips.html",
-    component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-    beforeEnter: (to, from, next) => {
-      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-63dbd780").then(next)
-    },
-  },
-  {
     name: "v-43ef1cc4",
     path: "/serializers.html",
     component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     beforeEnter: (to, from, next) => {
       Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-43ef1cc4").then(next)
+    },
+  },
+  {
+    name: "v-130048ae",
+    path: "/services.html",
+    component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    beforeEnter: (to, from, next) => {
+      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-130048ae").then(next)
+    },
+  },
+  {
+    name: "v-482c37be",
+    path: "/tasks.html",
+    component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    beforeEnter: (to, from, next) => {
+      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-482c37be").then(next)
+    },
+  },
+  {
+    name: "v-9198abec",
+    path: "/moleculer-repl.html",
+    component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    beforeEnter: (to, from, next) => {
+      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-9198abec").then(next)
     },
   },
   {
@@ -1620,52 +1620,6 @@ const siteData = {
           "level": 2,
           "title": "Custom Strategy",
           "slug": "custom-strategy"
-        }
-      ],
-      "lastUpdated": "2/7/2020, 4:13:12 PM"
-    },
-    {
-      "title": "Handling errors",
-      "frontmatter": {},
-      "regularPath": "/fault-tolerance.html",
-      "relativePath": "fault-tolerance.md",
-      "key": "v-3381debe",
-      "path": "/fault-tolerance.html",
-      "headers": [
-        {
-          "level": 2,
-          "title": "Handling errors",
-          "slug": "handling-errors"
-        },
-        {
-          "level": 2,
-          "title": "Default Service Invoker",
-          "slug": "default-service-invoker"
-        },
-        {
-          "level": 3,
-          "title": "Settings",
-          "slug": "settings"
-        },
-        {
-          "level": 3,
-          "title": "Call-level retry and timeout",
-          "slug": "call-level-retry-and-timeout"
-        },
-        {
-          "level": 3,
-          "title": "Distributed timeouts",
-          "slug": "distributed-timeouts"
-        },
-        {
-          "level": 2,
-          "title": "Circuit Breaker",
-          "slug": "circuit-breaker"
-        },
-        {
-          "level": 3,
-          "title": "Settings",
-          "slug": "settings-2"
         }
       ],
       "lastUpdated": "2/7/2020, 4:13:12 PM"
@@ -1837,6 +1791,52 @@ const siteData = {
         }
       ],
       "lastUpdated": "2/14/2020, 6:37:06 PM"
+    },
+    {
+      "title": "Handling errors",
+      "frontmatter": {},
+      "regularPath": "/fault-tolerance.html",
+      "relativePath": "fault-tolerance.md",
+      "key": "v-3381debe",
+      "path": "/fault-tolerance.html",
+      "headers": [
+        {
+          "level": 2,
+          "title": "Handling errors",
+          "slug": "handling-errors"
+        },
+        {
+          "level": 2,
+          "title": "Default Service Invoker",
+          "slug": "default-service-invoker"
+        },
+        {
+          "level": 3,
+          "title": "Settings",
+          "slug": "settings"
+        },
+        {
+          "level": 3,
+          "title": "Call-level retry and timeout",
+          "slug": "call-level-retry-and-timeout"
+        },
+        {
+          "level": 3,
+          "title": "Distributed timeouts",
+          "slug": "distributed-timeouts"
+        },
+        {
+          "level": 2,
+          "title": "Circuit Breaker",
+          "slug": "circuit-breaker"
+        },
+        {
+          "level": 3,
+          "title": "Settings",
+          "slug": "settings-2"
+        }
+      ],
+      "lastUpdated": "2/7/2020, 4:13:12 PM"
     },
     {
       "title": "About the JMX Service",
@@ -2024,76 +2024,35 @@ const siteData = {
       "lastUpdated": "2/11/2020, 8:48:15 PM"
     },
     {
-      "title": "About Moleculer Services",
+      "title": "Introduction to Service Broker",
       "frontmatter": {},
-      "regularPath": "/services.html",
-      "relativePath": "services.md",
-      "key": "v-130048ae",
-      "path": "/services.html",
+      "regularPath": "/broker.html",
+      "relativePath": "broker.md",
+      "key": "v-11bf1690",
+      "path": "/broker.html",
       "headers": [
         {
           "level": 2,
-          "title": "About Moleculer Services",
-          "slug": "about-moleculer-services"
+          "title": "Introduction to Service Broker",
+          "slug": "introduction-to-service-broker"
         },
         {
           "level": 2,
-          "title": "Actions",
-          "slug": "actions"
+          "title": "Create a Service Broker",
+          "slug": "create-a-service-broker"
         },
         {
           "level": 2,
-          "title": "Versioned Services",
-          "slug": "versioned-services"
+          "title": "Configuration options",
+          "slug": "configuration-options"
         },
         {
           "level": 2,
-          "title": "Events",
-          "slug": "events"
-        },
-        {
-          "level": 2,
-          "title": "Lifecycle handlers",
-          "slug": "lifecycle-handlers"
-        },
-        {
-          "level": 2,
-          "title": "Dependencies",
-          "slug": "dependencies"
-        },
-        {
-          "level": 2,
-          "title": "Wait for services via ServiceBroker",
-          "slug": "wait-for-services-via-servicebroker"
+          "title": "Service Broker methods",
+          "slug": "service-broker-methods"
         }
       ],
-      "lastUpdated": "2/7/2020, 4:13:12 PM"
-    },
-    {
-      "title": "About task scheduling",
-      "frontmatter": {},
-      "regularPath": "/tasks.html",
-      "relativePath": "tasks.md",
-      "key": "v-482c37be",
-      "path": "/tasks.html",
-      "headers": [
-        {
-          "level": 2,
-          "title": "About task scheduling",
-          "slug": "about-task-scheduling"
-        },
-        {
-          "level": 3,
-          "title": "Using the common scheduler",
-          "slug": "using-the-common-scheduler"
-        },
-        {
-          "level": 3,
-          "title": "Using a blockable Executor",
-          "slug": "using-a-blockable-executor"
-        }
-      ],
-      "lastUpdated": "2/6/2020, 11:19:45 PM"
+      "lastUpdated": "2/11/2020, 8:48:15 PM"
     },
     {
       "title": "About Actions",
@@ -2150,37 +2109,6 @@ const siteData = {
         }
       ],
       "lastUpdated": "2/13/2020, 5:34:28 PM"
-    },
-    {
-      "title": "Introduction to Service Broker",
-      "frontmatter": {},
-      "regularPath": "/broker.html",
-      "relativePath": "broker.md",
-      "key": "v-11bf1690",
-      "path": "/broker.html",
-      "headers": [
-        {
-          "level": 2,
-          "title": "Introduction to Service Broker",
-          "slug": "introduction-to-service-broker"
-        },
-        {
-          "level": 2,
-          "title": "Create a Service Broker",
-          "slug": "create-a-service-broker"
-        },
-        {
-          "level": 2,
-          "title": "Configuration options",
-          "slug": "configuration-options"
-        },
-        {
-          "level": 2,
-          "title": "Service Broker methods",
-          "slug": "service-broker-methods"
-        }
-      ],
-      "lastUpdated": "2/11/2020, 8:48:15 PM"
     },
     {
       "title": "Asynchronous programming concepts",
@@ -2320,125 +2248,80 @@ const siteData = {
       "lastUpdated": "2/13/2020, 5:34:28 PM"
     },
     {
-      "title": "About the Developer Console",
+      "title": "Use the most appropriate JSON API",
       "frontmatter": {},
-      "regularPath": "/moleculer-repl.html",
-      "relativePath": "moleculer-repl.md",
-      "key": "v-9198abec",
-      "path": "/moleculer-repl.html",
+      "regularPath": "/performance-tips.html",
+      "relativePath": "performance-tips.md",
+      "key": "v-63dbd780",
+      "path": "/performance-tips.html",
       "headers": [
         {
           "level": 2,
-          "title": "About the Developer Console",
-          "slug": "about-the-developer-console"
+          "title": "Use the most appropriate JSON API",
+          "slug": "use-the-most-appropriate-json-api"
+        },
+        {
+          "level": 3,
+          "title": "Deserialization",
+          "slug": "deserialization"
+        },
+        {
+          "level": 3,
+          "title": "Serialization",
+          "slug": "serialization"
         },
         {
           "level": 2,
-          "title": "Download",
-          "slug": "download"
+          "title": "Thread pools",
+          "slug": "thread-pools"
         },
         {
           "level": 2,
-          "title": "Usage from code",
-          "slug": "usage-from-code"
-        },
-        {
-          "level": 2,
-          "title": "Usage with Spring Framework",
-          "slug": "usage-with-spring-framework"
-        },
-        {
-          "level": 2,
-          "title": "Screenshot",
-          "slug": "screenshot"
-        },
-        {
-          "level": 2,
-          "title": "REPL Commands",
-          "slug": "repl-commands"
+          "title": "Coding style",
+          "slug": "coding-style"
         },
         {
           "level": 3,
-          "title": "List nodes",
-          "slug": "list-nodes"
+          "title": "Collect partial results",
+          "slug": "collect-partial-results"
         },
         {
           "level": 3,
-          "title": "List services",
-          "slug": "list-services"
+          "title": "Use Trees instead of Maps",
+          "slug": "use-trees-instead-of-maps"
         },
         {
           "level": 3,
-          "title": "List actions",
-          "slug": "list-actions"
+          "title": "Use field name constants",
+          "slug": "use-field-name-constants"
         },
         {
           "level": 3,
-          "title": "List events",
-          "slug": "list-events"
+          "title": "Don't repeat queries",
+          "slug": "don-t-repeat-queries"
         },
         {
           "level": 3,
-          "title": "Show common information",
-          "slug": "show-common-information"
+          "title": "Use shorter JSON Paths",
+          "slug": "use-shorter-json-paths"
         },
         {
           "level": 3,
-          "title": "List environment variables",
-          "slug": "list-environment-variables"
+          "title": "Cache the responses",
+          "slug": "cache-the-responses"
         },
         {
           "level": 3,
-          "title": "List system properties of JavaVM",
-          "slug": "list-system-properties-of-javavm"
+          "title": "Use local methods if possible",
+          "slug": "use-local-methods-if-possible"
         },
         {
           "level": 3,
-          "title": "Call an action",
-          "slug": "call-an-action"
-        },
-        {
-          "level": 3,
-          "title": "Direct call",
-          "slug": "direct-call"
-        },
-        {
-          "level": 3,
-          "title": "Emit an event",
-          "slug": "emit-an-event"
-        },
-        {
-          "level": 3,
-          "title": "Benchmark services",
-          "slug": "benchmark-services"
-        },
-        {
-          "level": 3,
-          "title": "Dump hierarchy of threads",
-          "slug": "dump-hierarchy-of-threads"
-        },
-        {
-          "level": 3,
-          "title": "Show JVM's heap usage",
-          "slug": "show-jvm-s-heap-usage"
-        },
-        {
-          "level": 3,
-          "title": "Invoke Garbage Collector",
-          "slug": "invoke-garbage-collector"
-        },
-        {
-          "level": 3,
-          "title": "Run a script file",
-          "slug": "run-a-script-file"
-        },
-        {
-          "level": 3,
-          "title": "User-defined commands",
-          "slug": "user-defined-commands"
+          "title": "Use non-blocking APIs",
+          "slug": "use-non-blocking-apis"
         }
       ],
-      "lastUpdated": "2/4/2020, 6:35:35 PM"
+      "lastUpdated": "2/13/2020, 5:34:28 PM"
     },
     {
       "title": "About MongoDB Client",
@@ -2577,82 +2460,6 @@ const siteData = {
       "lastUpdated": "2/4/2020, 6:35:35 PM"
     },
     {
-      "title": "Use the most appropriate JSON API",
-      "frontmatter": {},
-      "regularPath": "/performance-tips.html",
-      "relativePath": "performance-tips.md",
-      "key": "v-63dbd780",
-      "path": "/performance-tips.html",
-      "headers": [
-        {
-          "level": 2,
-          "title": "Use the most appropriate JSON API",
-          "slug": "use-the-most-appropriate-json-api"
-        },
-        {
-          "level": 3,
-          "title": "Deserialization",
-          "slug": "deserialization"
-        },
-        {
-          "level": 3,
-          "title": "Serialization",
-          "slug": "serialization"
-        },
-        {
-          "level": 2,
-          "title": "Thread pools",
-          "slug": "thread-pools"
-        },
-        {
-          "level": 2,
-          "title": "Coding style",
-          "slug": "coding-style"
-        },
-        {
-          "level": 3,
-          "title": "Collect partial results",
-          "slug": "collect-partial-results"
-        },
-        {
-          "level": 3,
-          "title": "Use Trees instead of Maps",
-          "slug": "use-trees-instead-of-maps"
-        },
-        {
-          "level": 3,
-          "title": "Use field name constants",
-          "slug": "use-field-name-constants"
-        },
-        {
-          "level": 3,
-          "title": "Don't repeat queries",
-          "slug": "don-t-repeat-queries"
-        },
-        {
-          "level": 3,
-          "title": "Use shorter JSON Paths",
-          "slug": "use-shorter-json-paths"
-        },
-        {
-          "level": 3,
-          "title": "Cache the responses",
-          "slug": "cache-the-responses"
-        },
-        {
-          "level": 3,
-          "title": "Use local methods if possible",
-          "slug": "use-local-methods-if-possible"
-        },
-        {
-          "level": 3,
-          "title": "Use non-blocking APIs",
-          "slug": "use-non-blocking-apis"
-        }
-      ],
-      "lastUpdated": "2/13/2020, 5:34:28 PM"
-    },
-    {
       "title": "About data serialization",
       "frontmatter": {},
       "regularPath": "/serializers.html",
@@ -2717,6 +2524,199 @@ const siteData = {
         }
       ],
       "lastUpdated": "2/14/2020, 6:37:06 PM"
+    },
+    {
+      "title": "About Moleculer Services",
+      "frontmatter": {},
+      "regularPath": "/services.html",
+      "relativePath": "services.md",
+      "key": "v-130048ae",
+      "path": "/services.html",
+      "headers": [
+        {
+          "level": 2,
+          "title": "About Moleculer Services",
+          "slug": "about-moleculer-services"
+        },
+        {
+          "level": 2,
+          "title": "Actions",
+          "slug": "actions"
+        },
+        {
+          "level": 2,
+          "title": "Versioned Services",
+          "slug": "versioned-services"
+        },
+        {
+          "level": 2,
+          "title": "Events",
+          "slug": "events"
+        },
+        {
+          "level": 2,
+          "title": "Lifecycle handlers",
+          "slug": "lifecycle-handlers"
+        },
+        {
+          "level": 2,
+          "title": "Dependencies",
+          "slug": "dependencies"
+        },
+        {
+          "level": 2,
+          "title": "Wait for services via ServiceBroker",
+          "slug": "wait-for-services-via-servicebroker"
+        }
+      ],
+      "lastUpdated": "2/7/2020, 4:13:12 PM"
+    },
+    {
+      "title": "About task scheduling",
+      "frontmatter": {},
+      "regularPath": "/tasks.html",
+      "relativePath": "tasks.md",
+      "key": "v-482c37be",
+      "path": "/tasks.html",
+      "headers": [
+        {
+          "level": 2,
+          "title": "About task scheduling",
+          "slug": "about-task-scheduling"
+        },
+        {
+          "level": 3,
+          "title": "Using the common scheduler",
+          "slug": "using-the-common-scheduler"
+        },
+        {
+          "level": 3,
+          "title": "Using a blockable Executor",
+          "slug": "using-a-blockable-executor"
+        }
+      ],
+      "lastUpdated": "2/6/2020, 11:19:45 PM"
+    },
+    {
+      "title": "About the Developer Console",
+      "frontmatter": {},
+      "regularPath": "/moleculer-repl.html",
+      "relativePath": "moleculer-repl.md",
+      "key": "v-9198abec",
+      "path": "/moleculer-repl.html",
+      "headers": [
+        {
+          "level": 2,
+          "title": "About the Developer Console",
+          "slug": "about-the-developer-console"
+        },
+        {
+          "level": 2,
+          "title": "Download",
+          "slug": "download"
+        },
+        {
+          "level": 2,
+          "title": "Usage from code",
+          "slug": "usage-from-code"
+        },
+        {
+          "level": 2,
+          "title": "Usage with Spring Framework",
+          "slug": "usage-with-spring-framework"
+        },
+        {
+          "level": 2,
+          "title": "Screenshot",
+          "slug": "screenshot"
+        },
+        {
+          "level": 2,
+          "title": "REPL Commands",
+          "slug": "repl-commands"
+        },
+        {
+          "level": 3,
+          "title": "List nodes",
+          "slug": "list-nodes"
+        },
+        {
+          "level": 3,
+          "title": "List services",
+          "slug": "list-services"
+        },
+        {
+          "level": 3,
+          "title": "List actions",
+          "slug": "list-actions"
+        },
+        {
+          "level": 3,
+          "title": "List events",
+          "slug": "list-events"
+        },
+        {
+          "level": 3,
+          "title": "Show common information",
+          "slug": "show-common-information"
+        },
+        {
+          "level": 3,
+          "title": "List environment variables",
+          "slug": "list-environment-variables"
+        },
+        {
+          "level": 3,
+          "title": "List system properties of JavaVM",
+          "slug": "list-system-properties-of-javavm"
+        },
+        {
+          "level": 3,
+          "title": "Call an action",
+          "slug": "call-an-action"
+        },
+        {
+          "level": 3,
+          "title": "Direct call",
+          "slug": "direct-call"
+        },
+        {
+          "level": 3,
+          "title": "Emit an event",
+          "slug": "emit-an-event"
+        },
+        {
+          "level": 3,
+          "title": "Benchmark services",
+          "slug": "benchmark-services"
+        },
+        {
+          "level": 3,
+          "title": "Dump hierarchy of threads",
+          "slug": "dump-hierarchy-of-threads"
+        },
+        {
+          "level": 3,
+          "title": "Show JVM's heap usage",
+          "slug": "show-jvm-s-heap-usage"
+        },
+        {
+          "level": 3,
+          "title": "Invoke Garbage Collector",
+          "slug": "invoke-garbage-collector"
+        },
+        {
+          "level": 3,
+          "title": "Run a script file",
+          "slug": "run-a-script-file"
+        },
+        {
+          "level": 3,
+          "title": "User-defined commands",
+          "slug": "user-defined-commands"
+        }
+      ],
+      "lastUpdated": "2/4/2020, 6:35:35 PM"
     },
     {
       "title": "Caching Action calls",
@@ -3533,7 +3533,7 @@ const { app, router } = Object(_app__WEBPACK_IMPORTED_MODULE_0__["createApp"])(f
 
 window.__VUEPRESS__ = {
   version: "1.2.0",
-  hash: "fbfb139"
+  hash: "a3a96bd"
 }
 
 router.onReady(() => {
@@ -17961,4 +17961,4 @@ module.exports = __webpack_require__(/*! C:\Users\András\AppData\Roaming\npm\no
 /***/ })
 
 /******/ });
-//# sourceMappingURL=app.39becabd.js.map
+//# sourceMappingURL=app.7e41aed8.js.map
