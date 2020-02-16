@@ -20,7 +20,7 @@ module.exports = {
 				delay: 1000,
 				options: {
 					margin: 24,
-					scrollOffset: 0,
+					scrollOffset: 0
 				}
 			}
 		]        
@@ -40,6 +40,7 @@ module.exports = {
 		nav: [
 			{ text: 'Home', link: '/' },
 			{ text: 'Documentation', link: 'introduction' },
+			{ text: 'Donate', link: 'https://patreon.com/moleculer_java' }
 		],
 		sidebar: [
 			{
@@ -86,7 +87,7 @@ module.exports = {
 					['moleculer-repl', 'Moleculer REPL'],
 					['mongo-client',   'MongoDB client'],
 					['http-client',    'HTTP client'],
-					['jmx-service',    'JMX Service'],
+					['jmx-service',    'JMX Service']
 				]
 			}
 		]
