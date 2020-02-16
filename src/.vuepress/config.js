@@ -23,25 +23,6 @@ module.exports = {
                     scrollOffset: 0,
                 }
             }
-        ],
-        [
-            'robots',
-            {
-                host: "https://moleculer-java.github.io/site",
-                sitemap: "/sitemap.xml",
-                policies: [
-                    {
-                        userAgent: '*'
-                    }
-                ]
-            }
-        ],
-        [
-            'sitemap',
-            {
-                hostname: 'https://moleculer-java.github.io/site',
-                exclude: ['/404.html']
-            }
         ]
     ],
     head: [

@@ -1253,13 +1253,13 @@ __webpack_require__.r(__webpack_exports__);
   "v-73b1a8ec": () => __webpack_require__.e(/*! import() */ 22).then(__webpack_require__.bind(null, /*! ./runner.md */ "./runner.md")),
   "v-130048ae": () => __webpack_require__.e(/*! import() */ 24).then(__webpack_require__.bind(null, /*! ./services.md */ "./services.md")),
   "v-482c37be": () => __webpack_require__.e(/*! import() */ 25).then(__webpack_require__.bind(null, /*! ./tasks.md */ "./tasks.md")),
-  "v-11bf1690": () => __webpack_require__.e(/*! import() */ 6).then(__webpack_require__.bind(null, /*! ./broker.md */ "./broker.md")),
   "v-0848db9e": () => __webpack_require__.e(/*! import() */ 4).then(__webpack_require__.bind(null, /*! ./actions.md */ "./actions.md")),
-  "v-97f87b90": () => __webpack_require__.e(/*! import() */ 9).then(__webpack_require__.bind(null, /*! ./events.md */ "./events.md")),
+  "v-11bf1690": () => __webpack_require__.e(/*! import() */ 6).then(__webpack_require__.bind(null, /*! ./broker.md */ "./broker.md")),
   "v-1fbc7714": () => __webpack_require__.e(/*! import() */ 8).then(__webpack_require__.bind(null, /*! ./concepts.md */ "./concepts.md")),
-  "v-63dbd780": () => __webpack_require__.e(/*! import() */ 21).then(__webpack_require__.bind(null, /*! ./performance-tips.md */ "./performance-tips.md")),
+  "v-97f87b90": () => __webpack_require__.e(/*! import() */ 9).then(__webpack_require__.bind(null, /*! ./events.md */ "./events.md")),
   "v-9198abec": () => __webpack_require__.e(/*! import() */ 18).then(__webpack_require__.bind(null, /*! ./moleculer-repl.md */ "./moleculer-repl.md")),
   "v-95268f3c": () => __webpack_require__.e(/*! import() */ 20).then(__webpack_require__.bind(null, /*! ./mongo-client.md */ "./mongo-client.md")),
+  "v-63dbd780": () => __webpack_require__.e(/*! import() */ 21).then(__webpack_require__.bind(null, /*! ./performance-tips.md */ "./performance-tips.md")),
   "v-43ef1cc4": () => __webpack_require__.e(/*! import() */ 23).then(__webpack_require__.bind(null, /*! ./serializers.md */ "./serializers.md")),
   "v-66d4fe44": () => __webpack_require__.e(/*! import() */ 7).then(__webpack_require__.bind(null, /*! ./caching.md */ "./caching.md")),
   "v-f7e33820": () => __webpack_require__.e(/*! import() */ 26).then(__webpack_require__.bind(null, /*! ./transporters.md */ "./transporters.md")),
@@ -1430,14 +1430,6 @@ const routes = [
     },
   },
   {
-    name: "v-11bf1690",
-    path: "/broker.html",
-    component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-    beforeEnter: (to, from, next) => {
-      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-11bf1690").then(next)
-    },
-  },
-  {
     name: "v-0848db9e",
     path: "/actions.html",
     component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
@@ -1446,11 +1438,11 @@ const routes = [
     },
   },
   {
-    name: "v-97f87b90",
-    path: "/events.html",
+    name: "v-11bf1690",
+    path: "/broker.html",
     component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     beforeEnter: (to, from, next) => {
-      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-97f87b90").then(next)
+      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-11bf1690").then(next)
     },
   },
   {
@@ -1462,11 +1454,11 @@ const routes = [
     },
   },
   {
-    name: "v-63dbd780",
-    path: "/performance-tips.html",
+    name: "v-97f87b90",
+    path: "/events.html",
     component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     beforeEnter: (to, from, next) => {
-      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-63dbd780").then(next)
+      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-97f87b90").then(next)
     },
   },
   {
@@ -1483,6 +1475,14 @@ const routes = [
     component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     beforeEnter: (to, from, next) => {
       Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-95268f3c").then(next)
+    },
+  },
+  {
+    name: "v-63dbd780",
+    path: "/performance-tips.html",
+    component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    beforeEnter: (to, from, next) => {
+      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-63dbd780").then(next)
     },
   },
   {
@@ -2096,37 +2096,6 @@ const siteData = {
       "lastUpdated": "2/6/2020, 11:19:45 PM"
     },
     {
-      "title": "Introduction to Service Broker",
-      "frontmatter": {},
-      "regularPath": "/broker.html",
-      "relativePath": "broker.md",
-      "key": "v-11bf1690",
-      "path": "/broker.html",
-      "headers": [
-        {
-          "level": 2,
-          "title": "Introduction to Service Broker",
-          "slug": "introduction-to-service-broker"
-        },
-        {
-          "level": 2,
-          "title": "Create a Service Broker",
-          "slug": "create-a-service-broker"
-        },
-        {
-          "level": 2,
-          "title": "Configuration options",
-          "slug": "configuration-options"
-        },
-        {
-          "level": 2,
-          "title": "Service Broker methods",
-          "slug": "service-broker-methods"
-        }
-      ],
-      "lastUpdated": "2/11/2020, 8:48:15 PM"
-    },
-    {
       "title": "About Actions",
       "frontmatter": {},
       "regularPath": "/actions.html",
@@ -2178,6 +2147,78 @@ const siteData = {
           "level": 2,
           "title": "Converting Java annotations to platform-independent properties",
           "slug": "converting-java-annotations-to-platform-independent-properties"
+        }
+      ],
+      "lastUpdated": "2/13/2020, 5:34:28 PM"
+    },
+    {
+      "title": "Introduction to Service Broker",
+      "frontmatter": {},
+      "regularPath": "/broker.html",
+      "relativePath": "broker.md",
+      "key": "v-11bf1690",
+      "path": "/broker.html",
+      "headers": [
+        {
+          "level": 2,
+          "title": "Introduction to Service Broker",
+          "slug": "introduction-to-service-broker"
+        },
+        {
+          "level": 2,
+          "title": "Create a Service Broker",
+          "slug": "create-a-service-broker"
+        },
+        {
+          "level": 2,
+          "title": "Configuration options",
+          "slug": "configuration-options"
+        },
+        {
+          "level": 2,
+          "title": "Service Broker methods",
+          "slug": "service-broker-methods"
+        }
+      ],
+      "lastUpdated": "2/11/2020, 8:48:15 PM"
+    },
+    {
+      "title": "Asynchronous programming concepts",
+      "frontmatter": {},
+      "regularPath": "/concepts.html",
+      "relativePath": "concepts.md",
+      "key": "v-1fbc7714",
+      "path": "/concepts.html",
+      "headers": [
+        {
+          "level": 2,
+          "title": "Asynchronous programming concepts",
+          "slug": "asynchronous-programming-concepts"
+        },
+        {
+          "level": 2,
+          "title": "JavaScript and Java parallels",
+          "slug": "javascript-and-java-parallels"
+        },
+        {
+          "level": 2,
+          "title": "DataTree API for JavaScript objects",
+          "slug": "datatree-api-for-javascript-objects"
+        },
+        {
+          "level": 2,
+          "title": "Avoid reflection",
+          "slug": "avoid-reflection"
+        },
+        {
+          "level": 2,
+          "title": "No object mapping",
+          "slug": "no-object-mapping"
+        },
+        {
+          "level": 2,
+          "title": "Non-blocking JSON processing",
+          "slug": "non-blocking-json-processing"
         }
       ],
       "lastUpdated": "2/13/2020, 5:34:28 PM"
@@ -2274,123 +2315,6 @@ const siteData = {
           "level": 3,
           "title": "$transporter.disconnected",
           "slug": "transporter-disconnected"
-        }
-      ],
-      "lastUpdated": "2/13/2020, 5:34:28 PM"
-    },
-    {
-      "title": "Asynchronous programming concepts",
-      "frontmatter": {},
-      "regularPath": "/concepts.html",
-      "relativePath": "concepts.md",
-      "key": "v-1fbc7714",
-      "path": "/concepts.html",
-      "headers": [
-        {
-          "level": 2,
-          "title": "Asynchronous programming concepts",
-          "slug": "asynchronous-programming-concepts"
-        },
-        {
-          "level": 2,
-          "title": "JavaScript and Java parallels",
-          "slug": "javascript-and-java-parallels"
-        },
-        {
-          "level": 2,
-          "title": "DataTree API for JavaScript objects",
-          "slug": "datatree-api-for-javascript-objects"
-        },
-        {
-          "level": 2,
-          "title": "Avoid reflection",
-          "slug": "avoid-reflection"
-        },
-        {
-          "level": 2,
-          "title": "No object mapping",
-          "slug": "no-object-mapping"
-        },
-        {
-          "level": 2,
-          "title": "Non-blocking JSON processing",
-          "slug": "non-blocking-json-processing"
-        }
-      ],
-      "lastUpdated": "2/13/2020, 5:34:28 PM"
-    },
-    {
-      "title": "Use the most appropriate JSON API",
-      "frontmatter": {},
-      "regularPath": "/performance-tips.html",
-      "relativePath": "performance-tips.md",
-      "key": "v-63dbd780",
-      "path": "/performance-tips.html",
-      "headers": [
-        {
-          "level": 2,
-          "title": "Use the most appropriate JSON API",
-          "slug": "use-the-most-appropriate-json-api"
-        },
-        {
-          "level": 3,
-          "title": "Deserialization",
-          "slug": "deserialization"
-        },
-        {
-          "level": 3,
-          "title": "Serialization",
-          "slug": "serialization"
-        },
-        {
-          "level": 2,
-          "title": "Thread pools",
-          "slug": "thread-pools"
-        },
-        {
-          "level": 2,
-          "title": "Coding style",
-          "slug": "coding-style"
-        },
-        {
-          "level": 3,
-          "title": "Collect partial results",
-          "slug": "collect-partial-results"
-        },
-        {
-          "level": 3,
-          "title": "Use Trees instead of Maps",
-          "slug": "use-trees-instead-of-maps"
-        },
-        {
-          "level": 3,
-          "title": "Use field name constants",
-          "slug": "use-field-name-constants"
-        },
-        {
-          "level": 3,
-          "title": "Don't repeat queries",
-          "slug": "don-t-repeat-queries"
-        },
-        {
-          "level": 3,
-          "title": "Use shorter JSON Paths",
-          "slug": "use-shorter-json-paths"
-        },
-        {
-          "level": 3,
-          "title": "Cache the responses",
-          "slug": "cache-the-responses"
-        },
-        {
-          "level": 3,
-          "title": "Use local methods if possible",
-          "slug": "use-local-methods-if-possible"
-        },
-        {
-          "level": 3,
-          "title": "Use non-blocking APIs",
-          "slug": "use-non-blocking-apis"
         }
       ],
       "lastUpdated": "2/13/2020, 5:34:28 PM"
@@ -2651,6 +2575,82 @@ const siteData = {
         }
       ],
       "lastUpdated": "2/4/2020, 6:35:35 PM"
+    },
+    {
+      "title": "Use the most appropriate JSON API",
+      "frontmatter": {},
+      "regularPath": "/performance-tips.html",
+      "relativePath": "performance-tips.md",
+      "key": "v-63dbd780",
+      "path": "/performance-tips.html",
+      "headers": [
+        {
+          "level": 2,
+          "title": "Use the most appropriate JSON API",
+          "slug": "use-the-most-appropriate-json-api"
+        },
+        {
+          "level": 3,
+          "title": "Deserialization",
+          "slug": "deserialization"
+        },
+        {
+          "level": 3,
+          "title": "Serialization",
+          "slug": "serialization"
+        },
+        {
+          "level": 2,
+          "title": "Thread pools",
+          "slug": "thread-pools"
+        },
+        {
+          "level": 2,
+          "title": "Coding style",
+          "slug": "coding-style"
+        },
+        {
+          "level": 3,
+          "title": "Collect partial results",
+          "slug": "collect-partial-results"
+        },
+        {
+          "level": 3,
+          "title": "Use Trees instead of Maps",
+          "slug": "use-trees-instead-of-maps"
+        },
+        {
+          "level": 3,
+          "title": "Use field name constants",
+          "slug": "use-field-name-constants"
+        },
+        {
+          "level": 3,
+          "title": "Don't repeat queries",
+          "slug": "don-t-repeat-queries"
+        },
+        {
+          "level": 3,
+          "title": "Use shorter JSON Paths",
+          "slug": "use-shorter-json-paths"
+        },
+        {
+          "level": 3,
+          "title": "Cache the responses",
+          "slug": "cache-the-responses"
+        },
+        {
+          "level": 3,
+          "title": "Use local methods if possible",
+          "slug": "use-local-methods-if-possible"
+        },
+        {
+          "level": 3,
+          "title": "Use non-blocking APIs",
+          "slug": "use-non-blocking-apis"
+        }
+      ],
+      "lastUpdated": "2/13/2020, 5:34:28 PM"
     },
     {
       "title": "About data serialization",
@@ -3533,7 +3533,7 @@ const { app, router } = Object(_app__WEBPACK_IMPORTED_MODULE_0__["createApp"])(f
 
 window.__VUEPRESS__ = {
   version: "1.2.0",
-  hash: "a2dcc28"
+  hash: "fbfb139"
 }
 
 router.onReady(() => {
@@ -17961,4 +17961,4 @@ module.exports = __webpack_require__(/*! C:\Users\András\AppData\Roaming\npm\no
 /***/ })
 
 /******/ });
-//# sourceMappingURL=app.26e2216f.js.map
+//# sourceMappingURL=app.39becabd.js.map
