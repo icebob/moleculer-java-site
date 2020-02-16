@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+Sitemap: https:/moleculer-java.github.io/site/sitemap.xml
+Host: https://moleculer-java.github.io
