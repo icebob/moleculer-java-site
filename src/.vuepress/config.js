@@ -6,13 +6,13 @@ module.exports = {
 	base: '/site/',
 	dest: '../docs',
 
-    plugins: [
+	plugins: [
 		[
 			'@vuepress/back-to-top'
 		],
-        [
-            '@vuepress/google-analytics', {'ga': 'UA-156080046-1'}
-        ],
+		[
+			'@vuepress/google-analytics', { 'ga': 'UA-156080046-1' }
+		],
 		[
 			'vuepress-plugin-medium-zoom',
 			{
@@ -23,20 +23,32 @@ module.exports = {
 					scrollOffset: 0,
 				}
 			}
-		]        
-    ],
+		],
+		[
+			'robots',
+			{
+				host: "https://moleculer-java.github.io/site",
+				sitemap: "/sitemap.xml",
+				policies: [
+					{
+						userAgent: '*'
+					}
+				]
+			}
+		]
+	],
 	head: [
-		['link', { rel: 'icon', href: 'favicon.ico'}]
+		['link', { rel: 'icon', href: 'favicon.ico' }]
 	],
 	themeConfig: {
 		logo: 'logo.png',
 		repo: 'https://github.com/moleculer-java/moleculer-java',
 		repoLabel: 'GitHub',
-		docsRepo:  'moleculer-java/site',
-		docsDir:   'src',
+		docsRepo: 'moleculer-java/site',
+		docsDir: 'src',
 		editLinks: true,
 		editLinkText: 'Edit this page on GitHub',
-		lastUpdated:  'Last Updated',		
+		lastUpdated: 'Last Updated',
 		nav: [
 			{ text: 'Home', link: '/' },
 			{ text: 'Documentation', link: 'introduction' },
@@ -48,46 +60,46 @@ module.exports = {
 				sidebarDepth: 2,
 				children: [
 					['introduction', 'Introduction'],
-					['concepts',     'Moleculer concepts']
+					['concepts', 'Moleculer concepts']
 				]
 			},
 			{
 				title: 'Moleculer core',
 				sidebarDepth: 2,
 				children: [
-					['broker',            'Service Broker'],
-					['services',          'Services'],
-					['lifecycle',         'Lifecycle'],
-					['actions',           'Actions'],
-					['middlewares',       'Middlewares'],
-					['caching',           'Caching'],
-					['events',            'Events'],
+					['broker', 'Service Broker'],
+					['services', 'Services'],
+					['lifecycle', 'Lifecycle'],
+					['actions', 'Actions'],
+					['middlewares', 'Middlewares'],
+					['caching', 'Caching'],
+					['events', 'Events'],
 					['internal-services', 'Internal Services'],
-					['logging',           'Logging'],
-					['runner',            'Runner'],
-					['tasks',             'Background processes'],
-					['performance-tips',  'Performance tips']
+					['logging', 'Logging'],
+					['runner', 'Runner'],
+					['tasks', 'Background processes'],
+					['performance-tips', 'Performance tips']
 				]
 			},
 			{
 				title: 'Clustering',
 				sidebarDepth: 2,
 				children: [
-					['transporters',    'Transporters'],
-					['serializers',     'Serializers'],
-					['balancing',       'Load balancing'],
+					['transporters', 'Transporters'],
+					['serializers', 'Serializers'],
+					['balancing', 'Load balancing'],
 					['fault-tolerance', 'Fault tolerance']
 				]
 			},
 			{
 				title: 'Modules',
 				sidebarDepth: 2,
-				children: [				
-					['moleculer-web',  'Web API Gateway'],
+				children: [
+					['moleculer-web', 'Web API Gateway'],
 					['moleculer-repl', 'Moleculer REPL'],
-					['mongo-client',   'MongoDB client'],
-					['http-client',    'HTTP client'],
-					['jmx-service',    'JMX Service'],
+					['mongo-client', 'MongoDB client'],
+					['http-client', 'HTTP client'],
+					['jmx-service', 'JMX Service'],
 				]
 			}
 		]
