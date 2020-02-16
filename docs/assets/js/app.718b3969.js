@@ -1243,26 +1243,26 @@ __webpack_require__.r(__webpack_exports__);
   "v-41ddd63d": () => __webpack_require__.e(/*! import() */ 3).then(__webpack_require__.bind(null, /*! ./README.md */ "./README.md")),
   "v-0cd7fa44": () => __webpack_require__.e(/*! import() */ 5).then(__webpack_require__.bind(null, /*! ./balancing.md */ "./balancing.md")),
   "v-3381debe": () => __webpack_require__.e(/*! import() */ 10).then(__webpack_require__.bind(null, /*! ./fault-tolerance.md */ "./fault-tolerance.md")),
-  "v-3a8e757e": () => __webpack_require__.e(/*! import() */ 11).then(__webpack_require__.bind(null, /*! ./http-client.md */ "./http-client.md")),
   "v-443df284": () => __webpack_require__.e(/*! import() */ 12).then(__webpack_require__.bind(null, /*! ./internal-services.md */ "./internal-services.md")),
+  "v-3a8e757e": () => __webpack_require__.e(/*! import() */ 11).then(__webpack_require__.bind(null, /*! ./http-client.md */ "./http-client.md")),
+  "v-e5cc7594": () => __webpack_require__.e(/*! import() */ 13).then(__webpack_require__.bind(null, /*! ./introduction.md */ "./introduction.md")),
+  "v-663ce51e": () => __webpack_require__.e(/*! import() */ 14).then(__webpack_require__.bind(null, /*! ./jmx-service.md */ "./jmx-service.md")),
   "v-d7f92984": () => __webpack_require__.e(/*! import() */ 15).then(__webpack_require__.bind(null, /*! ./lifecycle.md */ "./lifecycle.md")),
   "v-95eff644": () => __webpack_require__.e(/*! import() */ 16).then(__webpack_require__.bind(null, /*! ./logging.md */ "./logging.md")),
-  "v-663ce51e": () => __webpack_require__.e(/*! import() */ 14).then(__webpack_require__.bind(null, /*! ./jmx-service.md */ "./jmx-service.md")),
-  "v-e5cc7594": () => __webpack_require__.e(/*! import() */ 13).then(__webpack_require__.bind(null, /*! ./introduction.md */ "./introduction.md")),
   "v-3a5bf19e": () => __webpack_require__.e(/*! import() */ 17).then(__webpack_require__.bind(null, /*! ./middlewares.md */ "./middlewares.md")),
   "v-73b1a8ec": () => __webpack_require__.e(/*! import() */ 22).then(__webpack_require__.bind(null, /*! ./runner.md */ "./runner.md")),
-  "v-1fbc7714": () => __webpack_require__.e(/*! import() */ 8).then(__webpack_require__.bind(null, /*! ./concepts.md */ "./concepts.md")),
+  "v-130048ae": () => __webpack_require__.e(/*! import() */ 24).then(__webpack_require__.bind(null, /*! ./services.md */ "./services.md")),
+  "v-482c37be": () => __webpack_require__.e(/*! import() */ 25).then(__webpack_require__.bind(null, /*! ./tasks.md */ "./tasks.md")),
   "v-0848db9e": () => __webpack_require__.e(/*! import() */ 4).then(__webpack_require__.bind(null, /*! ./actions.md */ "./actions.md")),
   "v-11bf1690": () => __webpack_require__.e(/*! import() */ 6).then(__webpack_require__.bind(null, /*! ./broker.md */ "./broker.md")),
   "v-97f87b90": () => __webpack_require__.e(/*! import() */ 9).then(__webpack_require__.bind(null, /*! ./events.md */ "./events.md")),
+  "v-1fbc7714": () => __webpack_require__.e(/*! import() */ 8).then(__webpack_require__.bind(null, /*! ./concepts.md */ "./concepts.md")),
   "v-9198abec": () => __webpack_require__.e(/*! import() */ 18).then(__webpack_require__.bind(null, /*! ./moleculer-repl.md */ "./moleculer-repl.md")),
-  "v-63dbd780": () => __webpack_require__.e(/*! import() */ 21).then(__webpack_require__.bind(null, /*! ./performance-tips.md */ "./performance-tips.md")),
   "v-95268f3c": () => __webpack_require__.e(/*! import() */ 20).then(__webpack_require__.bind(null, /*! ./mongo-client.md */ "./mongo-client.md")),
-  "v-130048ae": () => __webpack_require__.e(/*! import() */ 24).then(__webpack_require__.bind(null, /*! ./services.md */ "./services.md")),
-  "v-66d4fe44": () => __webpack_require__.e(/*! import() */ 7).then(__webpack_require__.bind(null, /*! ./caching.md */ "./caching.md")),
   "v-43ef1cc4": () => __webpack_require__.e(/*! import() */ 23).then(__webpack_require__.bind(null, /*! ./serializers.md */ "./serializers.md")),
+  "v-63dbd780": () => __webpack_require__.e(/*! import() */ 21).then(__webpack_require__.bind(null, /*! ./performance-tips.md */ "./performance-tips.md")),
+  "v-66d4fe44": () => __webpack_require__.e(/*! import() */ 7).then(__webpack_require__.bind(null, /*! ./caching.md */ "./caching.md")),
   "v-f7e33820": () => __webpack_require__.e(/*! import() */ 26).then(__webpack_require__.bind(null, /*! ./transporters.md */ "./transporters.md")),
-  "v-482c37be": () => __webpack_require__.e(/*! import() */ 25).then(__webpack_require__.bind(null, /*! ./tasks.md */ "./tasks.md")),
   "v-2d16df1e": () => __webpack_require__.e(/*! import() */ 19).then(__webpack_require__.bind(null, /*! ./moleculer-web.md */ "./moleculer-web.md")) 
 });
 
@@ -1350,6 +1350,14 @@ const routes = [
     },
   },
   {
+    name: "v-443df284",
+    path: "/internal-services.html",
+    component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    beforeEnter: (to, from, next) => {
+      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-443df284").then(next)
+    },
+  },
+  {
     name: "v-3a8e757e",
     path: "/http-client.html",
     component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
@@ -1358,11 +1366,19 @@ const routes = [
     },
   },
   {
-    name: "v-443df284",
-    path: "/internal-services.html",
+    name: "v-e5cc7594",
+    path: "/introduction.html",
     component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     beforeEnter: (to, from, next) => {
-      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-443df284").then(next)
+      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-e5cc7594").then(next)
+    },
+  },
+  {
+    name: "v-663ce51e",
+    path: "/jmx-service.html",
+    component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    beforeEnter: (to, from, next) => {
+      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-663ce51e").then(next)
     },
   },
   {
@@ -1382,22 +1398,6 @@ const routes = [
     },
   },
   {
-    name: "v-663ce51e",
-    path: "/jmx-service.html",
-    component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-    beforeEnter: (to, from, next) => {
-      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-663ce51e").then(next)
-    },
-  },
-  {
-    name: "v-e5cc7594",
-    path: "/introduction.html",
-    component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-    beforeEnter: (to, from, next) => {
-      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-e5cc7594").then(next)
-    },
-  },
-  {
     name: "v-3a5bf19e",
     path: "/middlewares.html",
     component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
@@ -1414,11 +1414,19 @@ const routes = [
     },
   },
   {
-    name: "v-1fbc7714",
-    path: "/concepts.html",
+    name: "v-130048ae",
+    path: "/services.html",
     component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     beforeEnter: (to, from, next) => {
-      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-1fbc7714").then(next)
+      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-130048ae").then(next)
+    },
+  },
+  {
+    name: "v-482c37be",
+    path: "/tasks.html",
+    component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    beforeEnter: (to, from, next) => {
+      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-482c37be").then(next)
     },
   },
   {
@@ -1446,19 +1454,19 @@ const routes = [
     },
   },
   {
+    name: "v-1fbc7714",
+    path: "/concepts.html",
+    component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    beforeEnter: (to, from, next) => {
+      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-1fbc7714").then(next)
+    },
+  },
+  {
     name: "v-9198abec",
     path: "/moleculer-repl.html",
     component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     beforeEnter: (to, from, next) => {
       Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-9198abec").then(next)
-    },
-  },
-  {
-    name: "v-63dbd780",
-    path: "/performance-tips.html",
-    component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-    beforeEnter: (to, from, next) => {
-      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-63dbd780").then(next)
     },
   },
   {
@@ -1470,11 +1478,19 @@ const routes = [
     },
   },
   {
-    name: "v-130048ae",
-    path: "/services.html",
+    name: "v-43ef1cc4",
+    path: "/serializers.html",
     component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     beforeEnter: (to, from, next) => {
-      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-130048ae").then(next)
+      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-43ef1cc4").then(next)
+    },
+  },
+  {
+    name: "v-63dbd780",
+    path: "/performance-tips.html",
+    component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    beforeEnter: (to, from, next) => {
+      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-63dbd780").then(next)
     },
   },
   {
@@ -1486,27 +1502,11 @@ const routes = [
     },
   },
   {
-    name: "v-43ef1cc4",
-    path: "/serializers.html",
-    component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-    beforeEnter: (to, from, next) => {
-      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-43ef1cc4").then(next)
-    },
-  },
-  {
     name: "v-f7e33820",
     path: "/transporters.html",
     component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     beforeEnter: (to, from, next) => {
       Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-f7e33820").then(next)
-    },
-  },
-  {
-    name: "v-482c37be",
-    path: "/tasks.html",
-    component: C_Users_Andr_s_AppData_Roaming_npm_node_modules_vuepress_node_modules_vuepress_core_lib_client_components_GlobalLayout_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-    beforeEnter: (to, from, next) => {
-      Object(_app_util__WEBPACK_IMPORTED_MODULE_0__["ensureAsyncComponentsLoaded"])("Layout", "v-482c37be").then(next)
     },
   },
   {
@@ -1671,6 +1671,47 @@ const siteData = {
       "lastUpdated": "2/7/2020, 4:13:12 PM"
     },
     {
+      "title": "About Internal Services",
+      "frontmatter": {},
+      "regularPath": "/internal-services.html",
+      "relativePath": "internal-services.md",
+      "key": "v-443df284",
+      "path": "/internal-services.html",
+      "headers": [
+        {
+          "level": 2,
+          "title": "About Internal Services",
+          "slug": "about-internal-services"
+        },
+        {
+          "level": 2,
+          "title": "List of nodes",
+          "slug": "list-of-nodes"
+        },
+        {
+          "level": 2,
+          "title": "List of Services",
+          "slug": "list-of-services"
+        },
+        {
+          "level": 2,
+          "title": "List of Actions",
+          "slug": "list-of-actions"
+        },
+        {
+          "level": 2,
+          "title": "List of event subscriptions",
+          "slug": "list-of-event-subscriptions"
+        },
+        {
+          "level": 2,
+          "title": "Health of node",
+          "slug": "health-of-node"
+        }
+      ],
+      "lastUpdated": "2/7/2020, 4:13:12 PM"
+    },
+    {
       "title": "About the Async HTTP Client",
       "frontmatter": {},
       "regularPath": "/http-client.html",
@@ -1747,45 +1788,111 @@ const siteData = {
       "lastUpdated": "2/13/2020, 5:34:28 PM"
     },
     {
-      "title": "About Internal Services",
+      "title": "What is Moleculer Java?",
       "frontmatter": {},
-      "regularPath": "/internal-services.html",
-      "relativePath": "internal-services.md",
-      "key": "v-443df284",
-      "path": "/internal-services.html",
+      "regularPath": "/introduction.html",
+      "relativePath": "introduction.md",
+      "key": "v-e5cc7594",
+      "path": "/introduction.html",
       "headers": [
         {
           "level": 2,
-          "title": "About Internal Services",
-          "slug": "about-internal-services"
+          "title": "What is Moleculer Java?",
+          "slug": "what-is-moleculer-java"
         },
         {
           "level": 2,
-          "title": "List of nodes",
-          "slug": "list-of-nodes"
+          "title": "Features",
+          "slug": "features"
         },
         {
           "level": 2,
-          "title": "List of Services",
-          "slug": "list-of-services"
+          "title": "Prerequisites",
+          "slug": "prerequisites"
         },
         {
           "level": 2,
-          "title": "List of Actions",
-          "slug": "list-of-actions"
+          "title": "REST service example",
+          "slug": "rest-service-example"
         },
         {
           "level": 2,
-          "title": "List of event subscriptions",
-          "slug": "list-of-event-subscriptions"
+          "title": "Dependencies of the example",
+          "slug": "dependencies-of-the-example"
         },
         {
           "level": 2,
-          "title": "Health of node",
-          "slug": "health-of-node"
+          "title": "Detailed Example",
+          "slug": "detailed-example"
+        },
+        {
+          "level": 2,
+          "title": "Subprojects",
+          "slug": "subprojects"
+        },
+        {
+          "level": 2,
+          "title": "License",
+          "slug": "license"
         }
       ],
-      "lastUpdated": "2/7/2020, 4:13:12 PM"
+      "lastUpdated": "2/14/2020, 6:37:06 PM"
+    },
+    {
+      "title": "About the JMX Service",
+      "frontmatter": {},
+      "regularPath": "/jmx-service.html",
+      "relativePath": "jmx-service.md",
+      "key": "v-663ce51e",
+      "path": "/jmx-service.html",
+      "headers": [
+        {
+          "level": 2,
+          "title": "About the JMX Service",
+          "slug": "about-the-jmx-service"
+        },
+        {
+          "level": 2,
+          "title": "Download",
+          "slug": "download"
+        },
+        {
+          "level": 2,
+          "title": "Usage from code",
+          "slug": "usage-from-code"
+        },
+        {
+          "level": 2,
+          "title": "Usage with Spring Framework",
+          "slug": "usage-with-spring-framework"
+        },
+        {
+          "level": 2,
+          "title": "JMX Commands",
+          "slug": "jmx-commands"
+        },
+        {
+          "level": 3,
+          "title": "List object (MBean) names",
+          "slug": "list-object-mbean-names"
+        },
+        {
+          "level": 3,
+          "title": "Get object (entire MBean)",
+          "slug": "get-object-entire-mbean"
+        },
+        {
+          "level": 3,
+          "title": "Get attribute",
+          "slug": "get-attribute"
+        },
+        {
+          "level": 3,
+          "title": "Find objects by a query string",
+          "slug": "find-objects-by-a-query-string"
+        }
+      ],
+      "lastUpdated": "2/4/2020, 6:35:35 PM"
     },
     {
       "title": "Broker lifecycle",
@@ -1865,113 +1972,6 @@ const siteData = {
       "lastUpdated": "2/11/2020, 8:48:15 PM"
     },
     {
-      "title": "About the JMX Service",
-      "frontmatter": {},
-      "regularPath": "/jmx-service.html",
-      "relativePath": "jmx-service.md",
-      "key": "v-663ce51e",
-      "path": "/jmx-service.html",
-      "headers": [
-        {
-          "level": 2,
-          "title": "About the JMX Service",
-          "slug": "about-the-jmx-service"
-        },
-        {
-          "level": 2,
-          "title": "Download",
-          "slug": "download"
-        },
-        {
-          "level": 2,
-          "title": "Usage from code",
-          "slug": "usage-from-code"
-        },
-        {
-          "level": 2,
-          "title": "Usage with Spring Framework",
-          "slug": "usage-with-spring-framework"
-        },
-        {
-          "level": 2,
-          "title": "JMX Commands",
-          "slug": "jmx-commands"
-        },
-        {
-          "level": 3,
-          "title": "List object (MBean) names",
-          "slug": "list-object-mbean-names"
-        },
-        {
-          "level": 3,
-          "title": "Get object (entire MBean)",
-          "slug": "get-object-entire-mbean"
-        },
-        {
-          "level": 3,
-          "title": "Get attribute",
-          "slug": "get-attribute"
-        },
-        {
-          "level": 3,
-          "title": "Find objects by a query string",
-          "slug": "find-objects-by-a-query-string"
-        }
-      ],
-      "lastUpdated": "2/4/2020, 6:35:35 PM"
-    },
-    {
-      "title": "What is Moleculer Java?",
-      "frontmatter": {},
-      "regularPath": "/introduction.html",
-      "relativePath": "introduction.md",
-      "key": "v-e5cc7594",
-      "path": "/introduction.html",
-      "headers": [
-        {
-          "level": 2,
-          "title": "What is Moleculer Java?",
-          "slug": "what-is-moleculer-java"
-        },
-        {
-          "level": 2,
-          "title": "Features",
-          "slug": "features"
-        },
-        {
-          "level": 2,
-          "title": "Prerequisites",
-          "slug": "prerequisites"
-        },
-        {
-          "level": 2,
-          "title": "REST service example",
-          "slug": "rest-service-example"
-        },
-        {
-          "level": 2,
-          "title": "Dependencies of the example",
-          "slug": "dependencies-of-the-example"
-        },
-        {
-          "level": 2,
-          "title": "Detailed Example",
-          "slug": "detailed-example"
-        },
-        {
-          "level": 2,
-          "title": "Subprojects",
-          "slug": "subprojects"
-        },
-        {
-          "level": 2,
-          "title": "License",
-          "slug": "license"
-        }
-      ],
-      "lastUpdated": "2/14/2020, 6:37:06 PM"
-    },
-    {
       "title": "About Middlewares",
       "frontmatter": {},
       "regularPath": "/middlewares.html",
@@ -2024,45 +2024,76 @@ const siteData = {
       "lastUpdated": "2/11/2020, 8:48:15 PM"
     },
     {
-      "title": "Asynchronous programming concepts",
+      "title": "About Moleculer Services",
       "frontmatter": {},
-      "regularPath": "/concepts.html",
-      "relativePath": "concepts.md",
-      "key": "v-1fbc7714",
-      "path": "/concepts.html",
+      "regularPath": "/services.html",
+      "relativePath": "services.md",
+      "key": "v-130048ae",
+      "path": "/services.html",
       "headers": [
         {
           "level": 2,
-          "title": "Asynchronous programming concepts",
-          "slug": "asynchronous-programming-concepts"
+          "title": "About Moleculer Services",
+          "slug": "about-moleculer-services"
         },
         {
           "level": 2,
-          "title": "JavaScript and Java parallels",
-          "slug": "javascript-and-java-parallels"
+          "title": "Actions",
+          "slug": "actions"
         },
         {
           "level": 2,
-          "title": "DataTree API for JavaScript objects",
-          "slug": "datatree-api-for-javascript-objects"
+          "title": "Versioned Services",
+          "slug": "versioned-services"
         },
         {
           "level": 2,
-          "title": "Avoid reflection",
-          "slug": "avoid-reflection"
+          "title": "Events",
+          "slug": "events"
         },
         {
           "level": 2,
-          "title": "No object mapping",
-          "slug": "no-object-mapping"
+          "title": "Lifecycle handlers",
+          "slug": "lifecycle-handlers"
         },
         {
           "level": 2,
-          "title": "Non-blocking JSON processing",
-          "slug": "non-blocking-json-processing"
+          "title": "Dependencies",
+          "slug": "dependencies"
+        },
+        {
+          "level": 2,
+          "title": "Wait for services via ServiceBroker",
+          "slug": "wait-for-services-via-servicebroker"
         }
       ],
-      "lastUpdated": "2/13/2020, 5:34:28 PM"
+      "lastUpdated": "2/7/2020, 4:13:12 PM"
+    },
+    {
+      "title": "About task scheduling",
+      "frontmatter": {},
+      "regularPath": "/tasks.html",
+      "relativePath": "tasks.md",
+      "key": "v-482c37be",
+      "path": "/tasks.html",
+      "headers": [
+        {
+          "level": 2,
+          "title": "About task scheduling",
+          "slug": "about-task-scheduling"
+        },
+        {
+          "level": 3,
+          "title": "Using the common scheduler",
+          "slug": "using-the-common-scheduler"
+        },
+        {
+          "level": 3,
+          "title": "Using a blockable Executor",
+          "slug": "using-a-blockable-executor"
+        }
+      ],
+      "lastUpdated": "2/6/2020, 11:19:45 PM"
     },
     {
       "title": "About Actions",
@@ -2248,6 +2279,47 @@ const siteData = {
       "lastUpdated": "2/13/2020, 5:34:28 PM"
     },
     {
+      "title": "Asynchronous programming concepts",
+      "frontmatter": {},
+      "regularPath": "/concepts.html",
+      "relativePath": "concepts.md",
+      "key": "v-1fbc7714",
+      "path": "/concepts.html",
+      "headers": [
+        {
+          "level": 2,
+          "title": "Asynchronous programming concepts",
+          "slug": "asynchronous-programming-concepts"
+        },
+        {
+          "level": 2,
+          "title": "JavaScript and Java parallels",
+          "slug": "javascript-and-java-parallels"
+        },
+        {
+          "level": 2,
+          "title": "DataTree API for JavaScript objects",
+          "slug": "datatree-api-for-javascript-objects"
+        },
+        {
+          "level": 2,
+          "title": "Avoid reflection",
+          "slug": "avoid-reflection"
+        },
+        {
+          "level": 2,
+          "title": "No object mapping",
+          "slug": "no-object-mapping"
+        },
+        {
+          "level": 2,
+          "title": "Non-blocking JSON processing",
+          "slug": "non-blocking-json-processing"
+        }
+      ],
+      "lastUpdated": "2/13/2020, 5:34:28 PM"
+    },
+    {
       "title": "About the Developer Console",
       "frontmatter": {},
       "regularPath": "/moleculer-repl.html",
@@ -2367,82 +2439,6 @@ const siteData = {
         }
       ],
       "lastUpdated": "2/4/2020, 6:35:35 PM"
-    },
-    {
-      "title": "Use the most appropriate JSON API",
-      "frontmatter": {},
-      "regularPath": "/performance-tips.html",
-      "relativePath": "performance-tips.md",
-      "key": "v-63dbd780",
-      "path": "/performance-tips.html",
-      "headers": [
-        {
-          "level": 2,
-          "title": "Use the most appropriate JSON API",
-          "slug": "use-the-most-appropriate-json-api"
-        },
-        {
-          "level": 3,
-          "title": "Deserialization",
-          "slug": "deserialization"
-        },
-        {
-          "level": 3,
-          "title": "Serialization",
-          "slug": "serialization"
-        },
-        {
-          "level": 2,
-          "title": "Thread pools",
-          "slug": "thread-pools"
-        },
-        {
-          "level": 2,
-          "title": "Coding style",
-          "slug": "coding-style"
-        },
-        {
-          "level": 3,
-          "title": "Collect partial results",
-          "slug": "collect-partial-results"
-        },
-        {
-          "level": 3,
-          "title": "Use Trees instead of Maps",
-          "slug": "use-trees-instead-of-maps"
-        },
-        {
-          "level": 3,
-          "title": "Use field name constants",
-          "slug": "use-field-name-constants"
-        },
-        {
-          "level": 3,
-          "title": "Don't repeat queries",
-          "slug": "don-t-repeat-queries"
-        },
-        {
-          "level": 3,
-          "title": "Use shorter JSON Paths",
-          "slug": "use-shorter-json-paths"
-        },
-        {
-          "level": 3,
-          "title": "Cache the responses",
-          "slug": "cache-the-responses"
-        },
-        {
-          "level": 3,
-          "title": "Use local methods if possible",
-          "slug": "use-local-methods-if-possible"
-        },
-        {
-          "level": 3,
-          "title": "Use non-blocking APIs",
-          "slug": "use-non-blocking-apis"
-        }
-      ],
-      "lastUpdated": "2/13/2020, 5:34:28 PM"
     },
     {
       "title": "About MongoDB Client",
@@ -2581,50 +2577,146 @@ const siteData = {
       "lastUpdated": "2/4/2020, 6:35:35 PM"
     },
     {
-      "title": "About Moleculer Services",
+      "title": "About data serialization",
       "frontmatter": {},
-      "regularPath": "/services.html",
-      "relativePath": "services.md",
-      "key": "v-130048ae",
-      "path": "/services.html",
+      "regularPath": "/serializers.html",
+      "relativePath": "serializers.md",
+      "key": "v-43ef1cc4",
+      "path": "/serializers.html",
       "headers": [
         {
           "level": 2,
-          "title": "About Moleculer Services",
-          "slug": "about-moleculer-services"
+          "title": "About data serialization",
+          "slug": "about-data-serialization"
         },
         {
           "level": 2,
-          "title": "Actions",
-          "slug": "actions"
+          "title": "JSON Serializer",
+          "slug": "json-serializer"
         },
         {
           "level": 2,
-          "title": "Versioned Services",
-          "slug": "versioned-services"
+          "title": "MessagePack Serializer",
+          "slug": "messagepack-serializer"
         },
         {
           "level": 2,
-          "title": "Events",
-          "slug": "events"
+          "title": "BSON Serializer",
+          "slug": "bson-serializer"
         },
         {
           "level": 2,
-          "title": "Lifecycle handlers",
-          "slug": "lifecycle-handlers"
+          "title": "CBOR Serializer",
+          "slug": "cbor-serializer"
         },
         {
           "level": 2,
-          "title": "Dependencies",
-          "slug": "dependencies"
+          "title": "Amazon ION Serializer",
+          "slug": "amazon-ion-serializer"
         },
         {
           "level": 2,
-          "title": "Wait for services via ServiceBroker",
-          "slug": "wait-for-services-via-servicebroker"
+          "title": "SMILE Serializer",
+          "slug": "smile-serializer"
+        },
+        {
+          "level": 2,
+          "title": "Custom Serializer",
+          "slug": "custom-serializer"
+        },
+        {
+          "level": 2,
+          "title": "Message-level encryption",
+          "slug": "message-level-encryption"
+        },
+        {
+          "level": 2,
+          "title": "Compressing messages",
+          "slug": "compressing-messages"
+        },
+        {
+          "level": 2,
+          "title": "Chaining Serializers",
+          "slug": "chaining-serializers"
         }
       ],
-      "lastUpdated": "2/7/2020, 4:13:12 PM"
+      "lastUpdated": "2/14/2020, 6:37:06 PM"
+    },
+    {
+      "title": "Use the most appropriate JSON API",
+      "frontmatter": {},
+      "regularPath": "/performance-tips.html",
+      "relativePath": "performance-tips.md",
+      "key": "v-63dbd780",
+      "path": "/performance-tips.html",
+      "headers": [
+        {
+          "level": 2,
+          "title": "Use the most appropriate JSON API",
+          "slug": "use-the-most-appropriate-json-api"
+        },
+        {
+          "level": 3,
+          "title": "Deserialization",
+          "slug": "deserialization"
+        },
+        {
+          "level": 3,
+          "title": "Serialization",
+          "slug": "serialization"
+        },
+        {
+          "level": 2,
+          "title": "Thread pools",
+          "slug": "thread-pools"
+        },
+        {
+          "level": 2,
+          "title": "Coding style",
+          "slug": "coding-style"
+        },
+        {
+          "level": 3,
+          "title": "Collect partial results",
+          "slug": "collect-partial-results"
+        },
+        {
+          "level": 3,
+          "title": "Use Trees instead of Maps",
+          "slug": "use-trees-instead-of-maps"
+        },
+        {
+          "level": 3,
+          "title": "Use field name constants",
+          "slug": "use-field-name-constants"
+        },
+        {
+          "level": 3,
+          "title": "Don't repeat queries",
+          "slug": "don-t-repeat-queries"
+        },
+        {
+          "level": 3,
+          "title": "Use shorter JSON Paths",
+          "slug": "use-shorter-json-paths"
+        },
+        {
+          "level": 3,
+          "title": "Cache the responses",
+          "slug": "cache-the-responses"
+        },
+        {
+          "level": 3,
+          "title": "Use local methods if possible",
+          "slug": "use-local-methods-if-possible"
+        },
+        {
+          "level": 3,
+          "title": "Use non-blocking APIs",
+          "slug": "use-non-blocking-apis"
+        }
+      ],
+      "lastUpdated": "2/13/2020, 5:34:28 PM"
     },
     {
       "title": "Caching Action calls",
@@ -2701,72 +2793,6 @@ const siteData = {
         }
       ],
       "lastUpdated": "2/13/2020, 5:34:28 PM"
-    },
-    {
-      "title": "About data serialization",
-      "frontmatter": {},
-      "regularPath": "/serializers.html",
-      "relativePath": "serializers.md",
-      "key": "v-43ef1cc4",
-      "path": "/serializers.html",
-      "headers": [
-        {
-          "level": 2,
-          "title": "About data serialization",
-          "slug": "about-data-serialization"
-        },
-        {
-          "level": 2,
-          "title": "JSON Serializer",
-          "slug": "json-serializer"
-        },
-        {
-          "level": 2,
-          "title": "MessagePack Serializer",
-          "slug": "messagepack-serializer"
-        },
-        {
-          "level": 2,
-          "title": "BSON Serializer",
-          "slug": "bson-serializer"
-        },
-        {
-          "level": 2,
-          "title": "CBOR Serializer",
-          "slug": "cbor-serializer"
-        },
-        {
-          "level": 2,
-          "title": "Amazon ION Serializer",
-          "slug": "amazon-ion-serializer"
-        },
-        {
-          "level": 2,
-          "title": "SMILE Serializer",
-          "slug": "smile-serializer"
-        },
-        {
-          "level": 2,
-          "title": "Custom Serializer",
-          "slug": "custom-serializer"
-        },
-        {
-          "level": 2,
-          "title": "Message-level encryption",
-          "slug": "message-level-encryption"
-        },
-        {
-          "level": 2,
-          "title": "Compressing messages",
-          "slug": "compressing-messages"
-        },
-        {
-          "level": 2,
-          "title": "Chaining Serializers",
-          "slug": "chaining-serializers"
-        }
-      ],
-      "lastUpdated": "2/14/2020, 6:37:06 PM"
     },
     {
       "title": "Types of Transporters",
@@ -2848,32 +2874,6 @@ const siteData = {
         }
       ],
       "lastUpdated": "2/14/2020, 6:37:06 PM"
-    },
-    {
-      "title": "About task scheduling",
-      "frontmatter": {},
-      "regularPath": "/tasks.html",
-      "relativePath": "tasks.md",
-      "key": "v-482c37be",
-      "path": "/tasks.html",
-      "headers": [
-        {
-          "level": 2,
-          "title": "About task scheduling",
-          "slug": "about-task-scheduling"
-        },
-        {
-          "level": 3,
-          "title": "Using the common scheduler",
-          "slug": "using-the-common-scheduler"
-        },
-        {
-          "level": 3,
-          "title": "Using a blockable Executor",
-          "slug": "using-a-blockable-executor"
-        }
-      ],
-      "lastUpdated": "2/6/2020, 11:19:45 PM"
     },
     {
       "title": "About API Gateway",
@@ -3114,6 +3114,10 @@ const siteData = {
       {
         "text": "Documentation",
         "link": "introduction"
+      },
+      {
+        "text": "Donate",
+        "link": "https://www.patreon.com/moleculer_java"
       }
     ],
     "sidebar": [
@@ -3529,7 +3533,7 @@ const { app, router } = Object(_app__WEBPACK_IMPORTED_MODULE_0__["createApp"])(f
 
 window.__VUEPRESS__ = {
   version: "1.2.0",
-  hash: "a97a2fe"
+  hash: "61c878a"
 }
 
 router.onReady(() => {
@@ -17957,4 +17961,4 @@ module.exports = __webpack_require__(/*! C:\Users\András\AppData\Roaming\npm\no
 /***/ })
 
 /******/ });
-//# sourceMappingURL=app.e29a1e11.js.map
+//# sourceMappingURL=app.718b3969.js.map
