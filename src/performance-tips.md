@@ -317,7 +317,7 @@ as much of the program as possible must be coded in a non-blocking manner.
 Unfortunately, not all backend services have a non-blocking API in Java,
 but if you have one, use it and don't block the Thread.
 If there is a non-blocking API for a backend service, it can be
-converted to Moleculer Promise.
+converted to [Promise](https://berkesa.github.io/datatree/promise-introduction.html).
 
 The following section describes how to convert various non-blocking techniques to Promise-based methods.
 
