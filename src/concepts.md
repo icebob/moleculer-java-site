@@ -16,7 +16,7 @@ and there are modules for [RxJava](https://github.com/ReactiveX/RxJava) and Quas
 
 To summarize the essence of "Moleculer for Java" in a similar way, we could describe this:
 
-- [Moleculer](https://moleculer-java.github.io/moleculer-java/): Moleculer uses [Promises](https://berkesa.github.io/datatree-promise/)
+- [Moleculer](https://moleculer-java.github.io/moleculer-java/): Moleculer uses [Promises](https://berkesa.github.io/datatree/promise-introduction.html)
 and manages sequential flow controls through "*then().then().then()*"
 [chaining](concepts.html#non-blocking-json-processing) of Promises
 
@@ -57,7 +57,7 @@ var params = {param1: "value1",
 
 There is no similar native support for dynamic creation of JSON objects in Java language.
 Because of this, Moleculer uses an
-[abstract API](https://berkesa.github.io/datatree/)
+[abstract API](https://berkesa.github.io/datatree/introduction.html)
 instead of a certain JSON implementation.
 The `io.datatree.Tree` object is an **abstract layer** that uses an arbitrary JSON implementation.
 `Tree` API supports 18 popular
@@ -131,7 +131,7 @@ Object Mapper's are useful when starting the system,
 and we process configuration files using the Spring Framework, for example.
 However, it is faster at runtime if the incoming data packet is received immediately
 after parsing it from the binary (JSON, MessagePack, etc.) format.
-The [Tree](https://berkesa.github.io/datatree/)
+The [Tree](https://berkesa.github.io/datatree/introduction.html)
 data type helps in accurate type conversion, even allowing you to specify default values.
 
 ```java
@@ -178,7 +178,7 @@ The output can be one of the following:
 ## Non-blocking JSON processing
 
 Moleculer uses ES6-like
-[Promises](https://berkesa.github.io/datatree-promise/)
+[Promises](https://berkesa.github.io/datatree/promise-introduction.html)
 (based on the Java8's `CompletableFuture` API) to avoid
 [callback hell](https://www.google.com/search?q=callback+hell+promise).
 An `io.datatree.Promise` is an object that may produce a simple value (or a `Tree` object) some time in the future:

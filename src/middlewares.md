@@ -5,7 +5,7 @@ the configuration of the `Action` ("config"),
 and the next `Action` (or `Middleware`) function in the application’s request-response cycle ("action"):
 The "config" contains all annotations of the `Action`,
 [converted](actions.html#converting-java-annotations-to-platform-independent-properties)
-to a [Tree](https://berkesa.github.io/datatree/) (~= JSON) object.
+to a [Tree](https://berkesa.github.io/datatree/introduction.html) (~= JSON) object.
 `Middleware` functions can perform the following tasks:
 
 - Execute any code.

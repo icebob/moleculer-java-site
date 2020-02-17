@@ -426,7 +426,7 @@ the status code of the response and add any HTTP header to the response.
 The "Content-Type" value, status code and other HTTP headers
 can be changed even if the answer is a **Moleculer Stream**.
 Since `PacketStream` has no "meta", it needs to be wrapped in a
-[Tree](https://berkesa.github.io/datatree/) object:
+[Tree](https://berkesa.github.io/datatree/introduction.html) object:
 
 ```java
  Action list = ctx -> {
@@ -1059,7 +1059,7 @@ The templates have the same syntax as the Mustache syntax.
 
 ### DataTree Template Engine
 
-Server-side template engine based on [DataTreeTemplates API](https://github.com/berkesa/datatree-templates).
+Server-side template engine based on [DataTreeTemplates API](https://berkesa.github.io/datatree/template-introduction.html).
 Small and fast template engine capable of producing html, xml, and plain text files.
 The template engine works with hierarchical collection structures - similar to the Mustache Engine but with expandable features.
 
@@ -1107,7 +1107,7 @@ gateway.setTemplateEngine(templateEngine);
 
 **Sample template syntax**
 
-[Learn more about DataTreeTemplates syntax.](https://github.com/berkesa/datatree-templates#template-syntax)  
+[Learn more about DataTreeTemplates syntax.](https://berkesa.github.io/datatree/template-syntax.html)  
 [The following template can be called with this code.](moleculer-web.html#template-engines)
 
 ```html

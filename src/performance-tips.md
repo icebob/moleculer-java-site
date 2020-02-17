@@ -122,7 +122,7 @@ Therefore, sharing local variables between blocks would be problematic.
 Fortunately, the blocks reach request-level "global" variables of the `Action`.
 If any data in the blocks is needed later, it must be stored in this global containers.
 Since these variables must be "final", we cannot use "primitive" types (int, String, etc.), only containers (eg. `Tree`, `AtomicReference`, array, map).
-The following example uses a **single** [Tree](https://berkesa.github.io/datatree/)
+The following example uses a **single** [Tree](https://berkesa.github.io/datatree/introduction.html)
 object to store the processing variables of the request:
 
 ```java{5}

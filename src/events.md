@@ -57,7 +57,7 @@ public class PaymentService extends Service {
 Balanced events can be sent using "broker.emit" function.
 The first parameter is the name of the event, the second parameter is the payload. 
 To send multiple/hierarchical values, wrap them into a
-[Tree](https://berkesa.github.io/datatree/) object:
+[Tree](https://berkesa.github.io/datatree/introduction.html) object:
 
 ```java{12}
 // The payload is a "Tree" object (~=JSON structure)
@@ -95,7 +95,7 @@ ctx.emit("user.created",
          Groups.of("mail", "payments"));
 ```
 
-Creating a [Tree](https://berkesa.github.io/datatree/)
+Creating a [Tree](https://berkesa.github.io/datatree/introduction.html)
 object is required when passing more complex data structures between nodes,
 which contain sub-structures (~=hierarchical JSON objects and JSON arrays).
 

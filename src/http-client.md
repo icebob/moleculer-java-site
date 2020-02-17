@@ -35,7 +35,7 @@ dependencies {
 ### Blocking usage
 
 Blocking is not recommended, but you can use the "waitFor" method to wait for the server response if necessary.
-The [Tree](https://berkesa.github.io/datatree/) object is practically a JSON structure.
+The [Tree](https://berkesa.github.io/datatree/introduction.html) object is practically a JSON structure.
 Its contents can be retrieved using "get" function calls, as in a "Map" object.
 
 ```java
