@@ -89,13 +89,13 @@ Both pool types and sizes can be configured when creating `ServiceBroker`, via `
 ServiceBrokerConfig cfg = new ServiceBrokerConfig();
 
 // Set executors
-cfg.setExecutor(Executors.newFixedThreadPool(8));			
+cfg.setExecutor(Executors.newFixedThreadPool(8));            
 cfg.setScheduler(Executors.newScheduledThreadPool(4));
 
 // Set other broker properties
 cfg.setNodeID("node1");
 cfg.setTransporter(...);
-		
+        
 // Create Service Broker by config
 ServiceBroker broker = new ServiceBroker(cfg);
 ```
@@ -232,19 +232,69 @@ String constants can be placed in a separate `Interface` so that we can refer to
 The Code Completion feature of your IDE helps you complete these field names faster and more accurately.
 
 ```java
-public static final String FIELD_NAME    = "name";
-public static final String FIELD_AGE     = "age";
-public static final String FIELD_BALANCE = "balance";
-public static final String FIELD_VIP     = "vip";
-// ...
+public interface CommonFields {
 
-Action action = ctx -> {
-    String  name    = ctx.params.get(FIELD_NAME,    "");
-    int     age     = ctx.params.get(FIELD_AGE,     0);
-    double  balance = ctx.params.get(FIELD_BALANCE, 0d);
-    boolean isVip   = ctx.params.get(FIELD_VIP,     false);
-    // ...
-};
+    // --- COMMON FIELD NAMES ---
+
+    public static final String FIELD_NAME    = "name";
+    public static final String FIELD_AGE     = "age";
+    public static final String FIELD_BALANCE = "balance";
+    public static final String FIELD_VIP     = "vip";
+
+}
+```
+
+At the beginning of the services you can list the names of the actions and event subscriptions.
+Commonly used field names can be imported by the `CommonFields` interface:
+
+```java{1}
+public class UserService extends Service implements CommonFields {
+
+    // --- ACTION NAMES OF THIS SERVICE ---
+
+    public static final String ACTION_ADD_USER = "user.addUser";
+    public static final String ACTION_REMOVE_USER = "user.removeUser";
+    
+    // --- EVENT NAMES OF THIS SERVICE ---
+
+    public static final String EVENT_USER_MODIFIED = "user.modified";
+    public static final String EVENT_CONFIG_MODIFIED = "config.modified";
+
+    // --- IMPLEMENTATIONS OF ACTIONS ---
+    
+    @Name(ACTION_ADD_USER)
+    Action addUser = ctx -> {
+        String  name    = ctx.params.get(FIELD_NAME,    "");
+        int     age     = ctx.params.get(FIELD_AGE,     0);
+        double  balance = ctx.params.get(FIELD_BALANCE, 0d);
+        boolean isVip   = ctx.params.get(FIELD_VIP,     false);
+        // ...
+        ctx.broadcast(EVENT_USER_MODIFIED, FIELD_NAME, userName, ...);
+        return null;
+    };
+
+    @Name(ACTION_REMOVE_USER)
+    Action removeUser = ctx -> {
+        String userName = "...";
+        ctx.broadcast(EVENT_USER_MODIFIED, FIELD_NAME, userName);        
+        return null;
+    };
+
+    // --- IMPLEMENTATIONS OF LISTENERS ---
+    
+    @Subscribe(EVENT_USER_MODIFIED)
+    Listener userModifiedListener = ctx -> {
+        boolean vip = ctx.params.get(FIELD_VIP, false);
+        // ...
+        ctx.call(ACTION_ADD_USER, FIELD_VIP, vip);
+    };
+
+    @Subscribe(EVENT_CONFIG_MODIFIED)
+    Listener configModifiedListener = ctx -> {
+        String name = ctx.params.get(FIELD_NAME, "");
+    };
+
+}
 ```
 
 ### Don't repeat queries
@@ -256,9 +306,9 @@ So, do not use the "copy-paste" function in such cases, and instead of this...
 
 ```java
 if (ctx.params.get("addresses[0].zip", (String) null) != null &&
-	ctx.params.get("addresses[0].zip").asString().length() > 0 &&
-	ctx.params.get("addresses[0].zip").asString().startsWith("xyz")) {
-		store(user, ctx.params.get("addresses[0].zip").asString());
+    ctx.params.get("addresses[0].zip").asString().length() > 0 &&
+    ctx.params.get("addresses[0].zip").asString().startsWith("xyz")) {
+        store(user, ctx.params.get("addresses[0].zip").asString());
 }
 ```
 
