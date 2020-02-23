@@ -252,10 +252,10 @@ public class UserService extends Service implements CommonFields {
 
     // --- ACTION NAMES OF THIS SERVICE ---
 
-    public static final String ACTION_ADD_USER = "user.addUser";
-    public static final String ACTION_REMOVE_USER = "user.removeUser";
+    public static final String ACTION_ADD_USER = "userService.addUser";
+    public static final String ACTION_REMOVE_USER = "userService.removeUser";
     
-    // --- EVENT NAMES OF THIS SERVICE ---
+    // --- EVENT SUBSCRIPTIONS OF THIS SERVICE ---
 
     public static final String EVENT_USER_MODIFIED = "user.modified";
     public static final String EVENT_CONFIG_MODIFIED = "config.modified";
