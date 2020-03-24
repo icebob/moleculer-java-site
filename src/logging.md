@@ -83,6 +83,12 @@ services.moleculer.logger.AsyncFileLogger.level         = INFO
 .level                                                  = INFO
 ```
 
+With the above configuration and dependency settings the following logging structure is implemented:
+
+<div align="center">
+    <img src="logging.svg" alt="Logging" class="zoom" />
+</div>
+
 ## Logging in J2EE environment
 
 When using Spring Boot, the logger is mostly J2EE's own logger, but this is optional.

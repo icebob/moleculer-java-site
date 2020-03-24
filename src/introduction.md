@@ -7,6 +7,10 @@ REST backends for modern JavaScript front-ends,
 high volume message processing,
 common platform for modules written in different languages.
 
+<div align="center">
+    <img src="arch.svg" alt="Architecture" class="zoom" />
+</div>
+
 ## Features
 
 - Polyglot (implemented in [multiple languages](https://github.com/moleculerjs/awesome-moleculer#polyglot-implementations))
