@@ -220,6 +220,11 @@ const broker = new ServiceBroker({
 });
 ```
 
+::: warning Avoid "invalid key length" error
+[You need to install the Unlimited Strength Jurisdiction Policy Files for JCE
+to use 256-bit key.](http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html).
+:::
+
 ## Compressing messages
 
 The `DeflaterSerializer` can compress messages larger than the specified size.
