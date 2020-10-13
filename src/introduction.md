@@ -15,7 +15,7 @@ common platform for modules written in different languages.
 - Runs as a standard J2EE application or with a built-in Netty server
 - Fault Tolerance and high availability (circuit breaker, request timeout, retry, etc.)
 - Load balanced requests & events (round-robin, random, cpu-usage, network latency, sharding)
-- Pluggable transporters (TCP, NATS, MQTT, Redis, AMQP, Kafka, JMS, Google Pub/Sub, Ably.io)
+- Pluggable transporters (P2P TCP, NATS, MQTT, Redis, AMQP, Kafka, JMS, Ably.io)
 - Pluggable serializers (JSON, MessagePack, BSON, CBOR, Ion, Smile)
 - Built-in caching solution (memory cache, Redis cache, off-heap cache, JCache)
 - Send and receive streamed data (for transferring large files, media content)
