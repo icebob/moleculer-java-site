@@ -39,7 +39,7 @@ ServiceBroker broker = ServiceBroker.builder()
 
 ::: warning NATS dependencies
 To use NATS Transporter, add the following dependency to the build script:  
-[group: 'io.nats', name: 'jnats', version: '2.6.6'](https://mvnrepository.com/artifact/io.nats/jnats)
+[group: 'io.nats', name: 'jnats', version: '2.8.0'](https://mvnrepository.com/artifact/io.nats/jnats)
 :::
 
 Detailed example:
@@ -176,7 +176,7 @@ ServiceBroker broker = ServiceBroker.builder()
 
 ::: warning MQTT dependencies
 To use MQTT Transporter, add the following dependency to the build script:  
-[group: 'net.sf.xenqtt', name: 'xenqtt', version: '0.9.7'](https://mvnrepository.com/artifact/net.sf.xenqtt/xenqtt)
+[group: 'org.eclipse.paho', name: 'org.eclipse.paho.client.mqttv3', version: '1.2.5'](https://mvnrepository.com/artifact/org.eclipse.paho/org.eclipse.paho.client.mqttv3)
 :::
 
 Detailed example:
@@ -212,7 +212,7 @@ ServiceBroker broker = ServiceBroker.builder()
 
 ::: warning AMQP dependencies
 To use AMQP Transporter, add the following dependency to the build script:  
-[group: 'com.rabbitmq', name: 'amqp-client', version: '5.8.0'](https://mvnrepository.com/artifact/com.rabbitmq/amqp-client)
+[group: 'com.rabbitmq', name: 'amqp-client', version: '5.9.0'](https://mvnrepository.com/artifact/com.rabbitmq/amqp-client)
 :::
 
 Detailed example:
@@ -250,7 +250,7 @@ ServiceBroker broker = ServiceBroker.builder()
 
 ::: warning Kafka dependencies
 To use Kafka Transporter, add the following dependency to the build script:  
-[group: 'org.apache.kafka', name: 'kafka-clients', version: '2.4.0'](https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients)
+[group: 'org.apache.kafka', name: 'kafka-clients', version: '2.6.0'](https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients)
 :::
 
 Detailed example:
