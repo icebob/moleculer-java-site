@@ -48,7 +48,7 @@ The number of servers (Moleculer nodes) can vary depending on the load.
     <dependency>
         <groupId>com.github.berkesa</groupId>
         <artifactId>moleculer-java-web</artifactId>
-        <version>1.2.11</version>
+        <version>1.2.12</version>
         <scope>runtime</scope>
     </dependency>
 </dependencies>
@@ -58,7 +58,7 @@ The number of servers (Moleculer nodes) can vary depending on the load.
 
 ```gradle
 dependencies {
-    implementation group: 'com.github.berkesa', name: 'moleculer-java-web', version: '1.2.11' 
+    implementation group: 'com.github.berkesa', name: 'moleculer-java-web', version: '1.2.12' 
 }
 ```
 

@@ -74,7 +74,7 @@ The Moleculer packages can be downloaded from the central
 dependencies {
     implementation group: 'org.slf4j',          name: 'slf4j-jdk14',        version: '1.7.30'
     implementation group: 'com.github.berkesa', name: 'moleculer-java',     version: '1.2.15'
-    implementation group: 'com.github.berkesa', name: 'moleculer-java-web', version: '1.2.11' 
+    implementation group: 'com.github.berkesa', name: 'moleculer-java-web', version: '1.2.12' 
 }
 ```
 
@@ -95,7 +95,7 @@ dependencies {
     <dependency>
         <groupId>com.github.berkesa</groupId>
         <artifactId>moleculer-java-web</artifactId>
-        <version>1.2.11</version>
+        <version>1.2.12</version>
     </dependency>
 </dependencies>
 ```
