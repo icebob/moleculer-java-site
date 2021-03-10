@@ -212,7 +212,7 @@ ServiceBroker broker = ServiceBroker.builder()
 
 ::: warning AMQP dependencies
 To use AMQP Transporter, add the following dependency to the build script:  
-[group: 'com.rabbitmq', name: 'amqp-client', version: '5.9.0'](https://mvnrepository.com/artifact/com.rabbitmq/amqp-client)
+[group: 'com.rabbitmq', name: 'amqp-client', version: '5.11.0'](https://mvnrepository.com/artifact/com.rabbitmq/amqp-client)
 :::
 
 Detailed example:
@@ -250,7 +250,7 @@ ServiceBroker broker = ServiceBroker.builder()
 
 ::: warning Kafka dependencies
 To use Kafka Transporter, add the following dependency to the build script:  
-[group: 'org.apache.kafka', name: 'kafka-clients', version: '2.6.0'](https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients)
+[group: 'org.apache.kafka', name: 'kafka-clients', version: '2.7.0'](https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients)
 :::
 
 Detailed example:

@@ -73,8 +73,8 @@ The Moleculer packages can be downloaded from the central
 ```gradle
 dependencies {
     implementation group: 'org.slf4j',          name: 'slf4j-jdk14',        version: '1.7.30'
-    implementation group: 'com.github.berkesa', name: 'moleculer-java',     version: '1.2.16'
-    implementation group: 'com.github.berkesa', name: 'moleculer-java-web', version: '1.2.13' 
+    implementation group: 'com.github.berkesa', name: 'moleculer-java',     version: '1.2.17'
+    implementation group: 'com.github.berkesa', name: 'moleculer-java-web', version: '1.3.2' 
 }
 ```
 
@@ -90,12 +90,12 @@ dependencies {
     <dependency>
         <groupId>com.github.berkesa</groupId>
         <artifactId>moleculer-java</artifactId>
-        <version>1.2.16</version>
+        <version>1.2.17</version>
     </dependency>
     <dependency>
         <groupId>com.github.berkesa</groupId>
         <artifactId>moleculer-java-web</artifactId>
-        <version>1.2.13</version>
+        <version>1.3.2</version>
     </dependency>
 </dependencies>
 ```

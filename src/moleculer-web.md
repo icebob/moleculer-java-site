@@ -48,7 +48,7 @@ The number of servers (Moleculer nodes) can vary depending on the load.
     <dependency>
         <groupId>com.github.berkesa</groupId>
         <artifactId>moleculer-java-web</artifactId>
-        <version>1.2.12</version>
+        <version>1.3.2</version>
         <scope>runtime</scope>
     </dependency>
 </dependencies>
@@ -58,7 +58,7 @@ The number of servers (Moleculer nodes) can vary depending on the load.
 
 ```gradle
 dependencies {
-    implementation group: 'com.github.berkesa', name: 'moleculer-java-web', version: '1.2.12' 
+    implementation group: 'com.github.berkesa', name: 'moleculer-java-web', version: '1.3.2' 
 }
 ```
 
@@ -914,7 +914,7 @@ both looping and conditional evaluation can be achieved using section tags proce
 
 ::: warning Mustache dependencies
 To use Mustache Template Engine, add the following dependency to the build script:  
-[group: 'com.github.spullara.mustache.java', name: 'compiler', version: '0.9.6'](https://mvnrepository.com/artifact/com.github.spullara.mustache.java/compiler)
+[group: 'com.github.spullara.mustache.java', name: 'compiler', version: '0.9.7'](https://mvnrepository.com/artifact/com.github.spullara.mustache.java/compiler)
 :::
 
 **Simple example**
@@ -1140,7 +1140,7 @@ Templates are written in the FreeMarker Template Language (FTL), which is a simp
 
 ::: warning FreeMarker dependencies
 To use FreeMarker Template Engine, add the following dependency to the build script:  
-[group: 'org.freemarker', name: 'freemarker', version: '2.3.30'](https://mvnrepository.com/artifact/org.freemarker/freemarker)
+[group: 'org.freemarker', name: 'freemarker', version: '2.3.31'](https://mvnrepository.com/artifact/org.freemarker/freemarker)
 :::
 
 **Simple example**
@@ -1351,7 +1351,7 @@ allowing for stronger collaboration in development teams.
 
 ::: warning Thymeleaf dependencies
 To use Thymeleaf Template Engine, add the following dependency to the build script:  
-[group: 'org.thymeleaf', name: 'thymeleaf', version: '3.0.11.RELEASE'](https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf)
+[group: 'org.thymeleaf', name: 'thymeleaf', version: '3.0.12.RELEASE'](https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf)
 :::
 
 **Simple example**
